@@ -76,8 +76,9 @@ params:
 
 
           This blog also aims to illustrate how Pyodide can be used for
-          real-world project. If you have a nice Pyodide use case, with open-sourced
-          code, that you would like to share, we accept submissions on [Github](https://github.com/pyodide/pyodide-blog).
+          real-world project. If you have a nice Pyodide use case
+          that you would like to share, we accept submissions on
+          [Github](https://github.com/pyodide/pyodide-blog).
 
     socialIcons:
         - name: twitter
@@ -123,12 +124,6 @@ menu:
           name: archives
           url: /archives/
           weight: 30
-
-outputs:
-    home:
-        - HTML
-        - RSS
-        - JSON # is necessary
 # Read: https://github.com/adityatelange/hugo-PaperMod/wiki/FAQs#using-hugos-syntax-highlighter-chroma
 # pygmentsUseClasses: true
 # markup:
