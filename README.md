@@ -35,7 +35,7 @@ Proposals from existing Pyodide contributors will be given preference.
 
 ## License
 
-The source code for confuguration files is distributed under MPL 2.0 license.
+The source code for configuration files is distributed under MPL 2.0 license.
 The blog post contents are shared under the [CC
 BY](https://creativecommons.org/licenses/by/4.0/) license. In particular, if
 you republish an adapted version of the content on other websites you must
