@@ -2,7 +2,7 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/cb74649d-1eb9-4bee-83f1-ae45ae7c4eb7/deploy-status)](https://app.netlify.com/sites/pyodide-blog/deploys)
 
-The contents of the Pyodide blog
+The contents of the Pyodide blog ([blog.pyodide.org](https://blog.pyodide.org))
 
 ## Build locally
 
