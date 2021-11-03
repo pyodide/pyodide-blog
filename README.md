@@ -15,15 +15,13 @@ hugo server -D
 ```
 
 Note: the Linux Hugo executable is included in this repo. If you are on Linux,
-change all `hugo` commands by `./hugo`. Otherwise if you are on a different OS,
+change all `hugo` commands to `./hugo`. Otherwise if you are on a different OS,
 you would need to [install
 Hugo](https://gohugo.io/getting-started/installing/).
 
 ## Contributing
 
-We accept guest post for interesting Pyodide use cases.
-
-If you would like to propose a post,
+We accept guest posts. If you would like to propose a post,
  - please open an issue with a brief description.
  - Once the general post idea is approved, run,
    ```
