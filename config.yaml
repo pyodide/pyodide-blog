@@ -1,4 +1,4 @@
-baseURL: 'http://heuristic-euler-32805e.netlify.app'
+baseURL: 'https://blog.pyodide.org'
 languageCode: 'en-us'
 title: 'Pyodide blog'
 theme: 'hugo-PaperMod'
