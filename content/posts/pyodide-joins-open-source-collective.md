@@ -54,5 +54,3 @@ post. In the future we will share here project announcement, examples of real
 world use cases for Pyodide, as well as more technical posts about how Pyodide
 works. We also accept guest posts on
 [GitHub](https://github.com/pyodide/pyodide-blog).
-
-Stay tuned.
