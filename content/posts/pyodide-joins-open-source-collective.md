@@ -21,7 +21,7 @@ ShowPostNavLinks: true
 #cover:
 #    image: "<image path/url>" # image path/url
 #    alt: "<alt text>" # alt text
-#    caption: "<text>" # display caption under cover
+#    caption: "<text>" # display caption under the cover
 #    relative: false # when using page bundles set this to true
 #    hidden: true # only hide on current single page
 ---
@@ -43,16 +43,16 @@ able to receive donations and accept sponsorships though Open Source Collective,
 long term project sustainability. We have looked at a few non-profit umbrella
 organizations before making this choice, and we quite like the financial
 transparency and ease of setup offered by OSC. In addition, since Pyodide use
-cases are wider than scientific computing, we felt that a non specialized
+cases are wider than scientific computing, we felt that a non-specialized
 fiscal host would be best.
 
-We are now accepting donations at the OSC project page: [opencollective.com/pyodide](https://opencollective.com/pyodide) .
+We are now accepting donations at the OSC project page: [opencollective.com/pyodide](https://opencollective.com/pyodide)
 Funds will be mostly spent to organize in-person developer sprints.
 
 On a different subject, Pyodide now has a blog, where you are reading this
 post. In the future we will share here project announcement, examples of real
 world use cases for Pyodide, as well as more technical posts about how Pyodide
 works. We also accept guest posts on
-[Github](https://github.com/pyodide/pyodide-blog).
+[GitHub](https://github.com/pyodide/pyodide-blog).
 
 Stay tuned.
