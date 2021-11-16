@@ -21,7 +21,8 @@ params:
     keywords: [Blog, Portfolio, PaperMod]
     author: "Pyodide team"
     # author: ["Me", "You"] # multiple authors
-    images: ["<link or path of image for opengraph, twitter-cards>"]
+    # "<link or path of image for opengraph, twitter-cards>"
+    images: []
     DateFormat: "January 2, 2006"
     defaultTheme: auto # dark, light
     disableThemeToggle: false
@@ -53,7 +54,7 @@ params:
         enabled: false # needs to be explicitly set
         title: ExampleSite
         subtitle: "This is subtitle"
-        imageUrl: "<img location>"
+        # imageUrl: "<img location>"
         imageWidth: 120
         imageHeight: 120
         imageTitle: my image
