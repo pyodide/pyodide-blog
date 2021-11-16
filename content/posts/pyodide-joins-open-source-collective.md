@@ -6,7 +6,7 @@ tags: ["announcement"]
 author: "Roman Yurchak and Hood Chatham, on behalf of the Pyodide team"
 showToc: false
 TocOpen: false
-draft: true
+draft: false
 hidemeta: false
 comments: false
 # description: "Desc Text."
