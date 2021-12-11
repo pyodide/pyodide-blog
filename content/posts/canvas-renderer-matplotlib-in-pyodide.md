@@ -148,7 +148,7 @@ With the above major issues fixed, the new backend is ready. Here are some sampl
 
 Using the Canvas API to draw the plots live introduces a performance penalty. We assume this is due to iterating over all of the points on a curve in Python, since loops in Python are known to be slow. Further, loading dynamic fonts over the network can take some time. However, Rendering Images is as fast as before. Below are the benchmarks for the new Canvas based renderer compared to the default Agg renderer for 5 sample plots in both firefox and chrome.
 
-![metrics](https://user-images.githubusercontent.com/20173739/144758630-4ea4bcc4-c591-4e3a-abc9-306f1022c3b6.png)
+![metrics](https://user-images.githubusercontent.com/20173739/62864633-e4b6ba00-bd29-11e9-8d98-92d72f339f68.png)
 
 In essence, the new renderer is about 2 to 2.5x slower but that’s the price one pays for reducing the size.
 
