@@ -31,7 +31,7 @@ From web servers to end-to-end Data pipelines, Python has become a ubiquitous to
 
 In parallel, the popularity of the JavaScript language for building web UIs resulted in the creation of specialized frameworks like [React](https://reactjs.org/) and [Vue.js](https://vuejs.org/), as well as many associated component libraries like [React Bootstrap](https://react-bootstrap.github.io/) and [MUI](https://mui.com/) (formerly known as React Material-UI) to facilitate the creation of consistent and complex UIs for browsers. Moreover, if you wish to extend of those components or create your own, you would have to use JavaScript, which is a separate language you will need to learn. 
 
-Fortunately, it turns out that Pyodide has many capabilities that makes it possible to directly use React and MUI inside Python, without any JavaScript needed. This is what we will explore in this post.
+Fortunately, it turns out that Pyodide has many capabilities that make it possible to directly use React and MUI inside Python, without any JavaScript needed. This is what we will explore in this post.
 
 ## Building a React "hello world" example
 
