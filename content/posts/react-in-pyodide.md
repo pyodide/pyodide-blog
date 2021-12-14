@@ -157,7 +157,7 @@ Of course, we still need to actually load `pyodide.js` from the CDN, and then ma
 <head>
     <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.17.0/full/pyodide.js"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.18.1/full/pyodide.js"></script>
 </head>
 ```
 
@@ -165,7 +165,7 @@ and the Javascript will be replaced with this:
 ```js
 async function main() {
     await loadPyodide({
-        indexURL: "https://cdn.jsdelivr.net/pyodide/v0.17.0/full/"
+        indexURL: "https://cdn.jsdelivr.net/pyodide/v0.18.1/full/"
     });
 
     pyodide.runPythonAsync(`
@@ -253,12 +253,12 @@ def MyComponent(*children, **props):
 So you can pass in as many children as you want, and any parameter-argument pairs as props. We'd want the object returned to have a method `update(*children, **props)` to add anything you originally omitted; this will modify the object in place. Finally, it'd be nice if we could use `snake_cases` instead of `camelCases`. Let's rewrite the previous `App` function with this more pythonic approach:
 
 ```python
-# ...
+# same imports and helper functions as before
+
 
 def pythonify(component):
     # implementation omitted
     pass
-
 
 div = pythonify('div')
 p = pythonify('p')
