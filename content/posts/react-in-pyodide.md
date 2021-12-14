@@ -291,12 +291,12 @@ How `pythonify` is implemented is not as important as the fact it is *possible*,
 
 # Incorporating MUI into Python
 
-Being able to use pure React is nice, but most of the time you will need to use a third-party UI library like MUI. In terms of using it in HTML, all you need is to add a few more `<script>` tags to the head:
+Being able to use pure React is nice, but most of the time you will need to use a third-party UI library like MUI. If you want to use it inside HTML (as opposed to NPM), all you need is to add a few more `<script>` tags to the head:
 
 ```html
 <head>
     <meta charset="utf-8" />
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.18.0/full/pyodide.js"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.18.1/full/pyodide.js"></script>
     <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@material-ui/core@v4.12.3/umd/material-ui.production.min.js" crossorigin></script>
@@ -307,4 +307,97 @@ Being able to use pure React is nice, but most of the time you will need to use 
 </head>
 ```
 
-With that, you can use MUI inside your Python app. 
+With that, you can use MUI inside your Python app. For example, let's try to construct a more complex version of our previous app. We want:
+* A `<p>` that displays the combination `n choose k`
+* A MUI `Button` that will increase `n` by 1 every time it is clicked and another that increase `k` by 1 on click
+* The second button will be disabled if `k` is equal or greater than `n`
+
+Let's see what our app looks like:
+
+```python
+from functools import partial
+import math
+
+import js
+import pyodide
+import js.MaterialUI as mui
+
+# ...
+
+div = pythonify('div')
+p = pythonify('p')
+Button = pythonify(mui.Button)
+
+@pythonify
+def App(props, children):
+    k, set_k = js.React.useState(1)
+    n, set_n = js.React.useState(1)
+    disabled, set_disabled = js.React.useState(True)
+
+    def handle_disable(n, k):
+        set_disabled(k >= n)
+
+    def increase_k(event):
+        set_k(k + 1)
+        set_disabled(k + 1 >= n)
+
+    def increase_n(event):
+        set_n(n + 1)
+        set_disabled(k >= n + 1)
+    
+    return div(
+        p(f"{n} choose {k} = {math.comb(n, k)}"),
+        Button('Increase n').update(
+            on_click=increase_n, variant="contained", color="secondary"
+        ),
+        Button(
+            on_click=increase_k, variant="contained", disabled=disabled, color="primary"
+        ).update('Increase k'),
+    )
+
+# ...
+```
+
+> The full demo can be found in `demos/react-in-pyodide/demo-4.html`.
+
+Note how we use Python's `math.comb` function to calculate the combination (this function is not available in JS's `math` module). This is only a sneak peek at Python's numerical capabilities; through `numpy` and `scipy`, you can access a significant number of numerical tools that are difficult to find in JS, all without stepping out of the component body.
+
+## Rewriting full fledged MUI apps
+
+With `pythonify` and the proxy system built in `pyodide`, you can easily rewrite MUI apps in Python, such as this [official MUI demo](https://github.com/mui-org/material-ui/blob/v4.x/examples/cdn/index.html). Among else, you can use components you just created inside other components:
+
+```python
+# ...
+theme = mui.createTheme(dict(...))
+
+@pythonify
+def LightBulbIcon(props, children):
+    return SvgIcon(...)
+
+@pythonify
+def ProTip(props, children):
+    classes = use_styles()
+    return Typography(...)
+
+@pythonify
+def Copyright(props, children):
+    return Typography(variant="body2", ...).update(...)
+
+# Let's use everything created above in our App
+@pythonify
+def App(props, children):
+    return Container(...).update(
+        div(
+            # ...
+            ProTip(),
+            Copyright(),
+            style=dict(...),
+        ),
+    )
+```
+
+> The full demo can be found in `demos/react-in-pyodide/demo-5.html`.
+
+
+## Separating HTML and Python
+

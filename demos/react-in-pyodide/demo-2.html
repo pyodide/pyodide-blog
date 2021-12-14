@@ -10,12 +10,13 @@
 <body>
     <script type="text/javascript">
         async function main() {
-            await loadPyodide({
+            const pyodide = await loadPyodide({
                 indexURL: "https://cdn.jsdelivr.net/pyodide/v0.18.1/full/"
             });
 
             pyodide.runPythonAsync(`
                 import js
+                import pyodide
 
                 e = js.React.createElement
 
