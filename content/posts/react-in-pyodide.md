@@ -181,7 +181,7 @@ main();
 
 # Working with React hooks
 
-[React hooks](https://reactjs.org/docs/hooks-overview.html) are a collection of functions bundle with React that makes it easier to make your app more interactive. For example, a `useState` hook lets you create a variable that can be updated inside your app, as shown in this example from the docs:
+[React hooks](https://reactjs.org/docs/hooks-overview.html) are a collection of functions bundled with React that makes it easier to make your app more interactive. For example, a `useState` hook lets you create a variable that can be updated inside your app, as shown in this example from the docs:
 ```jsx
 import React, { useState } from 'react';
 function Example() {
