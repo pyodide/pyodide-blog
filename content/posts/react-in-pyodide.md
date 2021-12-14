@@ -241,7 +241,7 @@ In Python, if you have the following signature:
 
 ```python
 def func(*args, **kwargs):
-    # ...
+    ...
 ```
 
 Then `args` and `kwargs` will be used as `list` and `dict` respectively, and you can pass in as many arguments as you want. 
