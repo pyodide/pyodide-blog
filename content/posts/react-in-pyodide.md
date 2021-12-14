@@ -149,7 +149,7 @@ js.document.body.appendChild(dom_container)
 js.ReactDOM.render(e(App, None), dom_container)
 ```
 
-This is fairly similar to the JS code above, but the big difference is that, since we using Pyodide, it's now possible to use any standard built-in Python library anywhere in the app; we can even use the `pydata` ecosystem (`numpy`, `pandas`, `scikit-learn`, etc.)! 
+This is fairly similar to the JS code above; this is thanks to `pyodide`'s extensive support for JS -> Python proxying. However, the big difference is that, since we are using Pyodide, it's now possible to use any standard built-in Python library anywhere in the app; we can even use the `pydata` ecosystem (`numpy`, `pandas`, `scikit-learn`, etc.)! 
 
 Of course, we still need to actually load `pyodide.js` from the CDN, and then make the call to our script. The head will need to be updated:
 
@@ -177,5 +177,134 @@ main();
 
 > The full demo can be found in `demos/react-in-pyodide/demo-2.html`.
 
-# React hooks
+# Working with React hooks
 
+[React hooks](https://reactjs.org/docs/hooks-overview.html) are a collection of functions bundle with React that makes it easier to make your app more interactive. For example, a `useState` hook lets you create a variable that can be updated inside your app, as shown in this example from the docs:
+```jsx
+import React, { useState } from 'react';
+function Example() {
+  // Declare a new state variable, which we'll call "count"  
+  const [count, setCount] = useState(0);
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+```
+
+It's fairly straightforward to do the same thing in Python:
+
+```python
+import js
+import pyodide
+
+e = js.React.createElement
+
+# helper function
+def jsobj(**kwargs):
+    return js.Object.fromEntries(pyodide.to_js(kwargs))
+
+def App(props, children):
+    count, set_count = js.React.useState(0)
+
+    def handle_click(event):
+        set_count(count + 1)
+
+    return e(
+        'div', None,
+        e('p', None, f"You clicked {count} times"),
+        e('button', jsobj(onClick=handle_click), 'Click me'),
+    )
+
+# Create a div to contain our component
+dom_container = js.document.createElement('div')
+js.document.body.appendChild(dom_container)
+
+js.ReactDOM.render(e(App, None), dom_container)
+```
+
+> The full demo can be found in `demos/react-in-pyodide/demo-3.html`.
+
+You can see that we are adding a `jsobj` helper function to convert the Python `dict` into a JS `Object`. This is because the second argument to `e` is a JS object representing the `props`, hence the need to convert `dict`s to `Object`s.
+
+Note that `useState` is only one possible hook; there are many more. For a full list, see the [React hooks docs](https://reactjs.org/docs/hooks-reference.html). Note that, since we are calling those hooks through a proxy, it might be possible some capabilities will work out-of-the-box.
+
+## Making components more pythonic
+
+In Python, if you have the following signature:
+
+```python
+def func(*args, **kwargs):
+    # ...
+```
+
+Then `args` and `kwargs` will be used as `list` and `dict` respectively, and you can pass in as many arguments as you want. 
+
+Let's say we have a function `pythonify`, which, when called on a React component, will convert it into a Python function with the following signature:
+```python
+def MyComponent(*children, **props):
+    # ...
+```
+
+So you can pass in as many children as you want, and any parameter-argument pairs as props. We'd want the object returned to have a method `update(*children, **props)` to add anything you originally omitted; this will modify the object in place. Finally, it'd be nice if we could use `snake_cases` instead of `camelCases`. Let's rewrite the previous `App` function with this more pythonic approach:
+
+```python
+# ...
+
+def pythonify(component):
+    # implementation omitted
+    pass
+
+
+div = pythonify('div')
+p = pythonify('p')
+button = pythonify('button')
+
+
+@pythonify
+def App(props, children):
+    count, set_count = js.React.useState(0)
+
+    def handle_click(event):
+        set_count(count + 1)
+
+    return div(
+        p(f"You clicked {count} times"),
+        button(on_click=handle_click).update('Click me'),
+    )
+
+# Create a div to contain our component
+dom_container = js.document.createElement('div')
+js.document.body.appendChild(dom_container)
+
+js.ReactDOM.render(App(), dom_container)
+```
+
+How `pythonify` is implemented is not as important as the fact it is *possible*, and that you can use it to make your components more pythonic. 
+
+> The implementation used in this post is fairly concise (~50 lines) but is convoluted. You can find it in `demos/react-in-pyodide/pythonify.py`. The full example is at `demos/react-in-pyodide/demo-4.html`.
+
+
+# Incorporating MUI into Python
+
+Being able to use pure React is nice, but most of the time you will need to use a third-party UI library like MUI. In terms of using it in HTML, all you need is to add a few more `<script>` tags to the head:
+
+```html
+<head>
+    <meta charset="utf-8" />
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.18.0/full/pyodide.js"></script>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@material-ui/core@v4.12.3/umd/material-ui.production.min.js" crossorigin></script>
+    <!-- Fonts to support Material Design -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <!-- Icons to support Material Design -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+</head>
+```
+
+With that, you can use MUI inside your Python app. 
