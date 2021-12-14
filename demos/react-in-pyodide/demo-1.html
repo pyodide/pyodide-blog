@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        const e = React.createElement;
+
+        const App = (props) => {
+            return e(
+                'div', null,
+                e('h1', null, 'Hello World'),
+                e('p', null, 'This is my first React app.'),
+            );
+        };
+
+        // Create the div to render into.
+        const domContainer = document.createElement('div');
+        document.body.appendChild(domContainer);
+
+        ReactDOM.render(e(App), domContainer);
+    </script>
+</body>
+
+</html>
