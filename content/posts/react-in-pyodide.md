@@ -35,7 +35,9 @@ Fortunately, it turns out that Pyodide has many capabilities that makes it possi
 
 ## Building a React "hello world" example
 
-Let's see how you would build a simple React "hello world" example in Python. You could use [`create-react-app`](https://github.com/facebook/create-react-app) to generate a template app. Then, inside the `App.js` file, you would write something like this:
+Let's see how you would build a simple React "hello world" example in Python. The goal will be to create a simple component that will show "Hello world". A component is the most basic unit in React, which can be reused and composed to create more complex UIs; you can read more about it [here](https://reactjs.org/docs/components-and-props.html). 
+
+You could use [`create-react-app`](https://github.com/facebook/create-react-app) to generate a template app. Then, inside the `App.js` file, you would write something like this:
 
 ```jsx
 import React from 'react';
@@ -175,7 +177,7 @@ async function main() {
 main();
 ```
 
-> The full demo can be found in `demos/react-in-pyodide/demo-2.html`.
+> The full demo can be found in `demos/react-in-pyodide/demo-2.html`. You can find the JS fiddle here.
 
 # Working with React hooks
 
@@ -227,7 +229,7 @@ js.document.body.appendChild(dom_container)
 js.ReactDOM.render(e(App, None), dom_container)
 ```
 
-> The full demo can be found in `demos/react-in-pyodide/demo-3.html`.
+> The full demo can be found in `demos/react-in-pyodide/demo-3.html`. You can find the JS fiddle here.
 
 You can see that we are adding a `jsobj` helper function to convert the Python `dict` into a JS `Object`. This is because the second argument to `e` is a JS object representing the `props`, hence the need to convert `dict`s to `Object`s.
 
@@ -286,7 +288,7 @@ js.ReactDOM.render(App(), dom_container)
 
 How `pythonify` is implemented is not as important as the fact it is *possible*, and that you can use it to make your components more pythonic. 
 
-> The implementation used in this post is fairly concise (~50 lines) but is convoluted. You can find it in `demos/react-in-pyodide/pythonify.py`. The full example is at `demos/react-in-pyodide/demo-4.html`.
+> The implementation used in this post is fairly concise (~50 lines) but is convoluted. You can find it in `demos/react-in-pyodide/pythonify.py`. The full example is at `demos/react-in-pyodide/demo-4.html`. You can find the JS fiddle here.
 
 
 # Incorporating MUI into Python
@@ -396,8 +398,36 @@ def App(props, children):
     )
 ```
 
-> The full demo can be found in `demos/react-in-pyodide/demo-5.html`.
+> The full demo can be found in `demos/react-in-pyodide/demo-5.html`. You can find the JS fiddle here.
 
 
 ## Separating HTML and Python
 
+If you prefer to write your python code inside `.py` files, you can simply move all of the Python code to a separate `main.py` file and fetch it from your HTML file:
+
+```html
+<body>
+    <script type="text/javascript">
+        async function main() {
+            let pyodide = await loadPyodide({
+                indexURL: "https://cdn.jsdelivr.net/pyodide/v0.18.0/full/"
+            });
+
+            const script = await fetch("/path/to/main.py");
+            const scriptText = await script.text();
+            pyodide.runPython(scriptText);
+        }
+
+        main();
+    </script>
+</body>
+```
+
+Note that the absolute path needs to be specified, and will differ based on your provider. [This repo](https://github.com/xhlulu/material-ui-in-pyodide) shows you how it works on Github Pages. In general, JS will try to look for `yourwebsite.com/path/to/main.py` and will be able to fetch it if a text file exists at that location.
+
+
+## Conclusion
+
+In summary, this post covered how to use Python to implement fundamental React concepts (such as hooks) and simple MUI components, and proposed the use of a `pythonify` function to make the component creation process feel more natural. 
+
+Moving forward, it will be interesting to see how we can leverage Pyodide to build React UIs using the thousands of React libraries available on [npm](https://www.npmjs.com/search?q=keywords:react) along with pure Python libraries on PyPi. Rather than replacing other Python UI frameworks, React+Pyodide would instead complement them. For example, whereas Dash allows you to write Python code on the server side (e.g. to process GBs of data and running GPU computations), it still requires you to use JS to create [custom components](https://github.com/plotly/dash-component-boilerplate) and [client-side callbacks](https://dash.plotly.com/clientside-callbacks). To fill this gap, React+Pyodide would allow you to create sophisticated UIs on the client side (e.g. to render a large number of components) without leaving Python, so community effort to connect those two frameworks could allow a full end-to-end workflow for building `pydata` apps in Python on both server and client-side.
