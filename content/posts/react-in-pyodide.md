@@ -260,7 +260,7 @@ So you can pass in as many children as you want, and any parameter-argument pair
 
 def pythonify(component):
     # implementation omitted
-    pass
+    ...
 
 div = pythonify('div')
 p = pythonify('p')
