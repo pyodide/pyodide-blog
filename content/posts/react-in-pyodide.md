@@ -125,7 +125,7 @@ Putting everything together:
 </html>
 ```
 
-> The full demo can be found in `demos/react-in-pyodide/demo-1.html`.
+> The full demo can be found in `demos/react-in-pyodide/demo-1/`.
 
 ## Rewriting this in Python
 
@@ -176,7 +176,7 @@ async function main() {
 main();
 ```
 
-> The full demo can be found in `demos/react-in-pyodide/demo-2.html`. You can find the JS fiddle here.
+> The full demo can be found in `demos/react-in-pyodide/demo-2/`. You can find the JS fiddle here.
 
 # Working with React hooks
 
@@ -228,7 +228,7 @@ js.document.body.appendChild(dom_container)
 js.ReactDOM.render(e(App, None), dom_container)
 ```
 
-> The full demo can be found in `demos/react-in-pyodide/demo-3.html`. You can find the JS fiddle here.
+> The full demo can be found in `demos/react-in-pyodide/demo-3/`. You can find the JS fiddle here.
 
 You can see that we are adding a `jsobj` helper function to convert the Python `dict` into a JS `Object`. This is because the second argument to `e` is a JS object representing the `props`, hence the need to convert `dict`s to `Object`s.
 
@@ -287,7 +287,7 @@ js.ReactDOM.render(App(), dom_container)
 
 How `pythonify` is implemented is not as important as the fact it is *possible*, and that you can use it to make your components more pythonic. 
 
-> The implementation used in this post is fairly concise (~50 lines) but is convoluted. You can find it in `demos/react-in-pyodide/pythonify.py`. The full example is at `demos/react-in-pyodide/demo-4.html`. You can find the JS fiddle here.
+> The implementation used in this post is fairly concise (~50 lines) but is convoluted. You can find it in `demos/react-in-pyodide/pythonify.py`. The full example is at `demos/react-in-pyodide/demo-4/`. You can find the JS fiddle here.
 
 
 # Incorporating MUI into Python
@@ -359,7 +359,7 @@ def App(props, children):
 # ...
 ```
 
-> The full demo can be found in `demos/react-in-pyodide/demo-4.html`.
+> The full demo can be found in `demos/react-in-pyodide/demo-4/`.
 
 Note how we use Python's `math.comb` function to calculate the combination (this function is not available in JS's `math` module). This is only a sneak peek at Python's numerical capabilities; through `numpy` and `scipy`, you can access a significant number of numerical tools that are difficult to find in JS, all without stepping out of the component body.
 
@@ -397,7 +397,7 @@ def App(props, children):
     )
 ```
 
-> The full demo can be found in `demos/react-in-pyodide/demo-5.html`. You can find the JS fiddle here.
+> The full demo can be found in `demos/react-in-pyodide/demo-5`. You can find the JS fiddle here.
 
 
 ## Separating HTML and Python
