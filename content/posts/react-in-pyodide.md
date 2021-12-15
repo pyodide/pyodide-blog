@@ -10,7 +10,6 @@ TocOpen: false
 draft: false
 hidemeta: false
 comments: false
-description: "Desc Text."
 # canonicalURL: "https://canonical.url/to/page"
 disableHLJS: true # to disable highlightjs
 disableShare: false
@@ -29,7 +28,7 @@ cover:
 
 From web servers to end-to-end Data pipelines, Python has become a ubiquitous tool for building all sorts of programs and software. With powerful built-in libraries and an incredible number of third-party libraries, the Python ecosystem makes it easy to quickly get your project started. In fact, building user interfaces (UIs) is not an exception: [PyQT](https://pypi.org/project/PyQt5/) allows you to create cross-platform desktop applications, whereas libraries like [Dash](https://github.com/plotly/dash) allows you to create full-fledged web applications (including the UI) within a single Python script. 
 
-In parallel, the popularity of the JavaScript language for building web UIs resulted in the creation of specialized frameworks like [React](https://reactjs.org/) and [Vue.js](https://vuejs.org/), as well as many associated component libraries like [React Bootstrap](https://react-bootstrap.github.io/) and [MUI](https://mui.com/) (formerly known as React Material-UI) to facilitate the creation of consistent and complex UIs for browsers. Moreover, if you wish to extend of those components or create your own, you would have to use JavaScript, which is a separate language you will need to learn. 
+In parallel, the popularity of the JavaScript language for building web UIs resulted in the creation of specialized frameworks like [React](https://reactjs.org/) and [Vue.js](https://vuejs.org/), as well as many associated component libraries like [React Bootstrap](https://react-bootstrap.github.io/) and [MUI](https://mui.com/) (formerly known as React Material-UI) to facilitate the creation of consistent and complex UIs for browsers. Moreover, if you wish to extend those components or create your own, you would have to use JavaScript, which is a separate language you will need to learn. 
 
 Fortunately, it turns out that Pyodide has many capabilities that make it possible to directly use React and MUI inside Python, without any JavaScript needed. This is what we will explore in this post.
 
@@ -130,7 +129,7 @@ Putting everything together:
 
 ## Rewriting this in Python
 
-Let's now see what this would look like in Python. Let's ignore the JS part for a second; we will use the Pyodide API to proxy the JS call into Python code. If you are not familiar with that, you can check out the [doc page](https://pyodide.org/en/stable/usage/type-conversions.html#proxying-from-javascript-into-python) on the subject. Recall that `js` comes from the Pyodide API and `react` and `react-dom` were imported as `<script>` in HTML. Now, let's see what the Python code would look like:
+Let's now see what this would look like in Python. Let's ignore the JS part for a second; we will use the Pyodide API to proxy the JS call into Python code. If you are not familiar with that, you can check out the [doc page](https://pyodide.org/en/stable/usage/type-conversions.html#proxying-from-javascript-into-python) on the subject. Recall that `js` comes from the Pyodide API and `react` and `react-dom` were loaded with the `<script>` tag in HTML. Now, let's see what the Python code would look like:
 
 ```python
 import js
@@ -151,7 +150,7 @@ js.document.body.appendChild(dom_container)
 js.ReactDOM.render(e(App, None), dom_container)
 ```
 
-This is fairly similar to the JS code above; this is thanks to `pyodide`'s extensive support for JS -> Python proxying. However, the big difference is that, since we are using Pyodide, it's now possible to use any standard built-in Python library anywhere in the app; we can even use the `pydata` ecosystem (`numpy`, `pandas`, `scikit-learn`, etc.)! 
+This is fairly similar to the JS code above; this is thanks to Pyodide's extensive support for JS -> Python proxying. However, the big difference is that, since we are using Pyodide, it's now possible to use any standard built-in Python library anywhere in the app; we can even use the `pydata` ecosystem (`numpy`, `pandas`, `scikit-learn`, etc.)! 
 
 Of course, we still need to actually load `pyodide.js` from the CDN, and then make the call to our script. The head will need to be updated:
 
@@ -366,7 +365,7 @@ Note how we use Python's `math.comb` function to calculate the combination (this
 
 ## Rewriting full fledged MUI apps
 
-With `pythonify` and the proxy system built in `pyodide`, you can easily rewrite MUI apps in Python, such as this [official MUI demo](https://github.com/mui-org/material-ui/blob/v4.x/examples/cdn/index.html). Among else, you can use components you just created inside other components:
+With `pythonify` and the proxy system built in Pyodide, you can easily rewrite MUI apps in Python, such as this [official MUI demo](https://github.com/mui-org/material-ui/blob/v4.x/examples/cdn/index.html). Among else, you can use components you just created inside other components:
 
 ```python
 # ...
