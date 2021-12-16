@@ -47,7 +47,7 @@ intellisense so that interactive documentation for my custom chart API could
 appear right in the repl. This did not go as planned because of recursion
 errors.
 
-The following code reproduces of the problem:
+The following code reproduces the problem:
 ```py
 import jedi
 import numpy
