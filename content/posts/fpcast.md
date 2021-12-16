@@ -109,8 +109,9 @@ see a bunch of units like:
 ```
 
 The functions `byn$fpcast-emu$_PyFunction_Vectorcall` and
-`byn$fpcast-emu$_PyEval_EvalFrameDefault` emulate function pointer casts. In
-other words, they are there to handle the case where we've called
+`byn$fpcast-emu$_PyEval_EvalFrameDefault` emulate function pointer casts. (The
+`byn$` prefix indicates that they were created in a binaryen pass, to avoid
+confusion.) In other words, they are there to handle the case where we've called
 `PyFunction_Vectorcall` or `PyEval_EvalFrameDefault` with the wrong number of
 arguments. They also are slow and waste a huge amount of stack space.
 
