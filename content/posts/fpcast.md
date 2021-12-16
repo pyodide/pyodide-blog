@@ -333,12 +333,15 @@ signature always.
 
 The way that `EMULATE_FUNCTION_POINTER_CASTS` works is that it walks through the
 `wasmTable` which is used to make indirect calls and replaces each function with
-a "thunk" which expects a fixed, much larger number of arguments. So what we see is
-if `f` is a function:
+an adaptor which expects a fixed, much larger number of arguments. The argument
+list can be padded with zeroes at the end to ensure that it is always called
+with the same number of arguments.
+
+So if `f` is a function:
 ```C
 int f(float x, int y);
 ```
-Then the call `res = f(x,y)` gets replaced with:
+Then the `EMULATE_FUNCTION_POINTER_CASTS` pass replaces a call `res = f(x,y)` with:
 ```C
 u64 temp = f_adaptor(
     ConvertFloat32ToUint64(x),
