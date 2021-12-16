@@ -255,7 +255,9 @@ currently using.
 
 Explicitly, we make a trampoline:
 ```C
-EM_JS( // EM_JS is a C macro which lets us declare a Javascript function to invoke from C.
+// EM_JS is a C macro which lets us declare a Javascript function
+// which we can invoke from C.
+EM_JS(
 PyObject*, 
 method_call_trampoline, (
     PyCFunction func, // In Javascript, all arguments are Numbers.
