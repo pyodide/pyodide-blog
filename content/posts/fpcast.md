@@ -60,7 +60,7 @@ you will see "RangeError: Maximum call stack size exceeded".
 In Pyodide 0.16.1, the available stack space before a stack overflow is enough
 for a call depth of 120 Python function calls. Jedi needs more than this.
 
-## How are we using up all this stack space?
+## How much stack space are we working with?
 
 Chromium sets the stack size to about 984 kilobytes. The source has the comment:
 ```C
@@ -93,32 +93,28 @@ benchmark, but in practice it isn't much better than Pyodide v0.17. There are
 still examples that cause segfaults using Jedi in Pyodide v0.18 at much lower
 stack depths.
 
-This bad stack performance has to do with our ABI for calling function pointers.
-In version 0.18, I hacked a couple of common call paths by replacing:
-```C
-f(x, y, z) // f is a function pointer
+## The cause of the large stack usage: function pointer cast emulation!
+
+The bad stack performance has to do with our ABI for calling function pointers.
+In Pyodide v0.17, looking at the stack trace when we cause a stack overflow, we
+see a bunch of units like:
 ```
-with:
-```C
-if(f == most_common_function){    
-    // In some common cases, we can avoid calling the function pointer and save on
-    // stack space and execution time.
-    most_common_function(x, y, z);
-} else {
-    // Pointer isn't what we expected, make indirect call instead.
-    f(x, y, z);
-}
+    at pyodide.asm.wasm:wasm-function[767]:0x1cb77c
+    at _PyFunction_Vectorcall (pyodide.asm.wasm:wasm-function[768]:0x1cb878)
+    at byn$fpcast-emu$_PyFunction_Vectorcall (pyodide.asm.wasm:wasm-function[14749]:0x7a3736)
+    at pyodide.asm.wasm:wasm-function[2764]:0x2ac6ae
+    at _PyEval_EvalFrameDefault (pyodide.asm.wasm:wasm-function[2758]:0x2a980f)
+    at byn$fpcast-emu$_PyEval_EvalFrameDefault (pyodide.asm.wasm:wasm-function[15508]:0x7a61f3)
+    at PyEval_EvalFrameEx (pyodide.asm.wasm:wasm-function[2757]:0x2a4693)
 ```
-This improved the apparent score on the benchmark a lot, but in practice it
-still didn't work that well.
 
-In version `0.19`, we have finally fixed the root cause of the problem and can
-fully support a call depth of at least 1000 (most likely somewhere around 1500
-would still be safe).
+The functions `byn$fpcast-emu$_PyFunction_Vectorcall` and
+`byn$fpcast-emu$_PyEval_EvalFrameDefault` emulate function pointer casts. In
+other words, they are there to handle the case where we've called
+`PyFunction_Vectorcall` or `PyEval_EvalFrameDefault` with the wrong number of
+arguments. They also are slow and waste a huge amount of stack space.
 
-
-
-## Why function pointer casting?
+### Why are there function pointer casts?
 
 Many popular Python packages are written at least in part in C for performance
 reasons. Python comes with several possible calling conventions to allow calling
@@ -163,7 +159,7 @@ works fine. Since most of the time Python packages are compiled in these cases,
 package authors cast function pointers and move on with their lives. The
 existing Python ecosystem is full of these casts all over the place.
 
-## Indirect calls in Wasm
+### Function pointer casts don't work in Wasm
 
 In x86, calling a function pointer is the same process as calling a static
 function call. Arguments and a return address are pushed onto a stack, and a
@@ -183,7 +179,7 @@ asserts that it takes two arguments. The wasm runtime checks and sees that in
 fact, `my_noargs_function2` only expects one argument, and it crashes with an
 "indirect call signature mismatch" error.
 
-## Ways to fix call signature mismatch errors
+## Ways to fix the call signature mismatch errors
 
 ### 1. EMULATE_FUNCTION_POINTER_CASTS
 
