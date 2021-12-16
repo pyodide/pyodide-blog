@@ -30,7 +30,7 @@ cover:
 In Pyodide v0.19, we can finally support the default recursion depth of 1000.
 Here's a graph by browser and Pyodide version:
 
-{{< figure src="/recursion_depth.png" title="Default recusion depth by version" >}}
+{{< figure src="/recursion_depth.png" title="Default recursion depth by version" >}}
 
 Note that this figure understates the magnitude of the improvements because in
 all prior versions there were some code paths that would lead to fatal segmentation
@@ -41,7 +41,7 @@ faults in normal code.
 ### Acknowledgements
 
 We would like to thank [Joe Marshall](http://www.cs.nott.ac.uk/~pszjm2/) for his
-valuable contributions in this area. We would also like to thank the Emscipten
+valuable contributions in this area. We would also like to thank the Emscripten
 team, who are unfailingly helpful. Without Emscripten, Pyodide could not exist.
 
 
@@ -204,7 +204,7 @@ casts (there's no compiler setting that can generate warnings about them). It is
 also very tedious to locate the problematic code. The upstream packages are
 generally happy to accept these patches but it takes time to review them and
 they may not get backported as far as we need them (Pyodide is stuck on pretty
-old versions of some packages). So it generates a high maintentance burden. This
+old versions of some packages). So it generates a high maintenance burden. This
 solution isn't really workable for us.
 
 ### 3. Automate the patching
@@ -239,10 +239,9 @@ my_method(PyObject* self, PyObject *_ignored){
 ```
 
 We also patch each spot where `my_method` is called with one argument. We fix a
-handful of other common problematic declarations as well. If problematic code
-when the source is confusing (maybe the problem spans multiple files or occurs
-in a macro expansion) then we just raise an error indicating the problem
-location and someone can manually patch the source.
+handful of other common problematic declarations as well. If the problem spans
+multiple files or occurs inside of a macro expansion then we just raise an error
+indicating the problem location and someone can manually patch the source.
 
 I wrote code to do this and it works, but there are a lot of weird edge cases to
 take into account and the code is complex.
@@ -287,7 +286,7 @@ PyObject *result = method_call_trampoline(meth, args[0], NULL, NULL);
 ```
 and this won't crash if `meth` expects a number of arguments different than two.
 
-Similarly, the intepreter normally calls a function which supports `VARARGS` and
+Similarly, the interpreter normally calls a function which supports `VARARGS` and
 `KEYWORD_ARGS` as follows:
 ```C
 PyObject *result = meth(args[0], argstuple, kwdict);
