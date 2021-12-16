@@ -375,9 +375,9 @@ pointers to the adaptors and the normal function pointers.
 We make a list of function signatures that somewhere get cast and called with
 the wrong arguments. This might look like:
 
-1. i32 f(void)
-2. i32 f(i32)
-3. i32 f(i32, i32)
+1. `(void) -> i32`
+2. `(i32) -> i32`
+3. `(i32, i32) -> i32`
 
 Then when we take a function pointer, if it's signature is on the list, we
 encode the signature into the higher bits of the function pointer:
