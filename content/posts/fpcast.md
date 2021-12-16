@@ -331,19 +331,19 @@ int f(float x, int y);
 Then the call `res = f(x,y)` gets replaced with:
 ```C
 u64 temp = f_adaptor(
-    ConvertFromFloat32ToUint64(x), 
-    ConvertFromInt32ToUint64(y), 
+    ConvertFloat32ToUint64(x),
+    ConvertInt32ToUint64(y),
     0, ..., 0 // 59 zeros
 );
-res = ConvertFromUint64ToInt32(temp);
+res = ConvertUint64ToInt32(temp);
 ```
 and `f_adaptor` looks like:
 ```C
 uint_64 f_adaptor(uint_64 x1, ..., uint_64 x61){ 
     // Ignore x3, ..., x61 they are just there to keep us safe from being called
     // with too many arguments
-    int res = f(ConvertFromU64ToFloat32(x1), ConvertFromU64ToInt32(x2));
-    return ConvertFromInt32ToUint64(res);
+    int res = f(ConvertU64ToFloat32(x1), ConvertU64ToInt32(x2));
+    return ConvertInt32ToUint64(res);
 }
 ```
 
