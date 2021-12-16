@@ -63,11 +63,7 @@ for a call depth of 120 Python function calls. Jedi needs more than this.
 
 ## How much stack space are we working with?
 
-Chromium sets the stack size to about 984 kilobytes. The source has the comment:
-```C
-// Slightly less than 1MB, since Windows' default stack size for
-// the main execution thread is 1MB for both 32 and 64-bit.
-```
+[Chromium sets the stack size to 984 kilobytes.](https://chromium.googlesource.com/v8/v8/+/d2b4292ca73dd2c70d007fcb7ac423c3d2095329/src/common/globals.h#88)
 Firefox manages to set the stack size several times higher, but for some reason a 
 Python function call takes up about twice as much space on Firefox.
 
