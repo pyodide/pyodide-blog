@@ -3,7 +3,7 @@ title: "Pyodide Function Pointer Cast Removal"
 date: 2021-12-06T20:27:27-08:00
 draft: true
 tags: ["internals"]
-# author: "Me"
+author: "Hood Chatham"
 # author: ["Me", "You"] # multiple authors
 showToc: true
 TocOpen: false
