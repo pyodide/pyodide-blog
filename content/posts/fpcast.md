@@ -216,8 +216,9 @@ solution isn't really workable for us.
 ### 3. Automate the patching
 
 We can write code to analyze the `clang` abstract syntax tree, locate the bad
-pointer casts, and either automatically rewrite the source. The idea here is
-that we scan the AST for declarations that look like:
+pointer casts, and either automatically rewrite the source or raise an error if
+the problem is too hard to fix. The idea here is that we scan the AST for
+declarations that look like:
 
 ```C
 PyMethodDef my_method_def = {
