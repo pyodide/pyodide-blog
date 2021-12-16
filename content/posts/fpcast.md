@@ -27,8 +27,8 @@ cover:
     hidden: true # only hide on current single page
 ---
 
-In Pyodide v0.19, we can finally support a recursion depth of at least the
-native default of 1000. Here's a graph by browser and Pyodide version:
+In Pyodide v0.19, we can finally support the default recursion depth of 1000.
+Here's a graph by browser and Pyodide version:
 
 {{< figure src="/recursion_depth.png" title="Default recusion depth by version" >}}
 
