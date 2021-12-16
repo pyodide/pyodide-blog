@@ -362,7 +362,7 @@ other data types.
 adaptor function.
 
 4. It messes up calling from Javascript because when we do a function table
-lookup we get the weird function which expects to receive 61 `BigInt` rather
+lookup we get the weird function which expects to receive 61 `uint_64`s rather
 than the original arguments.
 
 To fix calls from Javascript, we have to make a second table which maps
