@@ -43,8 +43,9 @@ faults in normal code.
 When I first started using Pyodide in summer 2020, my plan was to use it to
 control the display of a niche type of mathematical charts. I hacked the Monaco
 editor to make it behave like a repl, and then connected Jedi to Monaco
-intellisense in order to get really good discoverability for my custom chart
-API. This did not go as planned because of recursion errors.
+intellisense so that interactive documentation for my custom chart API could
+appear right in the repl. This did not go as planned because of recursion
+errors.
 
 The following code reproduces of the problem:
 ```py
