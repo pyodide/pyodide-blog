@@ -343,7 +343,7 @@ int f(float x, int y);
 ```
 Then the `EMULATE_FUNCTION_POINTER_CASTS` pass replaces a call `res = f(x,y)` with:
 ```C
-u64 temp = f_adaptor(
+uint_64 temp = f_adaptor(
     ConvertFloat32ToUint64(x),
     ConvertInt32ToUint64(y),
     0, ..., 0 // 59 zeros
