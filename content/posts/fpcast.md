@@ -38,6 +38,13 @@ faults before hitting the default recursion depth, whereas in version `0.19`, we
 have plenty of extra stack space left over so we should never see fatal segmentation
 faults in normal code.
 
+### Acknowledgements
+
+We would like to thank [Joe Marshall](http://www.cs.nott.ac.uk/~pszjm2/) for his
+valuable contributions in this area. We would also like to thank the Emscipten
+team, who are unfailingly helpful. Without Emscripten, Pyodide could not exist.
+
+
 ## Some history
 
 When I first started using Pyodide in summer 2020, my plan was to use it to
