@@ -99,7 +99,7 @@ stack depths.
 The bad stack performance has to do with our ABI for calling function pointers.
 In Pyodide v0.17, looking at the stack trace when we cause a stack overflow, we
 see a bunch of units like:
-```
+```js
     at pyodide.asm.wasm:wasm-function[767]:0x1cb77c
     at _PyFunction_Vectorcall (pyodide.asm.wasm:wasm-function[768]:0x1cb878)
     at byn$fpcast-emu$_PyFunction_Vectorcall (pyodide.asm.wasm:wasm-function[14749]:0x7a3736)
@@ -135,7 +135,7 @@ my_noargs_function(PyObject *self, PyObject *_always_null){
 
 Many people writing Python C extensions write their `METH_NOARGS` functions
 instead like this:
-```
+```C
 static PyObject* 
 my_noargs_function2(PyObject *self){
     // Do something
