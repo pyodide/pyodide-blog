@@ -28,7 +28,13 @@ cover:
 ---
 
 In Pyodide v0.19, we can finally support the default recursion depth of 1000.
-Here's a graph by browser and Pyodide version:
+This post describes the work we did that enabled this increased recursion depth.
+
+We also attain a speed up between 8% to 20% for loading Pyodide and for
+individual benchmarks. The entire test suite runs faster by a comparable amount.
+The code size was reduced by ???%.
+
+Here's a graph of the recursion depth by browser and Pyodide version:
 
 {{< figure src="/recursion_depth.png" title="Default recursion depth by version" >}}
 
