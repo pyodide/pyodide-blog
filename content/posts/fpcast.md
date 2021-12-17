@@ -44,8 +44,8 @@ Here's a graph of the recursion limit by browser and Pyodide version:
   </figcaption>
 </figure>
 
-The "limit" bars show how we set the default recursion depth, the "segfault" bars show how many simple calls
-it takes to cause a segmentation fault:
+The "limit" bars show how we set the default recursion depth, the "segfault"
+bars show how many simple calls it takes to cause a segmentation fault:
 ```py
 import sys; sys.setrecursionlimit(100_000)
 def f(n):
@@ -101,23 +101,6 @@ Python function call takes up about twice as much space on Firefox.
 But 984 kilobytes is still a fair amount of space. Just what is happening that
 Jedi manages to use that all in 120 Python call frames? That averages out to
 over 8 kilobytes per call frame!
-
-In my native Python,
-```py
-import sys; sys.setrecursionlimit(100_000)
-def f(n): print(n); f(n+1)
-f(0)
-```
-gets up to 20135 calls before the segmentation fault.
-
-Note that setting the stack overflow anywhere near this high will lead to
-segmentation faults because a lot of code paths use more stack space per Python
-call (also, Python needs some stack space to raise a `RecursionError`).
-
-Pyodide v0.18 has a hack that helps it _look_ much better on this particular
-benchmark, but in practice it isn't much better than Pyodide v0.17. There are
-still examples that cause segfaults using Jedi in Pyodide v0.18 at much lower
-stack depths.
 
 ## The cause of the large stack usage: function pointer cast emulation!
 
