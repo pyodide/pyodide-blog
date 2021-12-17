@@ -169,7 +169,7 @@ works fine. Since most of the time Python packages are compiled in these cases,
 package authors cast function pointers and move on with their lives. The
 existing Python ecosystem is full of these casts all over the place.
 
-### Function pointer casts don't work in Wasm
+### Function pointer casts don't work in WebAssembly
 
 In x86, calling a function pointer is the same process as calling a static
 function call. Arguments and a return address are pushed onto a stack, and a
@@ -177,15 +177,15 @@ jump is performed. The only difference is that in the case of a static function
 call, the target of the jump is known at compile time, whereas in the case of a
 dynamic call, it is determined by a variable.
 
-In web assembly, a function pointer is an index into a table of functions. There
-is a separate wasm instruction called `call_indirect` which takes an immediate
+In WebAssembly, a function pointer is an index into a table of functions. There
+is a separate WebAssembly instruction called `call_indirect` which takes an immediate
 (compile-time determined) argument to indicate what the signature of the
-function being called should be. The web assembly runtime checks that the
+function being called should be. The WebAssembly runtime checks that the
 function being called has a signature which matches the asserted signature and
 if it doesn't it throws an error.
 
 So we call `my_noargs_function2` through a `call_indirect` instruction which
-asserts that it takes two arguments. The wasm runtime checks and sees that in
+asserts that it takes two arguments. The WebAssembly runtime checks and sees that in
 fact, `my_noargs_function2` only expects one argument, and it crashes with an
 "indirect call signature mismatch" error.
 
@@ -258,11 +258,11 @@ take into account and the code is complex.
 
 ### 4. Trampolines
 
-When calling from Js ==> Wasm, the calls behave like Javascript function calls:
+When calling from Js ==> WebAssembly, the calls behave like Javascript function calls:
 if we give the wrong number of arguments, it's silently fixed for us. The bad
 function calls only occur at a small number of call sites, so if we patch in a
 trampoline to each of these call sites that calls a Javascript function that
-calls back into wasm, we can fix the problems. This is the solution we are
+calls back into WebAssembly, we can fix the problems. This is the solution we are
 currently using.
 
 Explicitly, we make a trampoline:
@@ -320,7 +320,7 @@ rewrite the trampolines.
 
 My plan is to write an LLVM pass to implement function pointer cast emulation in
 a way that has a negligible impact on speed, stack usage, and code size. The
-solution will also impose no surprising difficulties for Javascript ==> Wasm
+solution will also impose no surprising difficulties for Javascript ==> WebAssembly
 calls or for dynamic linking. It does change the ABI so it will require the
 linked modules to be aware of this different ABI. We will also assume that (1)
 most function pointers are called with the correct signature most of the time
@@ -330,7 +330,7 @@ signature and called. Both of these assumptions are met in Python.
 ### How `EMULATE_FUNCTION_POINTER_CASTS` works
 
 Emscripten implements `EMULATE_FUNCTION_POINTER_CASTS` in a binaryen pass.
-Binaryen is the web assembly optimizer. It runs after the web assembly module is
+Binaryen is the WebAssembly optimizer. It runs after the WebAssembly module is
 completely linked. It's an all-or-nothing thing, we either have to pay a big
 cost EVERYWHERE or every single function pointer must be called with the correct
 signature always.
@@ -385,7 +385,7 @@ than the original arguments.
 To fix calls from Javascript, we have to make a second table which maps
 `f_adaptor_index ==> f_index`, and then instead of `wasmTable.get(func_ptr)` we
 say `wasmTable.get(adaptorToOrigFunctionMap.get(func_ptr))`. All Javascript code
-that calls into Wasm has to be adjusted in this way. When we used
+that calls into WebAssembly has to be adjusted in this way. When we used
 `EMULATE_FUNCTION_POINTER_CASTS` we always got errors due to confusion between
 pointers to the adaptors and the normal function pointers.
 
