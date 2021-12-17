@@ -198,8 +198,12 @@ casting. This is what we have been using to resolve the troubles. However, it
 comes with a high cost: it is slow, it uses up large amounts of stack space, and
 it increases code size by a lot. Also, it makes calling a function pointer from
 Javascript inconvenient, and in particular breaks dynamic linking and many
-Emscripten ports which implement C libraries with Javascript code. I will
-describe later how this works and why it imposes such large costs.
+Emscripten ports which implement C libraries with Javascript code. In upstream
+Emscripten, EMULATE_FUNCTION_POINTER_CASTS doesn't work with dynamic linking at
+all. It was only due to complicated patches contributed by Joe Marshall that we
+were able to use it. 
+
+I will describe later how EMULATE_FUNCTION_POINTER_CASTS works and why it imposes such large costs.
 
 ### 2. Just patch the packages
 
