@@ -30,13 +30,19 @@ cover:
 In Pyodide v0.19, we can finally support the default recursion depth of 1000. We
 also attain a speed up between 8% to 20% for loading Pyodide and for individual
 benchmarks. The entire test suite runs faster by a comparable amount. The code
-size was reduced by ???%. These gains came from [this pull
-request](https://github.com/pyodide/pyodide/pull/2019) which removed function
-pointer cast emulation.
+size was reduced by 25% from 12 megabytes to 9.1 megabytes. These gains came
+from [this pull request](https://github.com/pyodide/pyodide/pull/2019) which
+removed function pointer cast emulation.
 
 Here's a graph of the recursion depth by browser and Pyodide version:
+<figure style="text-align: center;">
+  <img src="/recursion_depth.png"  />
+  <figcaption>
+      <h4>Default recursion depth by version</h4>
+  </figcaption>
+</figure>
 
-{{< figure src="/recursion_depth.png" title="Default recursion depth by version" >}}
+
 
 Note that this figure understates the magnitude of the improvements because in
 all prior versions there were some code paths that would lead to fatal segmentation
@@ -90,9 +96,7 @@ import sys; sys.setrecursionlimit(100_000)
 def f(n): print(n); f(n+1)
 f(0)
 ```
-gets up to 20135 calls before the segmentation fault. In various Pyodide
-versions we have the following results:
-{{< figure src="/depth_to_stack_overflow.png" caption="How many simple Python calls it takes to cause a stack overflow by browser and Pyodide version" >}}
+gets up to 20135 calls before the segmentation fault.
 
 Note that setting the stack overflow anywhere near this high will lead to
 segmentation faults because a lot of code paths use more stack space per Python
@@ -443,3 +447,7 @@ This strategy cannot be implemented as a Binaryen pass, because it is impossible
 to tell when a function pointer is being taken in Binaryen. However, in llvm
 bytecode there is a dedicated instruction for taking a function pointer and we
 can visit these instructions in an llvm pass.
+
+## Conclusion
+
+Function pointer casting is a slightly dumb problem

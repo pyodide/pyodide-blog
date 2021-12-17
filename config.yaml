@@ -122,7 +122,10 @@ menu:
           weight: 30
 # Read: https://github.com/adityatelange/hugo-PaperMod/wiki/FAQs#using-hugos-syntax-highlighter-chroma
 # pygmentsUseClasses: true
-# markup:
+markup:
+  goldmark:
+    renderer:
+      unsafe : true
 #     highlight:
 #         # anchorLineNos: true
 #         codeFences: true
