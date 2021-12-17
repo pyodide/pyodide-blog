@@ -446,7 +446,3 @@ This strategy cannot be implemented as a Binaryen pass, because it is impossible
 to tell when a function pointer is being taken in Binaryen. However, in llvm
 bytecode there is a dedicated instruction for taking a function pointer and we
 can visit these instructions in an llvm pass.
-
-## Conclusion
-
-Function pointer casting is a slightly dumb problem
