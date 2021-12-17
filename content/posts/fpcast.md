@@ -34,21 +34,33 @@ size was reduced by 25% from 12 megabytes to 9.1 megabytes. These gains came
 from [this pull request](https://github.com/pyodide/pyodide/pull/2019) which
 removed function pointer cast emulation.
 
-Here's a graph of the recursion depth by browser and Pyodide version:
+Here's a graph of the recursion limit by browser and Pyodide version:
 <figure style="text-align: center;">
-  <img src="/recursion_depth.png"  />
+  <img src="/recursion_depth.svg"  />
   <figcaption>
-      <h4>Default recursion depth by version</h4>
+      <h4>Recursion limit and depth to segmentation fault</h4>
+      <h5 style="text-align: left;">
+
   </figcaption>
 </figure>
 
+The "limit" bars show how we set the default recursion depth, the "segfault" bars show how many simple calls
+it takes to cause a segmentation fault:
+```py
+import sys; sys.setrecursionlimit(100_000)
+def f(n):
+    print(n)
+    f(n+1)
+f(0)
+```
+In practice, a single Python stack frame can take a widely variable amount of
+stack space, so these simple Python to Python calls are not entirely
+representative, but they give a rough estimate.
 
-
-Note that this figure understates the magnitude of the improvements because in
-all prior versions there were some code paths that would lead to fatal segmentation
-faults before hitting the default recursion depth, whereas in version `0.19`, we
-have plenty of extra stack space left over so we should never see fatal segmentation
-faults in normal code.
+In all prior versions of Pyodide there were some code paths that could lead to a
+segmentation fault before hitting the recursion limit, whereas in version
+v0.19, we have plenty of extra stack space left over so we should never see
+segmentation faults in normal code.
 
 ### Acknowledgements
 
