@@ -178,16 +178,16 @@ call, the target of the jump is known at compile time, whereas in the case of a
 dynamic call, it is determined by a variable.
 
 In WebAssembly, a function pointer is an index into a table of functions. There
-is a separate WebAssembly instruction called `call_indirect` which takes an immediate
-(compile-time determined) argument to indicate what the signature of the
-function being called should be. The WebAssembly runtime checks that the
+is a separate WebAssembly instruction called `call_indirect` which takes an
+immediate (compile-time determined) argument to indicate what the signature of
+the function being called should be. The WebAssembly runtime checks that the
 function being called has a signature which matches the asserted signature and
 if it doesn't it throws an error.
 
 So we call `my_noargs_function2` through a `call_indirect` instruction which
-asserts that it takes two arguments. The WebAssembly runtime checks and sees that in
-fact, `my_noargs_function2` only expects one argument, and it crashes with an
-"indirect call signature mismatch" error.
+asserts that it takes two arguments. The WebAssembly runtime checks and sees
+that in fact, `my_noargs_function2` only expects one argument, and it crashes
+with an "indirect call signature mismatch" error.
 
 ## Ways to fix the call signature mismatch errors
 
@@ -203,7 +203,8 @@ Emscripten, EMULATE_FUNCTION_POINTER_CASTS doesn't work with dynamic linking at
 all. It was only due to complicated patches contributed by Joe Marshall that we
 were able to use it. 
 
-I will describe later how EMULATE_FUNCTION_POINTER_CASTS works and why it imposes such large costs.
+I will describe later how EMULATE_FUNCTION_POINTER_CASTS works and why it
+imposes such large costs.
 
 ### 2. Just patch the packages
 
@@ -258,12 +259,12 @@ take into account and the code is complex.
 
 ### 4. Trampolines
 
-When calling from Js ==> WebAssembly, the calls behave like Javascript function calls:
-if we give the wrong number of arguments, it's silently fixed for us. The bad
-function calls only occur at a small number of call sites, so if we patch in a
-trampoline to each of these call sites that calls a Javascript function that
-calls back into WebAssembly, we can fix the problems. This is the solution we are
-currently using.
+When calling from Js ==> WebAssembly, the calls behave like Javascript function
+calls: if we give the wrong number of arguments, it's silently fixed for us. The
+bad function calls only occur at a small number of call sites, so if we patch in
+a trampoline to each of these call sites that calls a Javascript function that
+calls back into WebAssembly, we can fix the problems. This is the solution we
+are currently using.
 
 Explicitly, we make a trampoline:
 ```C
@@ -296,8 +297,8 @@ PyObject *result = method_call_trampoline(meth, args[0], NULL, NULL);
 ```
 and this won't crash if `meth` expects a number of arguments different than two.
 
-Similarly, the interpreter normally calls a function which supports `VARARGS` and
-`KEYWORD_ARGS` as follows:
+Similarly, the interpreter normally calls a function which supports `VARARGS`
+and `KEYWORD_ARGS` as follows:
 ```C
 PyObject *result = meth(args[0], argstuple, kwdict);
 ```
@@ -320,12 +321,12 @@ rewrite the trampolines.
 
 My plan is to write an LLVM pass to implement function pointer cast emulation in
 a way that has a negligible impact on speed, stack usage, and code size. The
-solution will also impose no surprising difficulties for Javascript ==> WebAssembly
-calls or for dynamic linking. It does change the ABI so it will require the
-linked modules to be aware of this different ABI. We will also assume that (1)
-most function pointers are called with the correct signature most of the time
-and (2) only a small number of types of function are cast into the wrong
-signature and called. Both of these assumptions are met in Python.
+solution will also impose no surprising difficulties for Javascript ==>
+WebAssembly calls or for dynamic linking. It does change the ABI so it will
+require the linked modules to be aware of this different ABI. We will also
+assume that (1) most function pointers are called with the correct signature
+most of the time and (2) only a small number of types of function are cast into
+the wrong signature and called. Both of these assumptions are met in Python.
 
 ### How `EMULATE_FUNCTION_POINTER_CASTS` works
 
@@ -345,7 +346,8 @@ So if `f` is a function:
 ```C
 int f(float x, int y);
 ```
-Then the `EMULATE_FUNCTION_POINTER_CASTS` pass replaces a call `res = f(x,y)` with:
+Then the `EMULATE_FUNCTION_POINTER_CASTS` pass replaces a call `res = f(x,y)`
+with:
 ```C
 uint_64 temp = f_adaptor(
     ConvertFloat32ToUint64(x),
@@ -370,17 +372,18 @@ called with anywhere in any of the Python ecosystem code.
 This explains the drawbacks:
 
 1. It takes up a lot of stack space because for every function pointer call we
-have to call an extra adaptor which uses up ~ 8*61 = 488 bytes of stack space.
+   have to call an extra adaptor which uses up ~ 8*61 = 488 bytes of stack
+   space.
 
 2. It's slow because a lot of time is spent converting between `uint_64` and
-other data types.
+   other data types.
 
 3. It increases code size because every single function needs a corresponding
-adaptor function.
+   adaptor function.
 
 4. It messes up calling from Javascript because when we do a function table
-lookup we get the weird function which expects to receive 61 `uint_64`s rather
-than the original arguments.
+   lookup we get the weird function which expects to receive 61 `uint_64`s
+   rather than the original arguments.
 
 To fix calls from Javascript, we have to make a second table which maps
 `f_adaptor_index ==> f_index`, and then instead of `wasmTable.get(func_ptr)` we
@@ -429,18 +432,19 @@ if(f_sig == expected_sig){
 This is much better:
 
 1. For the typical case where we call the function with the right number of
-arguments, there is almost no cost (branch prediction should guess this case).
+   arguments, there is almost no cost (branch prediction should guess this
+   case).
 
 2. The effect on code size is much milder because we only need to include a few
-trampolines. Careful consideration shows that we don't actually need a different
-trampoline for each pair of signatures, in practice it could be linear in the
-number of signatures we need casting support for.
+   trampolines. Careful consideration shows that we don't actually need a
+   different trampoline for each pair of signatures, in practice it could be
+   linear in the number of signatures we need casting support for.
 
 3. For function pointers with a signature not in the casting support list, we
-won't generate any of this code.
+   won't generate any of this code.
 
 4. Calling code needs to know to mask out the signature bits before calling a
-function pointer, but this is all it needs to know.
+   function pointer, but this is all it needs to know.
 
 This strategy cannot be implemented as a Binaryen pass, because it is impossible
 to tell when a function pointer is being taken in Binaryen. However, in llvm
@@ -452,8 +456,8 @@ can visit these instructions in an llvm pass.
 Function pointer casting is unusual in most code bases but unfortunately quite
 common in Python code. Because it is allowed in native code but disallowed in
 WebAssembly, we need to find some way to fix it. In general, a lot of the work
-of porting software deals with fixing small incompatibilities that
-break the code when used in a new environment.
+of porting software deals with fixing small incompatibilities that break the
+code when used in a new environment.
 
 There are many different possible approaches to fixing function pointer casts. I
 would group them into three main categories: patch the packages (i.e., patch the
