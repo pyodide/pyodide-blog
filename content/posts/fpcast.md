@@ -446,3 +446,28 @@ This strategy cannot be implemented as a Binaryen pass, because it is impossible
 to tell when a function pointer is being taken in Binaryen. However, in llvm
 bytecode there is a dedicated instruction for taking a function pointer and we
 can visit these instructions in an llvm pass.
+
+## Conclusion
+
+Function pointer casting is unusual in most code bases but unfortunately quite
+common in Python code. Because it is allowed in native code but disallowed in
+WebAssembly, we need to find some way to fix it. In general, a lot of the work
+of porting software deals with fixing small incompatibilities that
+break the code when used in a new environment.
+
+There are many different possible approaches to fixing function pointer casts. I
+would group them into three main categories: patch the packages (i.e., patch the
+functions we are calling), patch the Python interpreter (i.e., patch the call
+sites), or patch the compiler. In our case patching the call sites with
+Javascript trampolines was the best approach. Patching the compiler is the most
+general approach, but the existing solution that Emscripten offers has very
+serious drawbacks. In future work, we may implement a better solution using llvm
+passes.
+
+Pyodide runs into similar function signature problems at link time: for example
+have a hard time building scipy because it defines functions with a return value
+of `int` but then links them with other files that declare them as returning
+`void`. This forces us to write very complicated patches which are hard to
+migrate to new versions. Using llvm passes or other compiler solutions to solve
+some of these problems would allow us to reduce the number of patches which
+should make it easier to keep up with updates.
