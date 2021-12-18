@@ -461,8 +461,9 @@ functions we are calling), patch the Python interpreter (i.e., patch the call
 sites), or patch the compiler. In our case patching the call sites with
 Javascript trampolines was the best approach. Patching the compiler is the most
 general approach, but the existing solution that Emscripten offers has very
-serious drawbacks. In future work, we may implement a better solution using llvm
-passes.
+serious drawbacks. In future work, we may implement a better compiler-based
+solution using custom llvm passes to store extra signature data in function
+pointers. 
 
 Pyodide runs into similar function signature problems at link time: for example
 have a hard time building scipy because it defines functions with a return value
