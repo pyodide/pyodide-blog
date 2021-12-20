@@ -1,6 +1,6 @@
 ---
 title: "Function Pointer Cast Emulation in Pyodide"
-date: 2021-12-06T20:27:27-08:00
+date: 2021-12-21
 draft: true
 tags: ["internals"]
 author: "Hood Chatham"
