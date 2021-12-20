@@ -1,9 +1,9 @@
 ---
 title: "Function Pointer Cast Emulation in Pyodide"
-date: 2021-12-21
+date: 2021-12-19
 draft: true
 tags: ["internals"]
-author: "Hood Chatham"
+author: "<a href='http://www.example.com'> Hood Chatham</a>"
 # author: ["Me", "You"] # multiple authors
 showToc: true
 TocOpen: false
@@ -20,9 +20,9 @@ ShowReadingTime: true
 ShowBreadCrumbs: true
 ShowPostNavLinks: true
 cover:
-    # image: "<image path/url>" # image path/url
-    # alt: "<alt text>" # alt text
-    # caption: "<text>" # display caption under cover
+    image: "<image path/url>" # image path/url
+    alt: "<alt text>" # alt text
+    caption: "<text>" # display caption under cover
     relative: false # when using page bundles set this to true
     hidden: true # only hide on current single page
 ---
@@ -104,8 +104,8 @@ average of more than 8 kilobytes per call frame!
 ## The cause of the large stack usage: function pointer cast emulation!
 
 The poor stack performance has to do with the ABI for calling function pointers.
-When there is a stack overflow in Pyodide v0.17, we will generally a long
-repeating sequence consisting of the following call frames:
+When there is a stack overflow in Pyodide v0.17, we will see a long repeating
+sequence consisting of the following call frames:
 ```js
     at pyodide.asm.wasm:wasm-function[767]:0x1cb77c
     at _PyFunction_Vectorcall (pyodide.asm.wasm:wasm-function[768]:0x1cb878)
@@ -268,7 +268,7 @@ to take into account and the code is complex.
 
 ### 4. Trampolines
 
-When calling from Js ==> WebAssembly, the calls behave like Javascript function
+When calling from Javascript into WebAssembly, the calls behave like Javascript function
 calls: if we give the wrong number of arguments, it's silently fixed for us. The
 bad function calls only occur at a small number of call sites, so if we patch in
 a trampoline to each of these call sites that calls a Javascript function that
@@ -330,7 +330,7 @@ flexible, and work in pure wasm.
 My plan is to write an LLVM pass to implement compiler-generated function
 pointer cast emulation in a way that has a negligible impact on speed, stack
 usage, and code size. The solution will also impose no surprising difficulties
-for Javascript ==> WebAssembly calls or for dynamic linking. It does change the
+for calls from Javascript into WebAssembly or for dynamic linking. It does change the
 ABI so it will require the linked modules to be aware of this different ABI. We
 will also assume that (1) most function pointers are called with the correct
 signature most of the time and (2) only a small number of types of function are
@@ -392,8 +392,8 @@ This explains the drawbacks:
    lookup we get the weird function which expects to receive 61 `uint_64`s
    rather than the original arguments.
 
-To fix calls from Javascript, we have to make a second table which maps
-`f_adaptor_index ==> f_index`, and then instead of `wasmTable.get(func_ptr)` we
+To fix calls from Javascript, we have to make a second table which maps from
+`f_adaptor_index` to `f_index`, and then instead of `wasmTable.get(func_ptr)` we
 say `wasmTable.get(adaptorToOrigFunctionMap.get(func_ptr))`. All Javascript code
 that calls into WebAssembly has to be adjusted in this way. When we used
 `EMULATE_FUNCTION_POINTER_CASTS` we always got errors due to confusion between
