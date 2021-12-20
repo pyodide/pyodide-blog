@@ -3,7 +3,7 @@ title: "Function Pointer Cast Emulation in Pyodide"
 date: 2021-12-19
 draft: true
 tags: ["internals"]
-author: "<a href='http://www.example.com'> Hood Chatham</a>"
+author: "Hood Chatham"
 # author: ["Me", "You"] # multiple authors
 showToc: true
 TocOpen: false
