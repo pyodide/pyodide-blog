@@ -35,9 +35,9 @@ request](https://github.com/pyodide/pyodide/pull/2019) which changed the way we
 handle function pointer casts.
 
 Here is a plot showing the improvements in recursion depth:
-<figure style="text-align: center;">
-<h4>Recursion limit and depth to segmentation fault</h4>
-  <img src="/recursion_depth.svg" style="margin-top:-40pt; z-index:-10; position: relative;"  />
+<figure style="text-align: center; margin-top: -20pt; margin-bottom: 5pt;" >
+<h4 style="color: black; position: relative; top:40pt;">Recursion limit and depth to segmentation fault</h4>
+  <img src="recursion_depth.svg" style="z-index:-10; position: relative;"  />
   <figcaption>
   <p>Tested with Chrome version 96 and Firefox version 93</p>
   </figcaption>
