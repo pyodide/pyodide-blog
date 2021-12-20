@@ -1,5 +1,5 @@
 ---
-title: "Pyodide Function Pointer Cast Removal"
+title: "Function Pointer Cast Emulation in Pyodide"
 date: 2021-12-06T20:27:27-08:00
 draft: true
 tags: ["internals"]
@@ -27,25 +27,25 @@ cover:
     hidden: true # only hide on current single page
 ---
 
-In Pyodide v0.19, we can finally support the Python default recursion limit of
-1000. We also attain a speed up between 8% to 20% for loading Pyodide and for
-individual benchmarks. The entire test suite runs faster by a comparable amount.
-The code size was reduced by 25% from 12 megabytes to 9.1 megabytes. These gains
-came from [this pull request](https://github.com/pyodide/pyodide/pull/2019)
-which removed function pointer cast emulation.
+In Pyodide v0.19, we finally support the Python default recursion limit of 1000.
+We also attain a speed boost of somewere between 10 and 20 percent. The code
+size was reduced by 25% from 12 megabytes to 9.1 megabytes. All these gains came
+from [this pull request](https://github.com/pyodide/pyodide/pull/2019) which
+removed function pointer cast emulation.
 
-Here's a graph of the recursion limit by browser and Pyodide version:
+Here is a plot showing the improvements in recursion depth:
 <figure style="text-align: center;">
-  <img src="/recursion_depth.svg"  />
+<h4>Recursion limit and depth to segmentation fault</h4>
+  <img src="/recursion_depth.svg" style="margin-top:-40pt; z-index:-10; position: relative;"  />
   <figcaption>
-      <h4>Recursion limit and depth to segmentation fault</h4>
-      <h5 style="text-align: left;">
-
+  <p>Tested with Chrome version 96 and Firefox version 93</p>
   </figcaption>
+
 </figure>
 
-The "limit" bars show how we set the default recursion limit, the "segfault"
-bars show how many simple calls it takes to cause a segmentation fault:
+The "limit" bars show how we set the default recursion limit. The "segfault"
+bars show how many calls it takes to cause a segmentation fault with the
+following code:
 ```py
 import sys; sys.setrecursionlimit(100_000)
 def f(n):
@@ -53,14 +53,14 @@ def f(n):
     f(n+1)
 f(0)
 ```
-In practice, a single Python stack frame can take a widely variable amount of
-stack space, so these simple Python to Python calls are not entirely
-representative, but they give a rough estimate.
+Different Python stack frames can take very different amounts of stack space, so
+this benchmark is not perfect, but it gives a rough estimate of how much
+recursion we can support.
 
-In all prior versions of Pyodide there were some code paths that could lead to a
-segmentation fault before hitting the recursion limit, whereas in version
-v0.19, we have plenty of extra stack space left over so we should never see
-segmentation faults in normal code.
+In prior versions of Pyodide there were code paths with many big stack frames
+that caused segmentation faults before hitting the recursion limit. In version
+v0.19, we have plenty of extra stack space left over so hopefully we won't see
+any stack overflows.
 
 ### Acknowledgements
 
@@ -72,35 +72,33 @@ team, who are unfailingly helpful. Without Emscripten, Pyodide could not exist.
 ## Some history
 
 When I first started using Pyodide in summer 2020, my plan was to use it to
-control the display of a niche type of mathematical charts. I hacked the Monaco
-editor to make it behave like a repl, and then connected Jedi to Monaco
-intellisense so that interactive documentation for my custom chart API could
-appear right in the repl. This did not go as planned because of recursion
-errors.
-
-The following code reproduces the problem:
+display certain niche mathematical charts. I hacked the Monaco editor to make it
+behave like a repl, and then connected Jedi to Monaco intellisense so that
+interactive documentation for my custom chart API could appear in the repl as
+the user typed. This did not go as planned because of recursion errors. The
+following code reproduces the problem:
 ```py
 import jedi
 import numpy
 jedi.Interpreter("numpy.in1d([1,2,3],[2]).", [globals()]).complete()
 ```
-
 Run this in [Pyodide
 0.16.1](https://pyodide-cdn2.iodide.io/v0.16.1/full/console.html) in Chrome and
-you will see "RangeError: Maximum call stack size exceeded".
-
-In Pyodide 0.16.1, the available stack space before a stack overflow is enough
-for a call depth of 120 Python function calls. Jedi needs more than this.
+you will see "RangeError: Maximum call stack size exceeded". In Pyodide 0.16.1,
+there is only enough stack space for a call depth of 120. Jedi needs more than
+this.
 
 ## How much stack space are we working with?
 
-[Chromium sets the stack size to 984 kilobytes.](https://chromium.googlesource.com/v8/v8/+/d2b4292ca73dd2c70d007fcb7ac423c3d2095329/src/common/globals.h#88)
-Firefox manages to set the stack size several times higher, but for some reason a 
-Python function call takes up about twice as much space on Firefox.
+[In Chromium, the stack is 984 kilobytes.](https://chromium.googlesource.com/v8/v8/+/d2b4292ca73dd2c70d007fcb7ac423c3d2095329/src/common/globals.h#88)
+In Firefox, the stack size is several times larger. However, for some reason
+Python function calls takes up significanly more space in Firefox. Firefox still
+comes out ahead overall, but the difference isn't as large as it looks like it
+would be based on stack size alone.
 
-But 984 kilobytes is still a fair amount of space. Just what is happening that
-Jedi manages to use that all in 120 Python call frames? That averages out to
-over 8 kilobytes per call frame!
+In any case, 984 kilobytes is a significant amount of space. Just what is
+happening that Jedi manages to use that much space in 120 Python call frames?
+That is an average of more than 8 kilobytes per call frame!
 
 ## The cause of the large stack usage: function pointer cast emulation!
 
