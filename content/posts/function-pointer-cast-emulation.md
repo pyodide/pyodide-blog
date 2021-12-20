@@ -104,8 +104,8 @@ That is an average of more than 8 kilobytes per call frame!
 ## The cause of the large stack usage: function pointer cast emulation!
 
 The poor stack performance has to do with the ABI for calling function pointers.
-When there is a stack overflow in Pyodide v0.17, we see a bunch of units like
-this:
+When there is a stack overflow in Pyodide v0.17, we will generally a long
+repeating sequence of the following call frames:
 ```js
     at pyodide.asm.wasm:wasm-function[767]:0x1cb77c
     at _PyFunction_Vectorcall (pyodide.asm.wasm:wasm-function[768]:0x1cb878)
