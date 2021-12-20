@@ -27,11 +27,12 @@ cover:
     hidden: true # only hide on current single page
 ---
 
-In Pyodide v0.19, we finally support the Python default recursion limit of 1000.
-We also attain a speed boost of somewere between 10 and 20 percent. The code
-size was reduced by 25% from 12 megabytes to 9.1 megabytes. All these gains came
-from [this pull request](https://github.com/pyodide/pyodide/pull/2019) which
-removed function pointer cast emulation.
+In the upcoming release of Pyodide v0.19, we finally support the Python default
+recursion limit of 1000. We also attain a speed boost of somewere between 10 and
+20 percent. The code size was reduced by 25% from 12 megabytes to 9.1 megabytes.
+These gains came from [this pull
+request](https://github.com/pyodide/pyodide/pull/2019) which changed the way we
+handle function pointer casts.
 
 Here is a plot showing the improvements in recursion depth:
 <figure style="text-align: center;">
@@ -58,9 +59,9 @@ this benchmark is not perfect, but it gives a rough estimate of how much
 recursion we can support.
 
 In prior versions of Pyodide there were code paths with many big stack frames
-that caused segmentation faults before hitting the recursion limit. In version
-v0.19, we have plenty of extra stack space left over so hopefully we won't see
-any stack overflows.
+that caused segmentation faults before hitting the recursion limit. In upcoming
+version v0.19, we have plenty of extra stack space left over so hopefully we
+won't see any stack overflows.
 
 ### Acknowledgements
 
