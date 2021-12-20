@@ -1,5 +1,5 @@
 ---
-title: "Function Pointer Cast Emulation in Pyodide"
+title: "Function Pointer Cast Handling in Pyodide"
 date: 2021-12-19
 draft: true
 tags: ["internals"]
@@ -10,7 +10,7 @@ TocOpen: false
 draft: false
 hidemeta: false
 comments: false
-description: "Why previous of Pyodide had a low recursion limit and how upcoming version 0.19.0 supports a much higher one."
+description: "Why previous versions of Pyodide had a low recursion limit and how the upcoming version v0.19 supports a much higher one."
 # canonicalURL: "https://canonical.url/to/page"
 disableHLJS: true # to disable highlightjs
 disableShare: false
