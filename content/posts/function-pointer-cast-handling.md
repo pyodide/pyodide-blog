@@ -10,7 +10,7 @@ TocOpen: false
 draft: false
 hidemeta: false
 comments: false
-description: "Why previous versions of Pyodide had a low recursion limit and how the upcoming version v0.19 supports a much higher one."
+description: "Why previous versions of Pyodide had a low recursion limit and how the upcoming version 0.19 supports a much higher one."
 # canonicalURL: "https://canonical.url/to/page"
 disableHLJS: true # to disable highlightjs
 disableShare: false
@@ -27,7 +27,7 @@ cover:
     hidden: true # only hide on current single page
 ---
 
-In the upcoming release of Pyodide v0.19, we finally support the Python default
+In the upcoming release of Pyodide version 0.19, we finally support the Python default
 recursion limit of 1000. We also attain a speed boost of somewere between 10 and
 20 percent. The code size was reduced by 25% from 12 megabytes to 9.1 megabytes.
 These gains came from [this pull
@@ -60,7 +60,7 @@ recursion we can support.
 
 In prior versions of Pyodide there were code paths with many big stack frames
 that caused segmentation faults before hitting the recursion limit. In upcoming
-version v0.19, we have plenty of extra stack space left over so hopefully we
+version 0.19, we have plenty of extra stack space left over so hopefully we
 won't see any stack overflows.
 
 ### Acknowledgements
@@ -84,8 +84,8 @@ import numpy
 jedi.Interpreter("numpy.in1d([1,2,3],[2]).", [globals()]).complete()
 ```
 Run this in [Pyodide
-0.16.1](https://pyodide-cdn2.iodide.io/v0.16.1/full/console.html) in Chrome and
-you will see "RangeError: Maximum call stack size exceeded". In Pyodide 0.16.1,
+v0.16](https://pyodide-cdn2.iodide.io/v0.16.1/full/console.html) in Chrome and
+you will see "RangeError: Maximum call stack size exceeded". In Pyodide v0.16,
 there is only enough stack space for a call depth of 120. Jedi needs more than
 this.
 
