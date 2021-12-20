@@ -1,5 +1,5 @@
 ---
-title: "React in Pyodide"
+title: "React in Python with Pyodide"
 date: 2021-12-13T16:34:44-05:00
 draft: true
 tags: ["announcement"]
