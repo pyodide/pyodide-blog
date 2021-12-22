@@ -28,7 +28,7 @@ cover:
 ---
 
 In the upcoming release of Pyodide version 0.19, we finally support the Python default
-recursion limit of 1000. We also attain a speed boost of somewere between 10 and
+recursion limit of 1000. We also attain a speed boost of somewhere between 10 and
 20 percent. The code size was reduced by 25% from 12 megabytes to 9.1 megabytes.
 These gains came from [this pull
 request](https://github.com/pyodide/pyodide/pull/2019) which changed the way we
@@ -181,13 +181,13 @@ ecosystem.
 
 ### Function pointer casts don't work in WebAssembly
 
-In x86, making a dynamic call (in other works, calling a function pointer) is
+In x86, making a dynamic call (in other words, calling a function pointer) is
 the same process as making a static call. Arguments and a return address are
 pushed onto a stack, and a jump is performed. The only difference is that in the
 case of a static function call, the target of the jump is known at compile time,
 whereas in the case of a dynamic call, it is determined by a variable.
 
-In WebAssembly, there are two distince instructions `call` for static calls and
+In WebAssembly, there are two distinct instructions `call` for static calls and
 `call_indirect` for dynamic calls. The `call_indirect` instruction takes a
 compile-time determined argument (an immediate) that indicates the expected
 signature of the function pointer being called. Before actually executing the
@@ -223,8 +223,8 @@ declarations. However, there is no easy way to detect these function pointer
 casts (there's no compiler setting that can generate warnings about them). It is
 also tedious to locate the problematic code. The packages are generally happy to
 accept these patches but it takes time to review them. Without any automated
-tool to detect the problem, there are likely to be regressions. Overall, This
-solution would generate too large of a maintenance burden for us to handle.
+tool to detect the problem, there are likely to be regressions. Overall, this
+solution would generate too large a maintenance burden for us to handle.
 
 ### 3. Automate the patching
 
@@ -405,7 +405,7 @@ the wrong arguments. This might look like:
 2. `(i32) -> i32`
 3. `(i32, i32) -> i32`
 
-Then when we take a function pointer, if it's signature is on the list, we
+Then when we take a function pointer, if its signature is on the list, we
 encode the signature into the higher bits of the function pointer:
 
 ```C
@@ -474,7 +474,7 @@ serious drawbacks. In future work, we may implement a better compiler-based
 solution using custom llvm passes to store extra signature data in function
 pointers. 
 
-Pyodide runs into similar function signature problems at link time: for example
+Pyodide runs into similar function signature problems at link time: for example, we
 have a hard time building scipy because it defines functions with a return value
 of `int` but then links them with other files that declare them as returning
 `void`. This forces us to write complicated patches which are difficult to
