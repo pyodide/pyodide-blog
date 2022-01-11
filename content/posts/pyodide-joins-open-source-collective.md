@@ -30,7 +30,7 @@ We would like to announce that Pyodide is now a member of the [Open Source
 Collective (OSC)](https://www.oscollective.org/), which will act as the project's
 fiscal host.
 
-The Pyodide project compiles Python and the scientific stack to WebAssembly using Emscripten. 
+The Pyodide project compiles Python and the scientific stack to WebAssembly using Emscripten.
 Pyodide was created in 2018 by Michael
 Droettboom at Mozilla as part of the [Iodide
 project](https://github.com/iodide-project/iodide). Later in 2021 [Pyodide
