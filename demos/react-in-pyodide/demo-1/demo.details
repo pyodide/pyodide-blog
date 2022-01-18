@@ -1,0 +1,10 @@
+/*
+---
+name: React in Python with Pyodide. Example 1.
+description: Building a React "hello world" example
+authors:
+  - Xing Han Lu
+normalize_css: yes
+lang_css: SCSS
+...
+*/
