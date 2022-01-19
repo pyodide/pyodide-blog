@@ -1,6 +1,6 @@
 ---
 title: "React in Python with Pyodide"
-date: 2022-01-19T16:34:44-05:00
+date: 2022-01-19T08:34:44+00:00
 draft: true
 tags: ["announcement"]
 author: "Xing Han Lu"
