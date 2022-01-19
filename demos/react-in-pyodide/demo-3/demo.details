@@ -1,0 +1,10 @@
+/*
+---
+name: React in Python with Pyodide. Example 3.
+description: Making React components more pythonic
+authors:
+  - Xing Han Lu
+normalize_css: yes
+lang_css: SCSS
+...
+*/
