@@ -176,7 +176,7 @@ Using the Canvas API to draw the plots live introduces a performance penalty. We
 
 ![metrics](/posts/2/metrics.png)
 
-In essence, the new renderer is about 2 to 2.5x slower but that’s the price one pays for reducing the size.
+In essence, the new renderer is about 1.25 to 1.5x slower but that’s the price one pays for reducing the size.
 
 To overcome the above slowdown due to the rendering loop in Python, one solution is to rewrite this time-critical piece in JavaScript. This can be possible using the Function construct in JavaScript. The Function construct would essentially allow us to create JavaScript functions inside a Python module capable of accepting and working with pythonic arguments.
 
