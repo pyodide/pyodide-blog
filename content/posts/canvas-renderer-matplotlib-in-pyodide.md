@@ -2,7 +2,7 @@
 title: "HTML5 <canvas> based renderer for Matplotlib in Pyodide"
 date: 2021-12-05T14:20:37+05:30
 draft: true
-tags: ["announcement"]
+tags: ["visualization", "matplotlib"]
 author: "Madhur Tandon"
 # author: ["Me", "You"] # multiple authors
 showToc: true
