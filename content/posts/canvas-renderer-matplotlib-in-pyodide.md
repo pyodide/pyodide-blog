@@ -170,6 +170,13 @@ With the above major issues fixed, the new backend is ready. Here are some sampl
 
 ![results](/posts/2/results.png)
 
+To use the *\<canvas\>* backend in your own projects, please use the following statements at the top of your script.
+
+```python
+import matplotlib
+matplotlib.use("module://matplotlib.backends.html5_canvas_backend")
+```
+
 ### **How Fast is it? and Potential Optimizations**
 
 Using the Canvas API to draw the plots live introduces a performance penalty. We assume this is due to iterating over all of the points on a curve in Python, since loops in Python are known to be slow. Further, loading fonts asynchronously over the network can take some time. However, Rendering Images is as fast as before. Below are the benchmarks for the new Canvas based renderer compared to the default Agg renderer for 5 sample plots in both firefox and chrome.
@@ -187,6 +194,12 @@ The above snippet defines a JavaScript function *_path_helper* which accepts Pyt
 ### **Conclusion**
 
 It’s been really gratifying to see all of the cool things that have been created with Pyodide in the few years since its public launch.  However, there’s still lots to do to turn this proof-of-concept into a professional tool for everyday data science work. If you’re interested in helping us build that future, come find us on Gitter, Github and our mailing list.
+
+---
+
+> **About the Author**
+>
+> [Madhur Tandon](https://github.com/madhur-tandon) is a Software Engineer from Delhi, India. He completed his Bachelors in Computer Science from IIITD. He is active in the open source ecosystem and has worked with Elucidata, INCF, TCS Research, Mozilla, Deepnote, etc. in the past. Besides core data science and machine learning, he is interested in tools that enhance a data scientist's workflow and the scientific software ecosystem. This work was initially done as a part of working with Michael Droettboom at Mozilla and was later revived with support from Roman Yurchak and Sylvain Corlay from QuantStack. Madhur has also contributed towards Jupyterlite (a Jupyter distribution that runs entirely in the browser and uses Pyodide beneath) in association with QuantStack. Finally, he has been a speaker at conferences such as PyData and JupyterCon, etc. Talk to him about his solo trip to SF, his previous experiences, or about books and food. When not working, he is working out!
 
 ---
 
