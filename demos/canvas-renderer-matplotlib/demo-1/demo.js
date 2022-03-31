@@ -1,16 +1,18 @@
-async function main(){
-    let pyodide = await loadPyodide({
-      indexURL : "https://cdn.jsdelivr.net/pyodide/v0.19.1/full/"
-    });
-    console.log(pyodide.runPython(`
+async function main() {
+  let pyodide = await loadPyodide({
+    indexURL: "https://cdn.jsdelivr.net/pyodide/v0.19.1/full/",
+  });
+  console.log(
+    pyodide.runPython(`
         import sys
         sys.version
-    `));
-    await pyodide.loadPackage("matplotlib");
-    pyodide.runPython(`
+    `)
+  );
+  await pyodide.loadPackage("matplotlib");
+  pyodide.runPython(`
       import matplotlib
       import numpy as np
-      matplotlib.use("module://matplotlib.backends.wasm_backend")
+      matplotlib.use("module://matplotlib.backends.html5_canvas_backend")
       import matplotlib.cm as cm
       from matplotlib import pyplot as plt
       delta = 0.025
