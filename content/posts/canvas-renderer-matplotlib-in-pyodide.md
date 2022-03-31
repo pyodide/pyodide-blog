@@ -32,7 +32,7 @@ Pyodide is a distribution of CPython for WebAssembly which was started by Michae
 It not only provides support for calling JavaScript and web APIs from Python, but also brings the Python scientific stack to the browser as it includes the five most essential data science libraries --
 [NumPy](https://numpy.org/), [Pandas](https://pandas.pydata.org/), [Matplotlib](https://matplotlib.org/), [scikit-learn](https://scikit-learn.org/), and [Scipy](https://scipy.org/).
 
-In this post, we present a new backend for Matplotlib enabling the rendering of figures in the browser by leveraging the _\<canvas\>_ element. This showcases how JavaScript and Python can interact with each other thanks to Pyodide.
+In this post, we present a new backend for Matplotlib enabling the rendering of figures in the browser by leveraging the _\<canvas\>_ element. This showcases how JavaScript and Python can interact with each other, thanks to Pyodide.
 
 ### **Motivation**
 
@@ -81,7 +81,7 @@ This problem is solved using [Web Fonts](https://developer.mozilla.org/en-US/doc
 
 However, as easy as it sounds, keeping track of when the font is loaded (so as to request a redraw) is not so trivial. The _FontFace API_ is asynchronous and relies on the network while _draw_text()_ in matplotlib is synchronous -- making things harder due to the following problems:
 
-- Matplotlib can call _draw_text()_ multiple times in a single drawing
+- Matplotlib can call _“draw_text()”_ multiple times in a single drawing
   instance -- each of them requesting the _“correct”_ font to be loaded. It’s
   possible that a previous request for asynchronously loading the correct
   font isn’t completed yet (still fetching from the network), and a new
@@ -99,7 +99,7 @@ However, as easy as it sounds, keeping track of when the font is loaded (so as t
   `load font → redraw → load font → redraw → ....`
 
 The above problems are similar but have a subtle difference amongst them. The
-first problem occurs for a single draw event (due to multiple _“draw_text”_
+first problem occurs for a single draw event (due to multiple _“draw_text()”_
 invocations in that draw event), while the second problem leads to multiple
 never-ending redraws. In general, these issues are related to Python not being able
 to do synchronous I/O operations when the underlying JavaScript APIs are asynchronus
@@ -151,8 +151,8 @@ The above snippet showcases how the conversion from Numpy array to a raw bytes r
 
 - If for some reason, the ImageData object contains some transparent pixels, and the canvas already has a red background, the transparent pixels will replace the red pixels which is not what we usually expect. We usually expect transparent pixels to blend with the background i.e. the pixels remain red at positions where pixels of the incoming ImageData object are transparent. But, this is not what happens, the previous pixels are simply over-written.
 
-To overcome the above 2 issues, we use the _drawImage()_ function in addition to the _putImageData()_ function.
-The _drawImage()_ function doesn't suffer from the above two issues but it expects another canvas element as it's input instead of an ImageData object. Thus, to use them in tandem we require something known as an In-memory canvas.
+To overcome the above 2 issues, we use the _“drawImage()”_ function in addition to the _“putImageData()”_ function.
+The _“drawImage()”_ function doesn't suffer from the above two issues but it expects another canvas element as it's input instead of an ImageData object. Thus, to use them in tandem we require something known as an In-memory canvas.
 
 An In-memory canvas is a normal _\<canvas\>_ element which is used for off-screen rendering which is about rendering content somewhere, but the screen. That _“somewhere”_ means the memory. Thus, we render graphics to the memory.
 
@@ -160,7 +160,7 @@ To achieve this, we create a _\<canvas\>_ element, but we do not link it to the 
 
 To make this possible — the function [putImageData()](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/putImageData) is used for off-screen rendering. This is used to put an ImageData object into an off-screen canvas. Once that is done, the on-screen canvas can now use the [drawImage()](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage) function — to copy the contents of the off-screen canvas and render that stuff to the screen.
 
-While the long process of rendering to off-screen and then transferring its data to on-screen using _drawImage()_ seems like overkill, it helps us avoid the 2 issues regarding transformations and transparency we discussed above.
+While the long process of rendering to off-screen and then transferring its data to on-screen using _“drawImage()”_ seems like overkill, it helps us avoid the 2 issues regarding transformations and transparency we discussed above.
 
 ### **Results**
 
