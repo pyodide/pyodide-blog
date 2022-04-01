@@ -1,6 +1,6 @@
 ---
 title: "HTML5 <canvas> based renderer for Matplotlib in Pyodide"
-date: 2021-12-05T14:20:37+05:30
+date: 2021-03-31T12:00:00+01:00
 draft: true
 tags: ["visualization", "matplotlib"]
 author: "Madhur Tandon"

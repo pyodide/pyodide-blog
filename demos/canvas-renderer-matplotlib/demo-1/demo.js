@@ -1,7 +1,5 @@
 async function main() {
-  let pyodide = await loadPyodide({
-    indexURL: "https://cdn.jsdelivr.net/pyodide/v0.19.1/full/",
-  });
+  let pyodide = await loadPyodide();
   console.log(
     pyodide.runPython(`
         import sys
