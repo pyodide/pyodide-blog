@@ -175,6 +175,8 @@ import matplotlib
 matplotlib.use("module://matplotlib.backends.html5_canvas_backend")
 ```
 
+You can find a more complete example of plotting with matplotlib WASM backend [on JSFiddle](https://jsfiddle.net/gh/get/library/pure/pyodide/pyodide-blog/contents/demos/canvas-renderer-matplotlib/demo-1/).
+
 ### **How Fast is it? and Potential Optimizations**
 
 Using the Canvas API to draw the plots live introduces a performance penalty. We assume this is due to iterating over all of the points on a curve in Python, since loops in Python are known to be slow. Further, loading fonts asynchronously over the network can take some time. However, Rendering Images is as fast as before. Below are the benchmarks for the new Canvas based renderer compared to the default Agg renderer for 5 sample plots in both firefox and chrome.
