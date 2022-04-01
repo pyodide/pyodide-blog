@@ -1,0 +1,10 @@
+/*
+---
+name: HTML5 <canvas> Renderer for matplotlib in Pyodide. Example 1.
+description: Basic Plotting Example
+authors:
+  - Madhur Tandon
+normalize_css: yes
+lang_css: SCSS
+...
+*/
