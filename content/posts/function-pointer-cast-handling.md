@@ -1,7 +1,7 @@
 ---
 title: "Function Pointer Cast Handling in Pyodide"
 date: 2021-12-21
-draft: true
+draft: false
 tags: ["internals"]
 author: "Hood Chatham"
 # author: ["Me", "You"] # multiple authors

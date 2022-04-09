@@ -27,7 +27,7 @@ We accept guest posts. If you would like to propose a post,
  - please open an issue with a brief description.
  - Once the general post idea is approved, run,
    ```
-   hugo new posts/<post-url>.md
+   hugo new content/posts/<post-url>.md
    ```
    and open a PR with the contents of your post in markdown in that file.
 
