@@ -1,7 +1,7 @@
 ---
 title: "Pyodide becomes member of the Open Source Collective"
 date: 2021-11-10T13:13:04+01:00
-draft: true
+draft: false
 tags: ["announcement"]
 author: "Roman Yurchak and Hood Chatham, on behalf of the Pyodide team"
 showToc: false
