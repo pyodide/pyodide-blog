@@ -31,7 +31,5 @@ async function main() {
       )
       plt.show()
     `);
-  // Note: there is a known issue with the FigureCanvasWasm.onmousemove event handling
-  // (pyodide#2335) which will be fixed in the 0.20.0 release.
 }
 main();
