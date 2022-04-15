@@ -97,7 +97,7 @@ this.
 
 [In Chromium, the stack is 984 kilobytes.](https://chromium.googlesource.com/v8/v8/+/d2b4292ca73dd2c70d007fcb7ac423c3d2095329/src/common/globals.h#88)
 In Firefox, the stack size is several times larger. However, for some reason
-Python function calls takes up significanly more space in Firefox. Firefox still
+Python function calls takes up significantly more space in Firefox. Firefox still
 comes out ahead overall, but the difference isn't as large as it looks like it
 would be based on stack size alone.
 
