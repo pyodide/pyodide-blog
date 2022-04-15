@@ -347,14 +347,15 @@ flexible.
 
 ## Better compiler support for function pointer casts using an LLVM pass
 
-It is possible to LLVM pass to implement compiler-generated function pointer
-cast emulation in a way that has a negligible impact on speed, stack usage, and
-code size. The solution will also impose no surprising difficulties for calls
-from Javascript into WebAssembly or for dynamic linking. It does change the ABI
-so it requires the linked modules to be aware of this different ABI. We also
-assume that (1) most function pointers are called with the correct signature
-most of the time and (2) only a small number of types of function are cast into
-the wrong signature and called. Both of these assumptions are met in Python.
+It is possible to use an LLVM pass to implement compiler-generated function
+pointer cast emulation in a way that has a negligible impact on speed, stack
+usage, and code size. The solution will also impose no surprising difficulties
+for calls from Javascript into WebAssembly or for dynamic linking. It does
+change the ABI so it requires the linked modules to be aware of this different
+ABI. We also assume that (1) most function pointers are called with the correct
+signature most of the time and (2) only a small number of types of function are
+cast into the wrong signature and called. Both of these assumptions are met in
+Python.
 
 ### How `EMULATE_FUNCTION_POINTER_CASTS` works
 
