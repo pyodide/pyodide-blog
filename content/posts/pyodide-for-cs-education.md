@@ -83,4 +83,11 @@ The result was exciting. Over a weekend I was able to build the editor using Pyo
 
 You can check the editor I built using Pyodide at [wasmeditor.com](https://wasmeditor.com) and I wrote a short [doc](https://wasmeditor.com/docs) on how to use it.
 
-I also wrote a step by step guide on how to build this editor you can check it out in [Testdriven.io](https://testdriven.io/blog/python-webassembly/)
+I also wrote a step by step guide on how to build this editor, you can check it out in [Testdriven.io](https://testdriven.io/blog/python-webassembly/)
+
+## Conclusion
+
+The impact Pyodide can have on the educational field is huge. If you want to learn Python you can find really good materials on the web but most of them are using Learning by reading and watching video methodologies.
+Also, there are a lot of Learning Management Systems out there but they don't provide any content type where you can let the learners write code, run it and give them some feedback.
+Building an editor like [wasmeditor.com](https://wasmeditor.com) that you can embed wherever that supports the iframe tag is a great example of how Pyodide can help to learn Python more fun in a variety of learning management systems and educational platforms.
+I hope you enjoyed reading this post and if you have any questions or suggestions feel free to contact me at [amirtds@gmail.com](mailto:amirtds@gmail.com) or drop me a DM on [Twitter](https://twitter.com/amirtds).
