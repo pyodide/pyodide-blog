@@ -1,4 +1,30 @@
-## Introduction
+---
+title: "Pyodide for CS Education"
+date: 2022-04-29T08:34:44+00:00
+draft: true
+tags: ["announcement"]
+author: "Amir Tadrisi"
+showToc: true
+TocOpen: false
+hidemeta: false
+comments: false
+# canonicalURL: "https://canonical.url/to/page"
+disableHLJS: true # to disable highlightjs
+disableShare: false
+hideSummary: false
+searchHidden: true
+ShowReadingTime: true
+ShowBreadCrumbs: true
+ShowPostNavLinks: true
+cover:
+    image: "<image path/url>" # image path/url
+    alt: "<alt text>" # alt text
+    caption: "<text>" # display caption under cover
+    relative: false # when using page bundles set this to true
+    hidden: true # only hide on current single page
+---
+
+
 I've been working in Edtech for 7 years now and one of the biggest pain points of every learning management system is to keep the number of elearners dropouts as low as possible.
 
 [Based on the statistics](https://www.researchgate.net/publication/330316898_The_MOOC_pivot) 52 % of the students who register for a course never look at the course and dropout rate can reach 96% because of multiple reasons like:
