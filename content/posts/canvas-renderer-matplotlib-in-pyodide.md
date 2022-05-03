@@ -166,7 +166,7 @@ While the long process of rendering to off-screen and then transferring its data
 
 With the above major issues fixed, the new backend is ready. Here are some sample plots (taken from the Matplotlib gallery) that are rendered using the new canvas based backend.
 
-![results](/posts/2/results.png)
+![results](/posts/2/featured.png)
 
 To use the _\<canvas\>_ backend in your own projects, please use the following statements at the top of your script.
 
