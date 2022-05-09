@@ -84,7 +84,7 @@ is lecturing or when hundreds of students are using the tool at the same
 time to visualize in-class code examples.
 
 Beyond user experience, this server-based setup was also a pain for us
-as system maintainers since we had to carefully configure our Linux and
+to maintain since we had to carefully configure our Linux and
 Docker setups to handle ever-increasing scale. Remember, we're
 university instructors, **not** professional software developers or
 DevOps staff! That means we don't have the know-how or institutional
