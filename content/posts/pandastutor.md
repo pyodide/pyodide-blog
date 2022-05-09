@@ -151,10 +151,8 @@ Tutor wheel so that our web frontend code needs only one call to
 `micropip` instead of almost a dozen separate calls:
 
 ```js
-await pyodide.runPythonAsync(`
-import micropip
-await micropip.install('https://pandastutor.com/build/pandastutor-1.0-py3-none-any.whl')
-`);
+const micropip = pyodide.pyimport("micropip");
+await micropip.install('https://pandastutor.com/build/pandastutor-1.0-py3-none-any.whl');
 ```
 
 This approach also has the nice side-effect of pinning all the
