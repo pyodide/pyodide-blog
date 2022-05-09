@@ -20,12 +20,6 @@ searchHidden: true
 ShowReadingTime: true
 ShowBreadCrumbs: true
 ShowPostNavLinks: true
-cover:
-    image: "<image path/url>" # image path/url
-    alt: "<alt text>" # alt text
-    caption: "<text>" # display caption under cover
-    relative: false # when using page bundles set this to true
-    hidden: true # only hide on current single page
 ---
 
 **UNRELEASED DRAFT -- please release on Saturday, May 14 if possible and
