@@ -182,9 +182,10 @@ and calls the `run_code_from_js()` Python function:
 
 ```js
 function runPyodidePandastutor(userCode) {
-  window.globalUserCode = userCode; // pass function argument as a global variable
-  const result = pyodide.runPython('pandas_tutor.pyodide_main.run_code_from_js()');
-  window.globalUserCode = undefined; // null this out afterward to prevent leakage
+  const pandas_tutor_py = pyodide.pyimport("pandas_tutor");
+  // assuming main.py is imported in `pandas_tutor.__init__.py` or directly
+  // pyimport("pandas_tutor.main")
+  const result = pandas_tutor_py.main.run_user_code(user_code);  
   return result;
 }
 ```
