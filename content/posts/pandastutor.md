@@ -192,7 +192,7 @@ with just one line:
 ```js
 // 1) frontend grabs userCode from the user's in-browser code editor
 // 2) run the user's code to produce an execution trace ...
-      const executionTrace = pandastutor_py.run_user_code(userCode);  
+const executionTrace = pandastutor_py.run_user_code(userCode);  
 // 3) frontend process executionTrace to produce step-by-step visualizations
 ```
 
