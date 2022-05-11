@@ -70,7 +70,7 @@ use it to understand and debug their homework assignments.
 ## Why did we port Pandas Tutor to Pyodide?
 
 The original version of Pandas Tutor ran the user's code on our Linux
-server by spinning up a new Docker container for every code execution request. It main
+server by spinning up a new Docker container for every code execution request. Its main
 limitation was slowness -- from the time a user hits the 'Run' button,
 it takes up to 5 seconds for the server to run their code, produce a
 step-by-step execution trace, and send it over the network to their
