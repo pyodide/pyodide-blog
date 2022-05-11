@@ -109,7 +109,7 @@ Fortunately, both of these can be fixed using a global state which keeps track o
 what fonts have already been loaded into the browser’s environment. This way,
 we only load fonts that are not present in this state.
 
-![font](/posts/2/font.gif)
+![font](font.gif)
 
 2. **Rendering Images and Transparent Pixels**:
 
@@ -166,7 +166,7 @@ While the long process of rendering to off-screen and then transferring its data
 
 With the above major issues fixed, the new backend is ready. Here are some sample plots (taken from the Matplotlib gallery) that are rendered using the new canvas based backend.
 
-![results](/posts/2/featured.png)
+![results](featured.png)
 
 To use the _\<canvas\>_ backend in your own projects, please use the following statements at the top of your script.
 
@@ -181,13 +181,13 @@ You can find a more complete example of plotting with matplotlib WASM backend [o
 
 Using the Canvas API to draw the plots live introduces a performance penalty. We assume this is due to iterating over all of the points on a curve in Python, since loops in Python are known to be slow. Further, loading fonts asynchronously over the network can take some time. However, Rendering Images is as fast as before. Below are the benchmarks for the new Canvas based renderer compared to the default Agg renderer for 5 sample plots in both firefox and chrome.
 
-![metrics](/posts/2/metrics.png)
+![metrics](metrics.png)
 
 In essence, the new renderer is about 1.25 to 1.5x slower but that’s the price one pays for reducing the size.
 
 To overcome the above slowdown due to the rendering loop in Python, one solution is to rewrite this time-critical piece in JavaScript. This can be possible using the Function construct in JavaScript. The Function construct would essentially allow us to create JavaScript functions inside a Python module capable of accepting and working with pythonic arguments.
 
-![snippet](/posts/2/snippet.png)
+![snippet](snippet.png)
 
 The above snippet defines a JavaScript function _\_path_helper_ which accepts Pythonic arguments and also supports calling of pythonic object’s methods inside it -- _path.iter_segments()_. The work related to this was attempted here: https://github.com/pyodide/pyodide/pull/510
 
