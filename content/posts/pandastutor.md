@@ -1,6 +1,6 @@
 ---
 title: "Pandas Tutor: Using Pyodide to Teach Data Science at Scale"
-date: 2022-05-12T08:00:00-07:00
+date: 2022-05-12T08:00:00+00:00
 summary: "Pandas Tutor is a data science education tool that visualizes how pandas code transforms dataframes. In this guest post we discuss how we ported it to run 100% in-browser with Pyodide."
 draft: true
 tags: ["announcement", "guest post", "education"]
