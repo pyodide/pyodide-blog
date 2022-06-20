@@ -323,3 +323,9 @@ We have added Emscripten tests to the PyO3 continuous integration system so we
 are hopeful that we are headed towards a sustainable ecosystem. The work we did
 is not specific to the Cryptography package so my expectation is that building
 the next Rust package will be much easier.
+
+> **About the author**
+>
+> Hood Chatham is an Mathematics NSF Postdoctoral fellow at UCLA in the field of
+> homotopy theory. He is a maintainer of Pyodide. Coincedentally, he taught a
+> mathematical cryptography class in the Spring of 2022.
