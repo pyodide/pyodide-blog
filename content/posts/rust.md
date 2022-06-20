@@ -25,18 +25,6 @@ cover:
     hidden: true # only hide on current single page
 ---
 
-<style>
-.post-content.post-content code {
-  font-size: 70%;
-}
-
-code.pkg {
-  background: white;
-  padding: 0px;
-  margin: 0px;
-}
-</style>
-
 We are happy to announce that the next version of Pyodide will ship with the
 newest version of the Cryptography package, including its Rust extension module.
 The Cryptography package was one of the first major packages that included a
@@ -60,6 +48,18 @@ between the Emscripten and Rust projects.
 In this blog post I will give a technical description of many of the problems I
 ran into in the process of building Rust extension modules for Pyodide.
 
+
+<style>
+.post-content.post-content code {
+  font-size: 70%;
+}
+
+code.pkg {
+  background: white;
+  padding: 0px;
+  margin: 0px;
+}
+</style>
 
 ### Acknowledgements
 
