@@ -192,9 +192,9 @@ The next linker error is
 ```
 Unable to find library `-lc-debug`
 ```
-For some reason, Rust tries to link `libc` into Emscripten dynamic libraries. It
-also used to link everything in debug mode even if compiled with the `--release`
-flag, hence `-lc-debug`, but [this has been
+For some reason when Rust tries to link libc into Emscripten dynamic libraries,
+Emscripten raises an error. Rust also used to link everything in debug mode even
+if compiled with the `--release` flag, hence `-lc-debug`, but [this has been
 fixed](https://github.com/rust-lang/rust/pull/97928).
 
 Attempting to link `libc` into an Emscripten dynamic library causes an error.
