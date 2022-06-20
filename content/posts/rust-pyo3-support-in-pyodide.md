@@ -39,12 +39,17 @@ maintainers](https://www.youtube.com/watch?v=z_Eiy2W0APU) for an interesting
 discussion of their reasons for using Rust and the problems in the ecosystem
 that needed to be fixed before they could use it.
 
-We want to build the Rust extension module for our WebAssembly-based distribution.
-Rust has good support for the <code class="pkg">wasm32-unknown-unknown</code>
-target and has popular tools like <code class="pkg">wasm-bindgen</code>.
-However, we need to use the <code class="pkg">wasm32-unknown-emscripten</code>
-compiler target which does not work as well because it requires coordination
-between the Emscripten and Rust projects.
+We want to build the Rust extension module for our WebAssembly-based
+distribution. Rust has good support for the <code
+class="pkg">wasm32-unknown-unknown</code> target and has popular tools like
+<code class="pkg">wasm-bindgen</code>. However, <code
+class="pkg">wasm32-unknown-unknown</code> uses a custom "wasm ABI" [which is not
+compatible with C/C++
+code](https://github.com/rustwasm/team/issues/291#issuecomment-644946504l). To
+use Rust in a project that also includes C/C++ code we need to use the <code
+class="pkg">wasm32-unknown-emscripten</code> compiler target which does not work
+as well because it requires coordination between the Emscripten and Rust
+projects.
 
 In this blog post I will give a technical description of many of the problems I
 ran into in the process of building Rust extension modules for Pyodide.
