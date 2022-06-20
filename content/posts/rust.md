@@ -1,5 +1,5 @@
 ---
-title: "Rust/PyO3 Support in Pyodide "
+title: "Rust/PyO3 Support in Pyodide"
 date: 2022-04-15T12:37:52-07:00
 author: "Hood Chatham"
 # author: ["Me", "You"] # multiple authors
@@ -8,7 +8,7 @@ TocOpen: false
 draft: false
 hidemeta: false
 comments: false
-description: "Getting the pyca/cryptography package working in Pyodide"
+description: "Getting the pyca/cryptography package to run in Pyodide"
 # canonicalURL: "https://canonical.url/to/page"
 disableHLJS: true # to disable highlightjs
 disableShare: false
