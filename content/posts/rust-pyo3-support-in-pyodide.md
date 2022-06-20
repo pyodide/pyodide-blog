@@ -25,13 +25,14 @@ cover:
     hidden: true # only hide on current single page
 ---
 
+
 We are happy to announce that the next version of Pyodide will ship with the
 newest version of the Cryptography package, including its Rust extension module.
 The Cryptography package was one of the first major packages that included a
-Rust extension module. By including Rust, the Cryptography maintainers have
-forced the Python ecosystem to adopt Rust support. We are no exception. The
-Cryptography package has been one of the most often requested packages in the
-Pyodide issue tracker so it is a priority for us to support it.
+Rust extension module. Python binary extensions in Rust for new projects have
+been gaining popularity lately. The Cryptography package has been one of the
+most often requested packages in the Pyodide issue tracker so it is a priority
+for us to support it.
 
 See [this talk by the Cryptography
 maintainers](https://www.youtube.com/watch?v=z_Eiy2W0APU) for an interesting
