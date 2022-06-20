@@ -93,10 +93,11 @@ The Cryptography package depends on a crate called <code
 class="pkg">chrono</code>. The <code class="pkg">chrono</code> crate explicitly
 supports <code class="pkg">wasm32-unknown-emscripten</code> but had a small
 mistake which caused a compile error on the Emscripten target. This bug in <code
-class="pkg">chrono</code> has been fixed, though the fix has not been released.
-This was the only compile error, once <code class="pkg">chrono</code> was
-patched the entire Cryptography package compiled. Getting it to link and load
-correctly was much harder.
+class="pkg">chrono</code> [has been
+fixed](https://github.com/chronotope/chrono/pull/593/files#diff-db4000d9e8bf29c6719984245eeefdf7e0a9b4e525f37ac8c5d6a918d4dc3005),
+though the fix has not been released. This was the only compile error, once
+<code class="pkg">chrono</code> was patched the entire Cryptography package
+compiled. Getting it to link and load correctly was much harder.
 
 Later on, we saw the load-time error 
 ```
@@ -107,13 +108,14 @@ class="pkg">parking_lot</code> crate. The <code class="pkg">instant</code> crate
 tries to explicitly support Emscripten but it mispells `emscripten_get_now` as
 `_emscripten_get_now` which leads to linker errors. We have to patch <code
 class="pkg">instant</code> and use a Cargo dependency override. The <code
-class="pkg">instant</code> crate does not seem to be maintained anymore so my
-find-and-replace patch has not been accepted. Luckily <code
-class="pkg">parking_lot</code> v0.12 does not use <code
-class="pkg">instant</code> anymore. Unfortunately, PyO3 v0.15 has a version pin
-on <code class="pkg">parking_lot</code> v0.11 and PyO3 v0.16 dropped support for
-Python 3.6 which Cryptography still supports. So Cryptography pins PyO3 to v0.15
-and depends on <code class="pkg">instant</code> and we need a patch.
+class="pkg">instant</code> crate does not seem to be maintained anymore so [my
+find-and-replace patch](https://github.com/sebcrozet/instant/pull/47) has not
+been accepted. Luckily <code class="pkg">parking_lot</code> v0.12 does not use
+<code class="pkg">instant</code> anymore. Unfortunately, PyO3 v0.15 has a
+version pin on <code class="pkg">parking_lot</code> v0.11 and PyO3 v0.16 dropped
+support for Python 3.6 which Cryptography still supports. So Cryptography pins
+PyO3 to v0.15 and depends on <code class="pkg">instant</code> and we need a
+patch.
 
 
 ## `lib.rmeta` and `--whole-archive`
@@ -227,8 +229,10 @@ _‾\\\_(ツ)\_/‾_
 
 After fixing all the preceding linker errors, linking succeeds but
 `setuptools-rust` fails to create a wheel because it expects the result to be a
-file called `_rust.abi3.so` but it is actually called `_rust.abi3.wasm`. This
-has been fixed in `setuptools-rust`, though the situation still isn't perfect.
+file called `_rust.abi3.so` but it is actually called `_rust.abi3.wasm`. [This
+has been fixed in
+`setuptools-rust`](https://github.com/PyO3/setuptools-rust/pull/242/files),
+though the situation still isn't perfect.
 
 Rust doesn't have a setting to specify the file extension of the final output,
 which is unfortunate. The file extension is part of the target spec and can be
