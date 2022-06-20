@@ -104,10 +104,11 @@ bad export type for `_emscripten_get_now`: undefined
 PyO3 v0.15 depends on the <code class="pkg">instant</code> crate via the <code
 class="pkg">parking_lot</code> crate. The <code class="pkg">instant</code> crate
 tries to explicitly support Emscripten but it mispells `emscripten_get_now` as
-`_emscripten_get_now` which leads to linker errors. We have to patch instant and
-use a Cargo dependency override. The <code class="pkg">instant</code> crate does
-not seem to be maintained anymore so my find-and-replace patch has not been
-accepted. Luckily <code class="pkg">parking_lot</code> v0.12 does not use <code
+`_emscripten_get_now` which leads to linker errors. We have to patch <code
+class="pkg">instant</code> and use a Cargo dependency override. The <code
+class="pkg">instant</code> crate does not seem to be maintained anymore so my
+find-and-replace patch has not been accepted. Luckily <code
+class="pkg">parking_lot</code> v0.12 does not use <code
 class="pkg">instant</code> anymore. Unfortunately, PyO3 v0.15 has a version pin
 on <code class="pkg">parking_lot</code> v0.11 and PyO3 v0.16 dropped support for
 Python 3.6 which Cryptography still supports so Cryptography pins PyO3 to v0.15
@@ -206,7 +207,8 @@ correct fix.
 
 The next linking error we hit is a very large number of errors like:
 ```
-relocation R_WASM_TABLE_INDEX_SLEB cannot be used against symbol `rust_begin_unwind`; recompile with -fPIC
+relocation R_WASM_TABLE_INDEX_SLEB cannot be used against symbol `rust_begin_unwind`;
+recompile with -fPIC
 ```
 
 Rust by default uses `relocation_model=static` for the Emscripten target, though
@@ -230,8 +232,9 @@ has been fixed in `setuptools-rust`, though the situation still isn't perfect.
 Rust doesn't have a setting to specify the file extension of the final output,
 which is unfortunate. The file extension is part of the target spec and can be
 located with:
-```
-$ rustc -Z unstable-options --print target-spec-json --target wasm32-unknown-emscripten | jq '.["dll-suffix"]'
+```sh
+$ rustc -Z unstable-options --print target-spec-json --target wasm32-unknown-emscripten \
+  | jq '.["dll-suffix"]'
 ".wasm"
 ```
 `setuptools-rust` hard codes the file extension for each target, but ideally it
@@ -255,13 +258,13 @@ This error is due to a bug in the interaction of Emscripten's support for
 C++/Rust error handling, 64 bit integers, and dynamic linking. The problem is
 not specific to Rust, it could occur in a C++ library as well.
 
-WebAssembly virtual machines support exception handling, but [it was
-only implemented in Safari in version 15.2 which came out in December
+The WebAssembly virtual machine supports exception handling, but [it was only
+implemented in Safari in version 15.2 which came out in December
 2021](https://developer.apple.com/documentation/safari-release-notes/safari-15_2-release-notes#WebAssembly).
 Emscripten has a hack to support stack unwinding in browsers without WebAssembly
 exception handling support. When a C++ error should be thrown, the WebAssembly
-code calls a JavaScript function which throws a JavaScript error.
-Emscripten routes function calls inside of C++ `try` blocks through a JavaScript
+code calls a JavaScript function which throws a JavaScript error. Emscripten
+routes function calls inside of C++ `try` blocks through a JavaScript
 trampoline. This trampoline calls the original WebAssembly function pointer
 inside of a JavaScript `try` block. 
 
@@ -274,7 +277,7 @@ WebAssembly functions that take or return 64 bit integers from JavaScript. All
 64 bit integer arguments have to be turned into a pair of 32 bit integers by a
 "legalizer" trampoline function. On the other side, a WebAssembly `dynCall`
 legalizer wrapper is generated that takes a function pointer, converts the
-appropriate pairs of 32 bit integers into 64 bit integers, and makes an onwards
+appropriate pairs of 32 bit integers into 64 bit integers, and makes the onwards
 call.
 
 These `dynCall` functions are only generated for code in the main WebAssembly
@@ -287,10 +290,11 @@ either by including them in the dynamic library or by generating them at load
 time. However, Emscripten does not support this.
 
 Our solution for this is to use `-sWASM_BIGINT` which avoids the need for
-`dynCall` legalizer wrappers. This also leads to a speed improvement and a
-reduction in code size. We don't want to support any browsers without `BigInt`.
-However, `-sWASM_BIGINT` requires both `BigInt` and `BigInt64Array`. Safari has
-supported `BigInt` since v14 but [it has only supported `BigInt64Array` since
+`dynCall` legalizer wrappers by using `BigInt`. This also leads to a speed
+improvement and a reduction in code size. We don't need to support any browsers
+without `BigInt`. However, `-sWASM_BIGINT` requires both `BigInt` and
+`BigInt64Array`. Safari has supported `BigInt` since v14 but [it has only
+supported `BigInt64Array` since
 v15.0](https://developer.apple.com/documentation/safari-release-notes/safari-15-release-notes#JavaScript).
 We do not want to drop Safari v14 support yet so we wrote [a polyfill for
 `BigInt64Array`](https://github.com/emscripten-core/emscripten/pull/17103/files).
