@@ -38,7 +38,7 @@ maintainers](https://www.youtube.com/watch?v=z_Eiy2W0APU) for an interesting
 discussion of their reasons for using Rust and the problems in the ecosystem
 that needed to be fixed before they could use it.
 
-We want to build the Rust extension module for our WebAssembly-based platform.
+We want to build the Rust extension module for our WebAssembly-based distribution.
 Rust has good support for the <code class="pkg">wasm32-unknown-unknown</code>
 target and has popular tools like <code class="pkg">wasm-bindgen</code>.
 However, we need to use the <code class="pkg">wasm32-unknown-emscripten</code>
@@ -111,8 +111,8 @@ find-and-replace patch has not been accepted. Luckily <code
 class="pkg">parking_lot</code> v0.12 does not use <code
 class="pkg">instant</code> anymore. Unfortunately, PyO3 v0.15 has a version pin
 on <code class="pkg">parking_lot</code> v0.11 and PyO3 v0.16 dropped support for
-Python 3.6 which Cryptography still supports so Cryptography pins PyO3 to v0.15
-and depends on <code class="pkg">instant</code> so we need the patch.
+Python 3.6 which Cryptography still supports. So Cryptography pins PyO3 to v0.15
+and depends on <code class="pkg">instant</code> and we need a patch.
 
 
 ## `lib.rmeta` and `--whole-archive`
@@ -211,7 +211,7 @@ relocation R_WASM_TABLE_INDEX_SLEB cannot be used against symbol `rust_begin_unw
 recompile with -fPIC
 ```
 
-Rust by default uses `relocation_model=static` for the Emscripten target, though
+Rust by default uses [`relocation_model=static`](https://doc.rust-lang.org/rustc/codegen-options/index.html#relocation-model) for the Emscripten target, though
 [hopefully that will change soon](https://github.com/rust-lang/rust/pull/98149).
 We can override this with `RUSTFLAGS=-C relocation-model=pic`, but we run into
 problems when we try to link the standard library because it has not been built
@@ -287,7 +287,7 @@ in try blocks in the main executable, we see the error above.
 
 It would be possible to generate extra `dynCall` wrappers for dynamic libraries,
 either by including them in the dynamic library or by generating them at load
-time. However, Emscripten does not support this.
+time. However, Emscripten does not currently support this.
 
 Our solution for this is to use `-sWASM_BIGINT` which avoids the need for
 `dynCall` legalizer wrappers by using `BigInt`. This also leads to a speed
