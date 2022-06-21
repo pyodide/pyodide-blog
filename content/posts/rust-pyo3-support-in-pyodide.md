@@ -205,12 +205,19 @@ if compiled with the `--release` flag, hence `-lc-debug`, but [this has been
 fixed](https://github.com/rust-lang/rust/pull/97928).
 
 Attempting to link `libc` into an Emscripten dynamic library causes an error.
-The dynamic library should use the libc that is linked into the main module. My
-current solution to this is to use a linker wrapper that locates the `-lc`
-argument and discards it. This is not a satisfactory solution -- I would rather
-not modify the linker or use a linker wrapper. This is a bug in the Rust support
-for Emscripten dynamic libraries. I need to do more research to work out the
-correct fix.
+The dynamic library should use the libc that is linked into the main module. By
+generously sprinkling `compiler/rustc_codegen_ssa/src/back/link.rs` with
+`println!` statements I determined that `-lc` was added by the function
+[`add_upstream_native_libraries`](https://github.com/rust-lang/rust/blob/master/compiler/rustc_codegen_ssa/src/back/link.rs#L2568).
+Conveniently the call to `add_upstream_native_libraries` can be turned off by
+setting the undocumented linker flag `-Zlink_native_libraries=off`. [Apparently
+this flag is also useful for targeting windows
+98.](https://seri.tools/blog/compiling-rust-for-legacy-windows/#get-unicows-properly-working)
+The author of that article also located it by adding print statements into the
+Rust linker.
+
+Hopefully we can add Rust support to build Emscripten dynamic librarires
+directly. I have some work in that direction [in this pull request](https://github.com/rust-lang/rust/pull/98358).
 
 
 ## Position independent code and -Zbuild-std
