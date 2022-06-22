@@ -158,12 +158,14 @@ export somehow.
 Using `-sSIDE_MODULE=2` solves the `lib.rmeta` error because `--whole-archive`
 is not passed to the linker. Conveniently, Rust is good at calculating which
 symbols should be exported: public symbols with the `#[no_mangle]` attribute are
-exported, other symbols are not. In the case of a PyO3 module, the only exported
-symbol is the `PyInit__my_module` function that Python invokes when loading a
-native module. 
+exported, other symbols are not. [It automatically passes this information on to
+the linker.](https://github.com/rust-lang/rust/blob/master/compiler/rustc_codegen_ssa/src/back/link.rs#L1882).
+In the case of a PyO3 module, the only exported symbol is the
+`PyInit__my_module` function that Python invokes when loading a native module.
 
-It would be great to link our other extension modules with `-sSIDE_MODULE=2` but
-we first need to figure out how to export the `PyInit` function.
+[We are working on linking Python C/C++ extension modules with `-sSIDE_MODULE=2`
+too](https://github.com/pyodide/pyodide/pull/2712). To do this we need to
+calculate the symbols to export with the Pyodide build system.
 
 
 ## Misencoded object files and LLVM version conflicts
