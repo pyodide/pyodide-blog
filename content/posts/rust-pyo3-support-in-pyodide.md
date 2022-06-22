@@ -53,8 +53,8 @@ due to limited development resources and difficulties coordinating between the
 Emscripten and Rust projects.
 
 
-In this blog post I will give a technical description of many of the problems I
-ran into in the process of building Rust extension modules for Pyodide.
+In this blog post I will give a technical description of many of the challenges I
+ran into in the process of building Rust extension modules for Pyodide and their solutions.
 
 
 <style>
