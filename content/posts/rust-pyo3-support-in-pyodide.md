@@ -1,6 +1,6 @@
 ---
 title: "Rust/PyO3 Support in Pyodide"
-date: 2022-04-15T12:37:52-07:00
+date: 2022-06-23T08:18:44-07:00
 author: "Hood Chatham"
 # author: ["Me", "You"] # multiple authors
 showToc: true
