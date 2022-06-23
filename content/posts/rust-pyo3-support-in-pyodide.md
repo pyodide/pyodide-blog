@@ -335,6 +335,6 @@ the next Rust package will be much easier.
 
 > **About the author**
 >
-> Hood Chatham is an Mathematics NSF Postdoctoral fellow at UCLA in the field of
-> homotopy theory. He is a maintainer of Pyodide. Coincedentally, he taught a
+> Hood Chatham is an NSF Postdoctoral fellow in Mathematics at UCLA in the field
+> of homotopy theory. He is a maintainer of Pyodide. Coincidentally, he taught a
 > mathematical cryptography class in the Spring of 2022.
