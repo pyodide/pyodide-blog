@@ -8,8 +8,6 @@ buildDrafts: true
 buildFuture: false
 buildExpired: false
 
-googleAnalytics: G-DN8KJHC6TN
-
 minify:
     disableXML: true
     minifyOutput: true
