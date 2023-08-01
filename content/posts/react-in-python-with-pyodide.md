@@ -434,4 +434,4 @@ Moving forward, it will be interesting to see how we can leverage Pyodide to bui
 
 > **About the author** 
 >
-> *[Xing Han Lu](https://xinghanlu.com/) ([@xhluu](https://twitter.com/xhluu)) is a graduate student at Mila, where he works on NLP research, and previously worked as a ML developer at Plotly. He authored ML libraries on GitHub and publish code and data on Kaggle, where he is a Code Grandmaster.*
+> *[Xing Han Lu](https://xinghanlu.com/) ([@xhluca](https://twitter.com/xhluca)) is a graduate student at Mila, where he works on NLP research, and previously worked as a ML developer at Plotly. He authored ML libraries on GitHub and publish code and data on Kaggle, where he is a Code Grandmaster.*
