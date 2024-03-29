@@ -1,5 +1,5 @@
 ---
-title: "marimo: a reactive Python notebook that runs in the browser"
+title: "Marimo"
 date: 2024-03-28T14:57:24-07:00
 draft: true
 tags: ["announcement"]
@@ -10,7 +10,7 @@ TocOpen: false
 draft: false
 hidemeta: false
 comments: false
-description: "Pyodide combined with marimo brings a whole new meaning to \"serverless\""
+description: "A reactive Python notebook that runs entirely in the browser."
 # canonicalURL: "https://canonical.url/to/page"
 disableHLJS: true # to disable highlightjs
 disableShare: false
@@ -27,34 +27,27 @@ cover:
     hidden: true # only hide on current single page
 ---
 
+# marimo: a reactive Python notebook that runs entirely in the browser
+
 
 We’re [Akshay Agrawal](https://akshayagrawal.com) and [Myles
 Scolnick](https://mylesscolnick.com/), and we’re the developers of
 [marimo](https://github.com/marimo-team/marimo), an open-source reactive
-notebook for Python. marimo is reproducible (no hidden state), stored as a Python
-file (easily versioned with git), executable as a script, and deployable as
-an interactive web app.
+notebook for Python that’s reproducible (no hidden state!), stored as Python
+files (easily versioned with git!), executable as a script, and deployable as
+interactive web apps.
 
-We recently made it possible to run marimo entirely in the browser using
-Pyodide, with your web browser executing the Python code in your notebook. This
-makes it extremely easy to get started with our notebook (no need to install
-Python) and to share live notebooks and apps (no server required!). Thanks to
-Pyodide, anyone in the world can create and share
-marimo notebooks at our [online marimo
-playground](https://marimo.new) for free.
+In this post we’ll describe how we ported marimo to [run entirely in the
+browser](https://marimo.app/l/c7h6pz) using Pyodide, making Python-based
+development available to everyone, for free.
 
-For example, here's our tutorial notebook, running entirely in your browser:
+As a preview, here’s our tutorial notebook _running in your browser_:
 
 <iframe
   src="https://marimo.app/l/c7h6pz?embed=true"
   width="800"
-  height="700"
-  style="transform: scale(0.9, 0.9); transform-origin: left; max-width: unset" 
+  height="600"
 ></iframe>
-
-As we'll describe in this post, porting marimo to run in the browser was
-relatively straightforward due to Pyodide's excellent design and
-documentation.
 
 
 ## What is marimo?
@@ -72,7 +65,6 @@ from program memory, eliminating hidden state. Try this for yourself!
   src="https://marimo.app/l/9bnuyz?embed=true"
   width="800"
   height="300"
-  style="transform: scale(0.9, 0.9); transform-origin: left; max-width: unset" 
 ></iframe>
 
 
@@ -132,41 +124,37 @@ at your command line.
 
 ## Using Pyodide to make marimo accessible to everyone
 
-The ability to run marimo notebooks in the browser via Pyodide excited
-us for three big reasons:
-
-- By eliminating the need to install and manage a Python installation, a
-Pyodide-powered marimo would scientific computing accessible to everyone.
-- By eliminating the financial and technical burden of deploying backend
-infrastructure, a Pyodide-powered marimo would make it extremely easy
-to share live, executable experiments, reports, and other computational documents
-with collaborators.
-- By eliminating network requests to a remote Python runner, a Pyodide-powered
-marimo would provide a delightfully snappy development experience.
-
-For these reasons, we decided to port marimo to work with Pyodide.
+**Why Pyodide?**
+Pyodide excites us because it has the potential to make computing accessible to
+everyone: while not everyone has the ability to install Python, almost everyone
+has access to a web browser. It also makes it much easier to share live
+computational documents or notebooks (no server required!). For these reasons,
+we decided to port marimo to work with Pyodide.
 
 **The Pyodide-marimo playground.**
-We have developed a [Pyodide-powered marimo playground](https://marimo.new)
-that makes it extremely easy for anyone in the world to tinker with marimo
-notebooks. With just one click, playground notebooks can be shared with others,
-and conversely every local notebook can be shared via our playground.
+[Our playground](https://marimo.new) makes it extremely easy for anyone in the
+world to tinker with marimo notebooks. With just one click, playground
+notebooks can be shared with others, and conversely every local notebook can be
+shared via our playground.
 
 Here are some use cases that our Pyodide-powered notebooks enable:
 
-- Rapidly experiment with code and models, without having to install Python or any packages.
-- Author blog posts, tutorials, and educational materials.
-- Embed interactive notebooks in library documentation or other static web pages.
-- Build tools, like a data labeler, embedding visualizer, model comparison tool, or anything else you can imagine.
-- Create and share bug reproductions.
+- Rapidly experiment with code and models, without having to install Python or any packages
+- Author blog posts, tutorials, and educational materials
+- Embed interactive notebooks in library documentation or other static web pages
+- Build tools, like a data labeler, embedding visualizer, model comparison tool, or anything else you can imagine
+- Create and share bug reproductions
 
 When you take a moment to think about all this, it’s really quite *magical* ✨.
 Thanks to Pyodide, you can use any pure Python package, as well as a number of
 packages for scientific computing, including Pandas, NumPy, SciPy, matplotlib,
 and scikit-learn, entirely in the sandbox of your web browser --- _without
-installing Python on your machine and without paying for infrastructure_.
+installing Python on your machine and without paying for infrastructure_. Plus,
+because everything runs in the browser, Pyodide can make marimo notebooks feel
+snappier -- code changes and UI interactions never need to wait for a
+round-trip to a remote server.
 
-**Examples.** We’ve created a few example notebooks to jump-start your imagination. There’s one that [trains a tiny neural network](https://marimo.app/l/xpd4te), another that visualizes [Bayes’ Theorem](https://marimo.app/l/odhwnq), and another that plots attractors of [dynamical systems](https://marimo.app/l/c7h6pz). One of our community members even created a [QR code generator](https://vxlabs.com/2024/03/02/contact-qrcode-generator-with-marimo-and-wasm/).
+**Examples.** We’ve created a few example notebooks to jumpstart your imagination. There’s one that [trains a tiny neural network](https://marimo.app/l/xpd4te), another that visualizes [Bayes’ Theorem](https://marimo.app/l/odhwnq), and another that plots attractors of [dynamical systems](https://marimo.app/l/c7h6pz). One of our community members even created a [QR code generator](https://vxlabs.com/2024/03/02/contact-qrcode-generator-with-marimo-and-wasm/).
 
 **Learn more**. Learn more on how to use the marimo playground, including how
 to include marimo notebooks in static HTML pages, [at our
@@ -181,14 +169,14 @@ existence.
 
 ## Implementation: porting marimo to Pyodide
 
-Porting marimo to work with Pyodide was relatively straightforward, a testament to the
+Porting marimo to work with Pyodide was straightforward, a testament to the
 latter's robustness and its thorough documentation. 
 
 marimo's original implementation has three main parts:
 
 1. a frontend
 2. a server
-3. a backend (or "runtime") with a kernel that runs Python code.
+3. a backend (or "runtime") with a kernel that runs Python code
 
 All that was required were
 minimal changes to the marimo frontend and runtime, and replacing the server
@@ -196,37 +184,14 @@ with a lightweight bridge (split across the frontend and runtime).
 
 ### Frontend
 
-The marimo frontend uses the same build when running in with Pyodide or when
-running with a Python server. This helps maintain consistency between the two
-experiences and avoid feature drift. The code path splits based off some
-feature flags that downloads the marimo wheel form PyPi and initializes the
-single threaded, Pyodide-compatible marimo kernel. Passing only a filename and
-a message callback function, we initialize the kernel as an async, never-ending
-python process. 
+**Web worker.**
+We [run Pyodide in a web worker](https://pyodide.org/en/stable/usage/webworker.html) to avoid blocking the main browser thread. XXX
 
-We interact with this kernel through a light RPC bridge that sends requests to
-the kernel and receives responses through the callback passed. This allows for
-an asynchronous-like feel to the execution. To support interruption of Python
-code, we simply followed the [Pyodide
-documentation](https://pyodide.org/en/stable/usage/keyboard-interrupts.html) on
-using its `SharedArrayBuffer`-based mechanism.
+**Filesystem.** Emscripten XXX
 
-For performance, we cache our assets and [run Pyodide in a web
-worker](https://pyodide.org/en/stable/usage/webworker.html) to avoid blocking
-the main browser thread. This creates some extra complexity with type-safety
-and mimicking blocking RPCs.    
+**Interrupts.**
 
-We heavily leverage the Emscripten filesystem. Code is passed from the URL hash
-(for ease of sharing), to the main frame, to the worker, and finally to the
-Emscripten filesystem. Emscripten supports many filesystem implementations such
-as IndexDB which we use to persists the user's files. We are working on our own
-implementation of the Emscripten filesystem built on top of any S3-compatible
-bucket. This means you'll be able to list, read, and write files from your S3
-bucket just by interacting with ”os” filesystem all in Python. 
-
-In order to make the experience smooth in and browser environment, we do our
-best to auto install packages. Whenever a cell is run, we try to install it
-through Pyodide or otherwise fallback to micropip.
+To support interruption of Python code, we simply followed the [Pyodide documentation](https://pyodide.org/en/stable/usage/keyboard-interrupts.html) on using its `SharedArrayBuffer`-based mechanism; this worked seamlessly.
 
 ### Runtime
 
@@ -249,4 +214,4 @@ We believe that Pyodide, combined with marimo, holds enormous potential for maki
 - library developers can embed interactive coding environments in documentation — we’ve done this throughout our own [API docs]([https://docs.marimo.io/api/inputs/slider.html](https://docs.marimo.io/api/inputs/slider.html))
 - authors can publish interactive blog posts and [computational tools]([https://vxlabs.com/2024/03/02/contact-qrcode-generator-with-marimo-and-wasm/](https://vxlabs.com/2024/03/02/contact-qrcode-generator-with-marimo-and-wasm/)) as part of static web pages
 
-**We want to hear from you.** We have ideas on how to make Pyodide-powered marimo notebooks more useful — *e.g.*, we’d like to make it easier to work with auxiliary code and data files, and to save multiple notebooks at our playground. We’re also interested in helping the Pyodide team support more packages. Most of all, though, we’d like to learn what would be most useful to you. Don’t hesitate to reach out to us at contact@marimo.io.
+**We want to hear from you.** We have ideas on how to make Pyodide notebooks more useful — *e.g.*, we’d like to make it easier to work with auxiliary code and data files, and to save multiple notebooks at our playground. We’re also interested in helping the Pyodide team support more packages. Most of all, though, we’d like to learn what would be most useful to you. Don’t hesitate to reach out to us at contact@marimo.io.
