@@ -37,7 +37,10 @@ to make computing more accessible.
 
 ## What is marimo?
 
-marimo is an open-source reactive notebook for Python built from the ground up to solve [well-known problems with traditional notebooks](https://docs.marimo.io/faq.html#faq-problems), including reproducibility, interactivity, maintainability, and shareability.
+marimo is an open-source reactive notebook for Python built from the ground up
+to solve [well-known problems with traditional
+notebooks](https://docs.marimo.io/faq.html#faq-problems), including
+reproducibility, interactivity, maintainability, and shareability.
 
 
 **A reactive notebook with no hidden state.**
@@ -164,23 +167,22 @@ latter's robustness and thorough documentation.
 
 marimo's original implementation has three main parts:
 
-1. a frontend
-2. a server
-3. a backend (or "runtime") with a kernel that runs Python code.
+1. a Python codebase implementing a kernel that runs Python code;
+2. a TypeScript codebase that issues control commands for the Python kernel;
+3. a server that connects the TypeScript and Python codebases.
 
-All that was required were
-minimal changes to the marimo frontend and runtime, and replacing the server
-with a lightweight bridge.
+All that was required were minimal changes to our TypeScript and Python
+codebases, and replacing the server with a lightweight bridge.
 
-### Frontend
+### TypeScript
 
-The marimo frontend uses the same build when running with Pyodide or when
-running with a Python server. This helps maintain consistency between the two
-experiences and avoid feature drift. The code path splits based off some
-feature flags that downloads the marimo wheel from PyPI and initializes the
-single-threaded, Pyodide-compatible marimo kernel. Passing only a filename and
-a message callback function, we initialize the kernel as an async, never-ending
-Python process.
+marimo uses the same TypeScript build when running with Pyodide or CPython.
+This helps maintain consistency between the two experiences and avoid feature
+drift. The code path splits based on feature flags; when running under Pyodide,
+we download the marimo wheel from PyPI and initialize a single-threaded,
+Pyodide-compatible marimo kernel. Passing only a filename and a message
+callback function, we initialize the kernel as an async, never-ending Python
+process.
 
 We interact with this kernel through a lightweight RPC bridge that sends requests to
 the kernel and receives responses through the callback passed. This allows for
@@ -206,10 +208,10 @@ In order to make the experience smooth in any browser environment, we do our
 best to auto-install packages. Whenever a cell is run, we try to install it
 through Pyodide or otherwise fallback to micropip.
 
-### Runtime
+### Python
 
-Similar to our frontend, our runtime uses the same
-implementation for Pyodide and CPython. We introduced just a few branches basd
+Similar to our TypeScript codebase, our Python codebase uses the same
+implementation for Pyodide and CPython. We introduced just a few branches based
 on [whether the kernel is running under
 Pyodide](https://pyodide.org/en/stable/usage/faq.html#how-to-detect-that-code-is-run-with-pyodide),
 since some Python features, such as shared memory, threading, and
@@ -240,7 +242,7 @@ We believe that marimo used with Pyodide holds enormous potential for making com
 - Authors can publish interactive blog posts and [computational tools]([https://vxlabs.com/2024/03/02/contact-qrcode-generator-with-marimo-and-wasm/](https://vxlabs.com/2024/03/02/contact-qrcode-generator-with-marimo-and-wasm/)) as part of static web pages.
 
 We have ideas on how to make Pyodide-powered
-marimo notebooks more useful — *e.g.*, we’d like to make it easier to work with
+marimo notebooks more useful — e.g., we’d like to make it easier to work with
 auxiliary code and data files, and to save multiple notebooks at our
 playground. We’re also interested in helping the Pyodide team support more
 packages.
