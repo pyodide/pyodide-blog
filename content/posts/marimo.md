@@ -176,7 +176,7 @@ codebases, and replacing the server with a lightweight bridge.
 
 ### TypeScript
 
-marimo uses the same TypeScript build when running with Pyodide or CPython.
+marimo uses the same TypeScript build when running with Pyodide or native Python.
 This helps maintain consistency between the two experiences and avoid feature
 drift. The code path splits based on feature flags; when running under Pyodide,
 we download the marimo wheel from PyPI and initialize a single-threaded,
@@ -230,7 +230,7 @@ async function and must be awaited. So we [configured code
 compilation](https://docs.python.org/3/library/functions.html#compile) to allow
 top-level await, and wrapped the marimo kernel in an `asyncio` event loop. As a
 bonus, this change made it possible to use top-level `await` when running
-via CPython, a feature that had been requested by our users for some time.
+via native Python, a feature that had been requested by our users for some time.
 
 ## What’s next?
 
