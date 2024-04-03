@@ -211,7 +211,7 @@ through Pyodide or otherwise fallback to micropip.
 ### Python
 
 Similar to our TypeScript codebase, our Python codebase uses the same
-implementation for Pyodide and CPython. We introduced just a few branches based
+implementation for Pyodide and native Python. We introduced just a few branches based
 on [whether the kernel is running under
 Pyodide](https://pyodide.org/en/stable/usage/faq.html#how-to-detect-that-code-is-run-with-pyodide),
 since some Python features, such as shared memory, threading, and
