@@ -42,7 +42,7 @@ marimo is an open-source reactive notebook for Python built from the ground up t
 
 **A reactive notebook with no hidden state.**
 In marimo, a notebook’s code, outputs, and program state are always consistent.
-Run a cell and marimo **reacts** by automatically running the cells that
+Run a cell and marimo _reacts_ by automatically running the cells that
 reference its declared variables. Delete a cell and marimo scrubs its variables
 from program memory, eliminating hidden state. Try this for yourself!
 
