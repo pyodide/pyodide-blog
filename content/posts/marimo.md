@@ -238,7 +238,7 @@ multiprocessing queues with `asyncio` queues.
 
 We added a new entrypoint for creating the marimo kernel when running under
 Pyodide, which receives messages from the RPC bridge in an asynchronous
-control loop. This entrypoint also sets up stream objects (_e.g._, for standard
+control loop. This entrypoint also sets up stream objects (e.g., for standard
 output) to use the message callback provided to it by the frontend.
 
 In order to support package installation with micropip, we had to modify the
