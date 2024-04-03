@@ -234,10 +234,10 @@ via CPython, a feature that had been requested by our users for some time.
 
 We believe that marimo used with Pyodide holds enormous potential for making computing more accessible:
 
-- anyone can create and share live notebooks, without having to pay for infrastructure
-- students can get started with Python instantly, without having to set up a development environment
-- library developers can embed reactive coding environments and demos in documentation — we’ve done this throughout our own [API docs]([https://docs.marimo.io/api/inputs/slider.html](https://docs.marimo.io/api/inputs/slider.html))
-- authors can publish interactive blog posts and [computational tools]([https://vxlabs.com/2024/03/02/contact-qrcode-generator-with-marimo-and-wasm/](https://vxlabs.com/2024/03/02/contact-qrcode-generator-with-marimo-and-wasm/)) as part of static web pages
+- Anyone can create and share live notebooks, without having to pay for infrastructure.
+- Students can get started with Python instantly, without having to set up a development environment.
+- Library developers can embed reactive coding environments and demos in documentation — we’ve done this throughout our own [API docs]([https://docs.marimo.io/api/inputs/slider.html](https://docs.marimo.io/api/inputs/slider.html)).
+- Authors can publish interactive blog posts and [computational tools]([https://vxlabs.com/2024/03/02/contact-qrcode-generator-with-marimo-and-wasm/](https://vxlabs.com/2024/03/02/contact-qrcode-generator-with-marimo-and-wasm/)) as part of static web pages.
 
 We have ideas on how to make Pyodide-powered
 marimo notebooks more useful — *e.g.*, we’d like to make it easier to work with
