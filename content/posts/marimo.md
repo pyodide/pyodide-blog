@@ -31,27 +31,7 @@ cover:
 We’re [Akshay Agrawal](https://akshayagrawal.com) and [Myles
 Scolnick](https://mylesscolnick.com/), and we’re the developers of
 [marimo](https://github.com/marimo-team/marimo), an open-source reactive
-notebook for Python. marimo is reproducible (no hidden state), stored as a Python
-file (easily versioned with git), executable as a script, and deployable as
-an interactive web app.
-
-Thanks to Pyodide, anyone in the world can create and share
-marimo notebooks at our [online marimo
-playground](https://marimo.new) for free, without having to install Python
-or pay for infrastructure. The playground uses Pyodide to run marimo
-entirely in the browser: instead of shipping Python to a remote server for
-execution, your browser runs it directly on your computer.
-
-As an example, here's our tutorial notebook running via Pyodide:
-
-<iframe
-  src="https://marimo.app/l/c7h6pz?embed=true"
-  width="800"
-  height="700"
-  style=" max-width: 800px"
-></iframe>
-
-In this post, we'll describe how we ported marimo to work via
+notebook for Python. In this post, we'll describe how we ported marimo to work via
 Pyodide, and why we're incredibly excited about the potential of Pyodide
 to make computing more accessible.
 
