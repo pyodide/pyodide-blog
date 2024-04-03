@@ -1,6 +1,6 @@
 ---
 title: "marimo: a reactive Python notebook that runs in the browser"
-date: 2024-03-28T14:57:24-07:00
+date: 2024-04-08
 draft: true
 tags: ["announcement", "guest post"]
 # author: "Me"
