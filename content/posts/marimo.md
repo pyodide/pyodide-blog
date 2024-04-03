@@ -232,7 +232,7 @@ via CPython, a feature that had been requested by our users for some time.
 
 ## What’s next?
 
-We believe that Pyodide, combined with marimo, holds enormous potential for making computing more accessible. With Pyodide …
+We believe that marimo used with Pyodide holds enormous potential for making computing more accessible:
 
 - anyone can create and share live notebooks, without having to pay for infrastructure
 - students can get started with Python instantly, without having to set up a development environment
