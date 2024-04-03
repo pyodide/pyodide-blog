@@ -108,7 +108,7 @@ order. For example, here's a simple educational app:
 
 
 **Use cases.** marimo can be used in many ways. It can be used as a next-gen
-replacement for Jupyter notebooks, allowing you to explore data very rapidly —
+replacement for Jupyter notebooks, allowing you to explore data rapidly —
 change code or interact with a UI element, and see outputs change instantly —
 and run experiments in an environment that prevents bugs before they happen. It
 can also be used to make powerful apps, dashboards, and internal
