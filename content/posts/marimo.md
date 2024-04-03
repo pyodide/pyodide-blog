@@ -130,13 +130,13 @@ at your command line.
 
 ## Using Pyodide to make marimo accessible to everyone
 
-We decided to port marimo to Pyodide for three big reasons.
+We decided to port marimo to Pyodide for three main reasons:
 
-- make scientific computing accessible to everyone by eliminating the need to
+- to make scientific computing accessible to everyone by eliminating the need to
   install and manage Python;
-- make it extremely easy to share executable notebooks by eliminating
-  the financial and technical burden of deploying backend infrastructure;
-- provide a delightfully snappy development experience by eliminating
+- to make it easy to share executable notebooks via a url by eliminating
+  the financial and technical burden of deploying backend infrastructure; and
+- to provide a snappy development experience by eliminating
   network requests to a remote Python runner.
 
 Our motivation for combining marimo with Pyodide echoes the vision articulated
