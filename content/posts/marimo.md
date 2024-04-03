@@ -135,8 +135,8 @@ Here are some use cases that our Pyodide-powered notebooks enable:
 - Rapidly experiment with code and models.
 - Author blog posts, tutorials, and educational materials.
 - Embed interactive notebooks in library documentation or other static web pages.
-- Build and share tools like a data labeler, embedding visualizer, model
-  comparison tool, or anything else you can imagine.
+- Build and share tools like data labelers, embedding visualizers, model
+  comparison tools, or anything else you can imagine.
 - Create and share bug reproductions.
 
 You can learn more about the playground, including how
