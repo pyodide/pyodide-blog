@@ -95,7 +95,7 @@ makes these UI elements more useful and ergonomic than Jupyter’s IPyWidgets.
 
 
 **Deploy as an app, run as a script.**
-Every marimo notebook can served as an interactive read-only web app (with outputs
+Every marimo notebook can be served as an interactive read-only web app (with outputs
 concatenated and code hidden). Additionally, marimo notebooks can be run as
 scripts from the command line, with cells executed in a topologically sorted
 order. For example, here's a simple educational app:
