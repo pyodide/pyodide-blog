@@ -1,7 +1,7 @@
 ---
 title: "marimo: a reactive Python notebook that runs in the browser"
 date: 2024-04-08
-draft: true
+draft: false
 tags: ["announcement", "guest post"]
 # author: "Me"
 author: ["Akshay Agrawal", "Myles Scolnick"] # multiple authors
