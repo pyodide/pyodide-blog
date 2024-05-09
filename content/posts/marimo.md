@@ -51,9 +51,9 @@ from program memory, eliminating hidden state. Try this for yourself!
 
 <iframe
   src="https://marimo.app/l/9bnuyz?embed=true"
-  width="800"
+  width="100%"
   height="300"
-  style="max-width: 800px"
+  frameborder="0"
 ></iframe>
 
 
@@ -71,9 +71,9 @@ makes these UI elements more useful and ergonomic than Jupyter’s IPyWidgets.
 
 <iframe
   src="https://marimo.app/l/p9l3ay?embed=true"
-  width="800"
+  width="100%"
   height="400"
-  style="max-width: 800px"
+  frameborder="0"
 ></iframe>
 
 
@@ -85,8 +85,9 @@ order. For example, here's a simple educational app:
 
 <iframe
   src="https://marimo.app/l/e9wii1?mode=read&embed=true"
-  width="800"
+  width="100%"
   height="800"
+  frameborder="0"
 ></iframe>
 
 
