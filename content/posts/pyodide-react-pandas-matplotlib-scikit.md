@@ -27,11 +27,15 @@ cover:
     hidden: true # only hide on current single page
 ---
 
-Hello, my name is Raul Andrial and I am a software engineer located in Miami, FL, USA. I created a proof of concept web app with Pyodide that allows users to use the pandas library without needing to code but can use code if they want to. The app uses a drag and drop interface. I also included functionality for plotting with matplotlib and linear regression using scikit-learn.
+Hello, my name is [Raul Andrial](https://randr000.github.io/portfolio-resume/tech) and I am a software engineer located in Miami, FL, USA. I created a proof of concept web app with Pyodide that allows users to use the pandas library without needing to code but can use code if they want to. The app uses a drag and drop interface. I also included functionality for plotting with matplotlib and linear regression using scikit-learn.
 
 You can read more about it [here](https://github.com/randr000/react_pyodide_data_prep).
 
 You can test it out [here](https://randr000.github.io/react_pyodide_data_prep/).
+
+### Implementation Details
+
+
 
 ### Uploading Files
 
