@@ -33,9 +33,97 @@ You can read more about it [here](https://github.com/randr000/react_pyodide_data
 
 You can test it out [here](https://randr000.github.io/react_pyodide_data_prep/).
 
-### Implementation Details
+### Pyodide Context Provider
 
+The pyodide instance is loaded and stored in its own context using React's [Context API](https://react.dev/reference/react/createContext). In order for any component to run python code it must be a child of the PyodideContextProvider component.
 
+```
+import React, { useEffect, useRef, useState } from 'react';
+import { loadPyodide } from 'pyodide/pyodide.js';
+
+export const PyodideContext = React.createContext(null);
+
+export const PyodideContextProvider = ({children, toLoadPyodide=true}) => {
+
+    const [isPyodideLoaded, setIsPyodideLoaded] = useState(!toLoadPyodide);
+    const pyodideRef = useRef(null);
+
+    useEffect(() => {
+        toLoadPyodide &&
+        (async function () {
+            pyodideRef.current = await loadPyodide({
+                indexURL : "https://cdn.jsdelivr.net/pyodide/v0.21.3/full/"
+            });
+
+            // Load python packages
+            ['pandas', 'numpy', 'matplotlib', 'scikit-learn', 'cloudpickle'].forEach(async pkg => await pyodideRef.current.loadPackage(pkg));
+    
+            setIsPyodideLoaded(true);
+            return pyodideRef.current.runPythonAsync('2 * 3');
+            
+        })().then(res => res === 6 ? console.log("Pyodide has loaded") : console.log("Something wrong appears to have happended when loading Pyodide"));
+
+    }, [pyodideRef]);
+    
+    return (
+        <PyodideContext.Provider value={{pyodide: pyodideRef.current, isPyodideLoaded}}>
+            {
+                isPyodideLoaded ?
+                children :
+                <div className="d-flex align-items-center justify-content-center" style={{height: "100vh"}}>
+                    <p className="text-center fs-1 fw-bold">Pyodide is Loading<span data-testid="pyodide-loading-spinner" className="spinner-border" role="status"></span></p>
+                </div>
+            }
+            
+        </PyodideContext.Provider>
+    );
+};
+```
+
+The custom hook useGetContexts can be used in order to run python code in any child component of the PyodideContextProvider component.
+
+```
+const {pyodide, isPyodideLoaded} = useGetContexts();
+```
+-- pyodide: The current instance of pyodide.
+<br/>
+-- isPyodideLoaded: A boolean value that can be used to check if pyodide has been loaded.
+
+Define python code
+
+```
+const addTwoNums = `
+
+def addTwoNums(x, y):
+    return x + y`;
+
+export default addTwoNums;
+```
+Run python code
+
+```
+import addTwoNums from '../../python_code_js_modules/addTwoNums';
+import useGetContexts from '../../custom-hooks/useGetContexts';
+
+const AddTwoNumsComp = () => {
+    const {pyodide, isPyodideLoaded} = useGetContexts();
+
+    /* Begin component logic */
+
+    // Load python function
+    pyodide.runPython(addTwoNums);
+    // Call python function
+    pyodide.globals.get('addTwoNums')(2, 3);
+
+    /* End component logic */
+
+    return (
+        <>
+            /* Render Component */
+        </>;
+    );
+};
+```
 
 ### Uploading Files
 
