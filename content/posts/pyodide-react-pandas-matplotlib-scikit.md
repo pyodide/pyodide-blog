@@ -146,7 +146,9 @@ const AddTwoNumsComp = () => {
 
 ## Pyodide Cons
 
+- **Load Times:** While not terrible, Pyodide does take around 5 seconds to load when the home page is visited.
 
+- **Debugging:** Debugging the Python code, while certainly doable, was not always straighforward.
 
 ## Data Components
 
