@@ -33,7 +33,7 @@ You can read more about it [here](https://github.com/randr000/react_pyodide_data
 
 You can test it out [here](https://randr000.github.io/react_pyodide_data_prep/).
 
-### Pyodide Context Provider
+## Pyodide Context Provider
 
 The pyodide instance is loaded and stored in its own context using React's [Context API](https://react.dev/reference/react/createContext). In order for any component to run python code it must be a child of the PyodideContextProvider component.
 
@@ -89,7 +89,9 @@ const {pyodide, isPyodideLoaded} = useGetContexts();
 <br/>
 -- isPyodideLoaded: A boolean value that can be used to check if pyodide has been loaded.
 
-Define python code
+## Defining Python Functions
+
+The way I run the python code is by defining python functions within a javascript template literal string. Below is an example of a function that adds two numbers.
 
 ```
 const addTwoNums = `
@@ -99,7 +101,8 @@ def addTwoNums(x, y):
 
 export default addTwoNums;
 ```
-Run python code
+## Running Python Code
+In order to run python code, I import a previously defined function and use the useGetContexts hook to reference the current pyodide instance. I then call the runPython method to load the python function and call globals.get to call the python function. This usually happens within a useEffect hook. Below is an example using the addTwoNums function defined above.
 
 ```
 import addTwoNums from '../../python_code_js_modules/addTwoNums';
@@ -124,6 +127,16 @@ const AddTwoNumsComp = () => {
     );
 };
 ```
+
+## Pain Points
+
+- **Lack of documentation for working with React:** React is one of the most popular front-end libaries at the time this artical was written. However, there was very little documentation on how to get pyodide working with React and very few examples. Also, the [react-py](https://github.com/elilambnz/react-py/issues/67) library does not currently support returning values from the python scope which is what I needed for this project.
+
+- **Testing:** It was not possible to test individual components using the React Testing Library since pyodide needed to be loaded.
+
+- **Large Datasets:** The app is really slow with large datasets. Though, this could be because of how I manage the app state and not entirely an issue with pyodide.
+
+## Data Components
 
 ### Uploading Files
 
@@ -189,6 +202,8 @@ they left off.
 
 <br/>
 <br/>
+
+## Conclusion
 
 It was exciting to see the potential of Pyodide while building this app. An app like this can help analysts and domain experts, who may not be proficient in programming, to build data pipelines. Since all the code is run in the browser, they also would not need to worry about installing any software or configuring a python backend.
 
