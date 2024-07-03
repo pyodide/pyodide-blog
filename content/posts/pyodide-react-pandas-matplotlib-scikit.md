@@ -31,13 +31,13 @@ Hello, my name is [Raul Andrial](https://randr000.github.io/portfolio-resume/tec
 
 You can read more about it [here](https://github.com/randr000/react_Pyodide_data_prep).
 
-You can test it out [here](https://randr000.github.io/react_Pyodide_data_prep/).
+You can test it out [here](https://randr000.github.io/react_pyodide_data_prep/).
 
 ## Pyodide Context Provider
 
 The Pyodide instance is loaded and stored in its own context using React's [Context API](https://react.dev/reference/react/createContext). In order for any component to run Python code it must be a child of the PyodideContextProvider component.
 
-```
+```jsx
 import React, { useEffect, useRef, useState } from 'react';
 import { loadPyodide } from 'Pyodide/Pyodide.js';
 
@@ -52,11 +52,11 @@ export const PyodideContextProvider = ({children, toLoadPyodide=true}) => {
         toLoadPyodide &&
         (async function () {
             PyodideRef.current = await loadPyodide({
-                indexURL : "https://cdn.jsdelivr.net/Pyodide/v0.21.3/full/"
+                indexURL : "https://cdn.jsdelivr.net/pyodide/v0.21.3/full/"
             });
 
             // Load Python packages
-            ['pandas', 'numpy', 'matplotlib', 'scikit-learn', 'cloudpickle'].forEach(async pkg => await PyodideRef.current.loadPackage(pkg));
+            PyodideRef.current.loadPackage(['pandas', 'numpy', 'matplotlib', 'scikit-learn', 'cloudpickle']);
     
             setIsPyodideLoaded(true);
             return PyodideRef.current.runPythonAsync('2 * 3');
@@ -82,7 +82,7 @@ export const PyodideContextProvider = ({children, toLoadPyodide=true}) => {
 
 The custom hook useGetContexts can be used in order to run Python code in any child component of the PyodideContextProvider component.
 
-```
+```jsx
 const {Pyodide, isPyodideLoaded} = useGetContexts();
 ```
 -- Pyodide: The current instance of Pyodide.
@@ -93,7 +93,7 @@ const {Pyodide, isPyodideLoaded} = useGetContexts();
 
 The way I run the Python code is by defining Python functions within a javascript template literal string. Below is an example of a function that adds two numbers.
 
-```
+```js
 const addTwoNums = `
 
 def addTwoNums(x, y):
@@ -104,7 +104,7 @@ export default addTwoNums;
 ## Running Python Code
 In order to run Python code, I import a previously defined function and use the useGetContexts hook to reference the current Pyodide instance. I then call the runPython method to load the Python function and call globals.get to call the Python function. This usually happens within a useEffect hook. Below is an example using the addTwoNums function defined above.
 
-```
+```jsx
 import addTwoNums from '../../Python_code_js_modules/addTwoNums';
 import useGetContexts from '../../custom-hooks/useGetContexts';
 
