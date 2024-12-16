@@ -10,7 +10,7 @@ async function main() {
   pyodide.runPython(`
       import matplotlib
       import numpy as np
-      matplotlib.use("module://matplotlib.backends.html5_canvas_backend")
+      matplotlib.use("module://matplotlib_pyodide.html5_canvas_backend")
       import matplotlib.cm as cm
       from matplotlib import pyplot as plt
       delta = 0.025
