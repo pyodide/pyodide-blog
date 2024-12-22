@@ -172,7 +172,7 @@ To use the _\<canvas\>_ backend in your own projects, please use the following s
 
 ```python
 import matplotlib
-matplotlib.use("module://matplotlib.backends.html5_canvas_backend")
+matplotlib.use("module://matplotlib_pyodide.html5_canvas_backend")
 ```
 
 You can find a more complete example of plotting with matplotlib WASM backend [on JSFiddle](https://jsfiddle.net/gh/get/library/pure/pyodide/pyodide-blog/contents/demos/canvas-renderer-matplotlib/demo-1/).
