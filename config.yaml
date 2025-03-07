@@ -75,6 +75,10 @@ params:
           [GitHub](https://github.com/pyodide/pyodide-blog).
 
     socialIcons:
+        - name: mastodon
+          url: "https://fosstodon.org/@pyodide"
+        - name: linkedin
+          url: "https://www.linkedin.com/company/pyodide"
         - name: twitter
           url: "https://twitter.com/pyodide"
         - name: github
