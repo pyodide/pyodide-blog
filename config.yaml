@@ -90,8 +90,8 @@ params:
         hiddenInSingle: true # hide on single page
 
     editPost:
-        URL: "https://github.com/pyodide/pyodide-blog/blob/master/content/"
-        Text: "Suggest Changes" # edit text
+        URL: "https://github.com/pyodide/pyodide-blog/edit/master/content"
+        Text: "Suggest changes" # edit text
         appendFilePath: true # to append file path to Edit link
 
     # for search
