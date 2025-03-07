@@ -72,7 +72,7 @@ params:
           This blog also aims to illustrate how Pyodide can be used for
           real-world projects. If you have a nice Pyodide use case
           that you would like to share, we accept submissions on
-          [Github](https://github.com/pyodide/pyodide-blog).
+          [GitHub](https://github.com/pyodide/pyodide-blog).
 
     socialIcons:
         - name: twitter
