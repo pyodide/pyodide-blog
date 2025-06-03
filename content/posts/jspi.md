@@ -305,7 +305,7 @@ deallocating stack space that `victim()` is still using. Calling a third
 `allocateOnStackAndSleep()` exits and before `victim()` resumes would then
 overwrite victim's stack space.
 
-Explicitly these other two functions can look as follows:
+These other two functions look as follows:
 ```C
 WASM_EXPORT("overwritesVictimsStack")
 void overwritesVictimsStack(void) {
