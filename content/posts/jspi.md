@@ -45,7 +45,7 @@ JavaScript Promise integration became a stage 4 finished proposal on April 8,
 Integration](https://developer.chrome.com/release-notes/137#javascript_promise_integration).
 This will make Pyodide quite a lot more useful.
 
-Thanks to Antonio Cuni for helpful feedback.
+Thanks to Antonio Cuni for feedback on a draft.
 
 ## Pyodide's stack switching API
 
