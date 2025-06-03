@@ -131,19 +131,24 @@ To make `awaitAsyncHttpRequest()` into a suspending import, we wrap it with
 `new WebAssembly.Suspending()`.
 ```js
 const imports = {
-    env: {
-        logInt,
-        logString,
-        awaitAsyncHttpRequest: new WebAssembly.Suspending(awaitAsyncHttpRequest),
-    }
-}
+  env: {
+    logInt,
+    logString,
+    awaitAsyncHttpRequest: new WebAssembly.Suspending(awaitAsyncHttpRequest),
+  },
+};
 
-const {instance} = await WebAssembly.instantiate(readFileSync("basic.wasm"), imports);
+export const { instance } = await WebAssembly.instantiate(
+  readFileSync("basic.wasm"),
+  imports,
+);
 const HEAP = new Uint8Array(instance.exports.memory.buffer);
 ```
 To call `pythonFunction()`, we need to wrap the export in `WebAssembly.Promising()`:
 ```js
-const pythonFunction = WebAssembly.Promising(instance.exports.pythonFunction);
+export const pythonFunction = WebAssembly.promising(
+  instance.exports.pythonFunction,
+);
 ```
 And now we call `pythonFunction(3)` and it will log:
 ```
@@ -189,8 +194,8 @@ void pythonFunction(int x) {
 Our JavaScript imports are then:
 ```js
 function awaitInt(x) {
-    // Just the identity function...
-    // We wrap it with WebAssembly.Suspending so that it will suspend for the input promise.
+    // This is just the identity function...
+    // We need it so we can wrap it with WebAssembly.Suspending
     return x;
 }
 async function asyncHttpRequest(x) {
@@ -333,7 +338,9 @@ module. `sleep()` is our only suspending import. We need to wrap
 `allocateOnStackAndSleep` and `victim` in `Webassembly.promising()` since they
 stack switch:
 ```js
-const allocateOnStackAndSleep = WebAssembly.promising(instance.exports.allocateOnStackAndSleep);
+const allocateOnStackAndSleep = WebAssembly.promising(
+  instance.exports.allocateOnStackAndSleep,
+);
 const victim = WebAssembly.promising(instance.exports.victim);
 const overwritesVictimsStack = instance.exports.overwritesVictimsStack;
 ```
@@ -373,7 +380,9 @@ function promisingExport(func) {
     } 
 }
 
-const allocateOnStackAndSleep = promisingExport(instance.exports.allocateOnStackAndSleep);
+const allocateOnStackAndSleep = promisingExport(
+  instance.exports.allocateOnStackAndSleep,
+);
 const victim = promisingExport(instance.exports.victim);
 ```
 Then when a thread sleeps we can save the stack pointer and the range of stack
