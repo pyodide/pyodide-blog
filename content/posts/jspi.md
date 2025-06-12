@@ -33,11 +33,11 @@ synchronous, but most JavaScript APIs are asynchronous. For example, `urllib`
 offers a synchronous API to make a request, but in JavaScript, the normal way to
 make a request is with the `fetch` API which is asynchronous. Python also has
 APIs like `event_loop.run_until_complete()` which are supposed to block until an
-async task is completed. There was simply no way to do this.
+async task is completed. There was no way to do this in Pyodide.
 
-JavaScript Promise integration is a new WebAssembly standard that gives us a way
-to work around this. It allows us to make a call that seems synchronous from
-the perspective of C but is actually asynchronous from the perspective of
+JavaScript Promise integration (JSPI) is a new WebAssembly standard that gives
+us a way to work around this. It allows us to make a call that seems synchronous
+from the perspective of C but is actually asynchronous from the perspective of
 Python.
 
 JavaScript Promise integration became a stage 4 finished proposal on April 8,
@@ -49,8 +49,8 @@ Thanks to Antonio Cuni for feedback on a draft.
 
 ## Pyodide's stack switching API
 
-The function `run_sync` stack switches for the resolution of any Python
-awaitable. For example:
+Pyodide defines a Python function `run_sync` which stack switches for the
+resolution of any Python awaitable. For example:
 ```py
 from pyodide.ffi import run_sync
 from js import fetch
@@ -63,20 +63,42 @@ def await_async_http_request(url):
     # Suspend for async_http_request to complete
     return run_sync(async_http_request(url))
 ```
-If we call `await_async_http_request()` from JavaScript normally like
-`await_async_http_request("https://example.com")`, it will raise an error. In
-order to suspend for a promise, we must make a "promising" call into Python, and
-the result will itself be a promise. However, for API compatibility, calling a
-synchronous Python function cannot return a promise. If we want to enable stack
-switching, we need to call it like
-`await_async_http_request.callPromising("https://example.com")`. This returns a
-promise. See the full example
-[here](https://github.com/hoodmane/jspi-blog-examples/blob/main/1-pyodide-api/pyodide_example.mjs).
+If we call `await_async_http_request()` from JavaScript:
+```js
+await_async_http_request("https://example.com")
+```
+It will raise:
+```py
+RuntimeError: Cannot stack switch because the Python entrypoint was a synchronous function. Use pyFunc.callPromising() to fix.
+```
+For API compatibility, calling a synchronous Python function cannot return a
+promise. If we want to enable stack switching, we need to call it like
+```js
+await_async_http_request.callPromising("https://example.com")
+```
+This returns a promise, even though a synchronous Python function would
+ordinarily return the value directly.
+
+If Python code is executed with `pyodide.runPython()` then it is not possible to
+stack switch:
+```js
+pyodide.runPython("run_sync(sleep(1))"); // RuntimeError: Cannot stack switch
+```
+But it is possible to stack switch inside of `pyodide.runPythonAsync()`. Stack
+switching is also enabled if the entrypoint to Python is any async function. It
+is also possible to use `asyncio.run(task)` or
+`asyncio.get_event_loop().run_until_complete(task)` in place of
+`run_sync(task)`.
+
+As-is, this may not look all that useful. The value is most noticeable when
+using existing APIs. For instance, `urllib3` and `requests` have built in
+support for Pyodide and will use JSPI to make requests if possible.
+
 
 ## Using JSPI directly
 
 We'll start with a basic example of the JSPI API. The full example is
-[here](https://github.com/hoodmane/jspi-blog-examples/tree/main/2-basic-example)
+[here](https://github.com/hoodmane/jspi-blog-examples/tree/main/2-basic-example).
 
 Suppose we have an async JavaScript function:
 ```js
@@ -166,13 +188,14 @@ We can separate the function that blocks from the original promise-returning
 function. This lets us schedule multiple promises from C and only later block
 for them.
 
-So now `asyncHttpRequest()` and `asyncDbQuery()` will return promises. In C,
-they have type `__externref_t` which is an opaque reference to a JavaScript
-object. The only operations allowed on them are assignment and calling
-functions. Attempting to add them, dereference them, take their address, use
-them as struct fields or pass them as arguments to a varargs function all will
-result in compile errors. The only thing we can do with these `__externref_t`
-promises is call `awaitInt()` to suspend for the integers they resolve to.
+Suppose now we have two async operationsm say `asyncHttpRequest()` and
+`asyncDbQuery()`. They will return promises. In C, the return type will be
+`__externref_t` which is an opaque reference to a JavaScript object. The only
+operations allowed on them are assignment and calling functions. Attempting to
+add them, dereference them, take their address, use them as struct fields or
+pass them as arguments to a varargs function all will result in compile errors.
+The only thing we can do with these `__externref_t` promises is call
+`awaitInt()` to suspend for the integers they resolve to.
 ```C
 WASM_EXPORT("pythonFunction")
 void pythonFunction(int x) {
@@ -323,19 +346,13 @@ void victim() {
     logStrStr("victim2", x);
 }
 ```
-Sleep has the traditional JavaScript definition:
-```js
-function sleep(ms) {
-    return new Promise(res => setTimeout(res, ms));
-}
-```
 Escape is a no-op:
 ```js
 function escape(x) { }
 ```
 As usual we have to define our imports, compile and instantiate the WebAssembly
 module. `sleep()` is our only suspending import. We need to wrap
-`allocateOnStackAndSleep` and `victim` in `Webassembly.promising()` since they
+`allocateOnStackAndSleep()` and `victim()` in `Webassembly.promising()` since they
 stack switch:
 ```js
 const allocateOnStackAndSleep = WebAssembly.promising(
