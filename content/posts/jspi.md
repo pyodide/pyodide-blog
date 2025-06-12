@@ -38,7 +38,7 @@ async task is completed. There was no way to do this in Pyodide.
 JavaScript Promise integration (JSPI) is a new WebAssembly standard that gives
 us a way to work around this. It allows us to make a call that seems synchronous
 from the perspective of C but is actually asynchronous from the perspective of
-Python.
+JavaScript.
 
 JavaScript Promise integration became a stage 4 finished proposal on April 8,
 2025. Chrome 137, released May 27th, 2025, [supports JavaScript Promise
