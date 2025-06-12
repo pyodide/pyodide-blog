@@ -79,23 +79,40 @@ await_async_http_request.callPromising("https://example.com")
 This returns a promise, even though a synchronous Python function would
 ordinarily return the value directly.
 
+`urllib3` and `requests` will use JSPI to make requests if possible. For
+example:
+```js
+import {loadPyodide} from "pyodide";
+
+const py = await loadPyodide();
+await py.loadPackage("requests")
+
+// Use runPythonAsync to enable stack switching
+py.runPythonAsync(`
+import requests
+
+r = requests.get("https://example.com")
+print(r.text[:100])
+`);
+```
+
 If Python code is executed with `pyodide.runPython()` then it is not possible to
 stack switch:
 ```js
-pyodide.runPython("run_sync(sleep(1))"); // RuntimeError: Cannot stack switch
+pyodide.runPython("run_sync(sleep(1))"); // RuntimeError: Cannot stack switch ...
 ```
-But it is possible to stack switch inside of `pyodide.runPythonAsync()`. Stack
-switching is also enabled if the entrypoint to Python is any async function. It
-is also possible to use `asyncio.run(task)` or
-`asyncio.get_event_loop().run_until_complete(task)` in place of
-`run_sync(task)`.
+but as long as the Python entrypoint is an async function or invoked via
+`callPromising()` stack switching will be enabled. It is also possible to query
+whether or not stack switching is enabled with `pyodide.ffi.can_run_sync()`.
 
-As-is, this may not look all that useful. The value is most noticeable when
-using existing APIs. For instance, `urllib3` and `requests` have built in
-support for Pyodide and will use JSPI to make requests if possible.
-
+Both `asyncio.run(task)` and `event_loop.run_until_complete(task)` are now
+implemented in terms of stack switching.
 
 ## Using JSPI directly
+
+All of these examples are designed to work with NodeJS 24. Node must be started
+with `--experimental-wasm-stack-switching` since Node 24 was released from a
+version of v8 just before the feature gate was removed.
 
 We'll start with a basic example of the JSPI API. The full example is
 [here](https://github.com/hoodmane/jspi-blog-examples/tree/main/2-basic-example).
