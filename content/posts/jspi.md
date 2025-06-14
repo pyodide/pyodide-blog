@@ -50,7 +50,44 @@ Thanks to Antonio Cuni for feedback on a draft.
 ## Pyodide's stack switching API
 
 Pyodide defines a Python function `run_sync` which stack switches for the
-resolution of any Python awaitable. For example:
+resolution of any awaitable. This allows effectively resolving the sync/async problem.
+
+For example, let's say you have a Python code that makes an HTTP request, using the builtin `urllib` library,
+and you want to use it in Pyodide. The code might look like this:
+
+```py
+import urllib.request
+
+def make_http_request(url):
+    with urllib.request.urlopen(url) as response:
+        return response.read().decode('utf-8')
+
+def do_something_with_request(url):
+    result = make_http_request(url)
+    do_something_with(result)
+```
+
+This code cannot be run in Pyodide because `urllib` requires low-level socket operations which are not available in the browser.
+To make this work, you'll need to replace `urllib` with a JavaScript API that can make HTTP requests, such as `fetch`.
+
+However, `fetch` is asynchronous and returns a Promise, which means you cannot directly use it in a synchronous Python function.
+
+```py
+from js import fetch
+
+async def async_http_request(url):
+    resp = await fetch(url)
+    return await resp.text()
+
+async def do_something_with_request(url):
+    result = await async_http_request(url)
+    do_something_with(result)
+```
+
+This is typical sync/async problem: when you introduce asynchronous API calls, you need to change all your code to be asynchronous as well.
+
+Pyodide's `run_sync` function can help with this. It wraps an asynchronous function and allows you to call it synchronously from Python code.
+
 ```py
 from pyodide.ffi import run_sync
 from js import fetch
@@ -59,54 +96,58 @@ async def async_http_request(url):
     resp = await fetch(url)
     return await resp.text()
 
-def await_async_http_request(url):
-    # Suspend for async_http_request to complete
+def make_http_request(url):
+    # This is a synchronous function that will block until the async function completes
     return run_sync(async_http_request(url))
+
+def do_something_with_request(url):
+    result = make_http_request(url)
+    do_something_with(result)
 ```
-If we call `await_async_http_request()` from JavaScript:
+
+Here, `run_sync` wraps the awaitable and allows you to return the result synchronously.
+This helps you avoid changing the entire codebase to be asynchronous, when porting your synchronous Python code to Pyodide.
+
+This `run_sync` function is integrated in the Pyodide's event loop from 0.28 release. If your browser supports
+JSPI, both `asyncio.run()` and `event_loop.run_until_complete()` will use stack switching to run the async task.
+
+### API compatibility with `run_sync`
+
+Calling a python function that uses `run_sync()` inside from JavaScript requires using `callPromising()` to enable stack switching.
+
+For instance, if you call the `do_something_with_request()` function from JavaScript:
+
 ```js
-await_async_http_request("https://example.com")
+do_something_with_request = pyodide.globals.get("do_something_with_request");
+do_something_with_request("https://example.com");
 ```
+
 It will raise:
+
 ```py
 RuntimeError: Cannot stack switch because the Python entrypoint was a synchronous function. Use pyFunc.callPromising() to fix.
 ```
-For API compatibility, calling a synchronous Python function cannot return a
-promise. If we want to enable stack switching, we need to call it like
+
+For API compatibility, you need to call it like
+
 ```js
 await_async_http_request.callPromising("https://example.com")
 ```
+
 This returns a promise, even though a synchronous Python function would
 ordinarily return the value directly.
 
-`urllib3` and `requests` will use JSPI to make requests if possible. For
-example:
+Also, calling the Python code that uses `run_sync()` requires using `pyodide.runPythonAsync()` instead of `pyodide.runPython()` to enable stack switching. 
+
+
 ```js
-import {loadPyodide} from "pyodide";
-
-const py = await loadPyodide();
-await py.loadPackage("requests")
-
-// Use runPythonAsync to enable stack switching
-py.runPythonAsync(`
-import requests
-
-r = requests.get("https://example.com")
-print(r.text[:100])
-`);
+pyodide.runPython("run_sync(asyncio.sleep(1))"); // RuntimeError: Cannot stack switch ...
+pyodide.runPythonAsync("run_sync(asyncio.sleep(1))"); // Works fine
 ```
 
-If Python code is executed with `pyodide.runPython()` then it is not possible to
-stack switch:
-```js
-pyodide.runPython("run_sync(sleep(1))"); // RuntimeError: Cannot stack switch ...
-```
 but as long as the Python entrypoint is an async function or invoked via
 `callPromising()` stack switching will be enabled. It is also possible to query
 whether or not stack switching is enabled with `pyodide.ffi.can_run_sync()`.
-
-Both `asyncio.run(task)` and `event_loop.run_until_complete(task)` are now
-implemented in terms of stack switching.
 
 ## Using JSPI directly
 
