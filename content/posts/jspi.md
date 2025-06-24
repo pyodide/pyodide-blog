@@ -401,7 +401,11 @@ deallocating stack space that `victim()` is still using. Calling a third
 `allocateOnStackAndSleep()` exits and before `victim()` resumes would then
 overwrite victim's stack space.
 
-This happens because `emcc` implements the C stack using a combination of the native WebAssembly stack (managed by the WebAssembly VM) and a shadow stack in linear memory (which the WebAssembly VM knows nothing about).  When doing stack switching, the WebAssembly VM only handles the native stack. Unless we  handle the shadow stack ourselves, it will go out of sync.
+This happens because `emcc` implements the C stack using a combination of the
+native WebAssembly stack (managed by the WebAssembly VM) and a shadow stack in
+linear memory (which the WebAssembly VM knows nothing about).  When doing stack
+switching, the WebAssembly VM only handles the native stack. Unless we handle
+the shadow stack ourselves, it will go out of sync.
 
 These other two functions look as follows:
 ```C
