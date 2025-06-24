@@ -49,7 +49,9 @@ JavaScript Promise integration became a stage 4 finished proposal on April 8,
 Integration](https://developer.chrome.com/release-notes/137#javascript_promise_integration).
 This will make Pyodide quite a lot more useful.
 
-Thanks to Antonio Cuni for feedback on a draft.
+Thanks to Antonio Cuni for feedback on a draft. Thanks also to my current
+employer Cloudflare and my former employer Anaconda for paying me to work on
+this.
 
 ## Pyodide's stack switching API
 
@@ -170,7 +172,7 @@ whether or not stack switching is enabled with `pyodide.ffi.can_run_sync()`.
 ## Using JSPI directly
 
 All of these examples are designed to work with NodeJS 24. Node must be started
-with `--experimental-wasm-stack-switching` since Node 24 was released from a
+with `--experimental-wasm-jspi` since Node 24 was released from a
 version of v8 just before the feature gate was removed.
 
 We'll start with a basic example of the JSPI API. The full example is
@@ -354,8 +356,8 @@ This example is
 
 JSPI handles switching the native call stack. But the native callstack is opaque
 in WebAssembly, so if a pointer is taken to a variable, that variable has to be
-written into a stack which is located in the WebAssembly linear memory. The
-stack pointer is a mutable global variable which is not thread safe. For
+written into a second stack located in the WebAssembly linear memory.
+The stack pointer is a mutable global variable which is not thread safe. For
 example, consider the following C code:
 ```C
 // Escape is a no-op function to ensure that stack space is actually allocated.
@@ -365,7 +367,7 @@ void sleep(int);
 
 void allocateOnStackAndSleep(void) {
     int x[] = {7};
-    // Force the compiler to put x on the stack
+    // Force the compiler to store x on the linear memory stack
     escape(x);
     sleep(0);
 }
@@ -409,7 +411,7 @@ overwrite victim's stack space.
 
 This happens because `emcc` implements the C stack using a combination of the
 native WebAssembly stack (managed by the WebAssembly VM) and a shadow stack in
-linear memory (which the WebAssembly VM knows nothing about).  When doing stack
+linear memory (which the WebAssembly VM knows nothing about). When doing stack
 switching, the WebAssembly VM only handles the native stack. Unless we handle
 the shadow stack ourselves, it will go out of sync.
 
@@ -519,3 +521,9 @@ data. The code that handles this is substantially more complicated so I won't
 explain it here, but you can find it
 [here](https://github.com/hoodmane/jspi-blog-examples/blob/main/6-reentrancy-full-fix/stack_state.mjs)
 
+## Conclusion
+
+Pyodide 0.27.7 fully supports JSPI in Chrome 137, in Node 24 with the
+`--experimental-wasm-jspi` flag, in Firefox with the
+`javascript.options.wasm_js_promise_integration` flag. We will soon release a
+version of Cloudflare Python workers that supports JSPI as well.
