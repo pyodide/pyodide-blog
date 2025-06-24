@@ -80,6 +80,7 @@ async def async_http_request(url):
     resp = await fetch(url)
     return await resp.text()
 
+# Problem: we need to make this function async
 async def do_something_with_request(url):
     result = await async_http_request(url)
     do_something_with(result)
@@ -101,6 +102,7 @@ def make_http_request(url):
     # This is a synchronous function that will block until the async function completes
     return run_sync(async_http_request(url))
 
+# this is a non-async function 🎉
 def do_something_with_request(url):
     result = make_http_request(url)
     do_something_with(result)
@@ -171,12 +173,11 @@ async function fakeFetch(x) {
 which we want to call from WebAssembly. From C's perspective, `awaitAsyncHttpRequest()`
 will return an `int`. We use it in the following C function:
 ```C
-// This doesn't actually have anything to do with Python, but it would in our
-// application to the Pyodide code base.
-WASM_EXPORT("pythonFunction")
-void pythonFunction(int x) {
-    logString("About to call awaitAsyncHttpRequest");
-    int res = awaitAsyncHttpRequest(x);
+// this is the moral equivalent of CPython interpreter running a Python function
+WASM_EXPORT("fakePyFunc")
+void fakePyFunc(int x) {
+    logString("About to call fakeFetch");
+    int res = fakeFetch(x);
     logString("Got result:");
     logInt(res);
 }
