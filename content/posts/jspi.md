@@ -526,8 +526,8 @@ explain it here, but you can find it
 JavaScript promise integration finally lets us run synchronous Python code that
 consumes asynchronous JavaScript APIs. Pyodide 0.27.7 fully supports JSPI in
 Chrome 137, in Node 24 with the `--experimental-wasm-jspi` flag, in Firefox with
-the `javascript.options.wasm_js_promise_integration` flag. We will soon release
-a version of Cloudflare Python workers that supports JSPI as well.
+the `javascript.options.wasm_js_promise_integration` flag. There will soon be a
+version of Cloudflare Python workers that supports JSPI as well.
 
 Using JSPI as a WebAssembly developer is unfortunately quite hard and there is
 still limited toolchain support for it. The WebAssembly native stack is
