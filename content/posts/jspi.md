@@ -38,9 +38,11 @@ async task is completed. There was no way to do this in Pyodide.
 JavaScript Promise integration (JSPI) is a new WebAssembly standard that gives
 us a way to work around this. It allows us to make a call that seems synchronous
 from the perspective of C but is actually asynchronous from the perspective of
-JavaScript. In other words, you can have a blocking C call without blocking the JavaScript main thread.
+JavaScript. In other words, you can have a blocking C call without blocking the
+JavaScript main thread. JSPI enables this by stack switching.
 
-For Pyodide, this means that by using this technology we can finally implement things like `time.sleep()`, `input()` or `requests.get()`.
+For Pyodide, this means that by using this technology we can finally implement
+things like `time.sleep()`, `input()` or `requests.get()`.
 
 JavaScript Promise integration became a stage 4 finished proposal on April 8,
 2025. Chrome 137, released May 27th, 2025, [supports JavaScript Promise
@@ -195,7 +197,11 @@ void fakePyFunc(int x) {
     logInt(res);
 }
 ```
-We compile and link this C file with clang. We compile with
+We can't use libc functions like `printf` because we are compiling to target
+`wasm32-unknown-unknown` which comes with no libc implementation. Instead we use
+this custom `logString()` function which we will define in JavaScript.
+
+We compile and link this C file with clang with
 ```sh
 clang -I../include -target wasm32-unknown-unknown -Wl,--no-entry -nostdlib -O2 \
     basic.c -o basic.wasm
@@ -203,7 +209,7 @@ clang -I../include -target wasm32-unknown-unknown -Wl,--no-entry -nostdlib -O2 \
 The build script is
 [here](https://github.com/hoodmane/jspi-blog-examples/blob/main/2-basic-example/build.sh).
 To instantiate the WebAssembly module, we need JavaScript definitions for the
-imports `sleep`, `logInt` and `logString`. We can't use libc functions like `printf` because
+imports `sleep`, `logInt` and `logString`.
 
 ```js
 function logInt(x) {
