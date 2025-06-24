@@ -38,7 +38,9 @@ async task is completed. There was no way to do this in Pyodide.
 JavaScript Promise integration (JSPI) is a new WebAssembly standard that gives
 us a way to work around this. It allows us to make a call that seems synchronous
 from the perspective of C but is actually asynchronous from the perspective of
-JavaScript.
+JavaScript. In other words, you can have a blocking C call without blocking the JavaScript main thread.
+
+For Pyodide, this means that by using this technology we can finally implement things like `time.sleep()`, `input()` or `requests.get()`.
 
 JavaScript Promise integration became a stage 4 finished proposal on April 8,
 2025. Chrome 137, released May 27th, 2025, [supports JavaScript Promise
@@ -49,8 +51,7 @@ Thanks to Antonio Cuni for feedback on a draft.
 
 ## Pyodide's stack switching API
 
-Pyodide defines a Python function `run_sync` which stack switches for the
-resolution of any awaitable. This allows effectively resolving the sync/async problem.
+Pyodide defines a Python function `run_sync` which suspends the C stack until the given awaitable is resolved. This allows effectively resolving the sync/async problem.
 
 For example, let's say you have a Python code that makes an HTTP request, using the builtin `urllib` library,
 and you want to use it in Pyodide. The code might look like this:
@@ -113,9 +114,9 @@ JSPI, both `asyncio.run()` and `event_loop.run_until_complete()` will use stack 
 
 ### API compatibility with `run_sync`
 
-Calling a python function that uses `run_sync()` inside from JavaScript requires using `callPromising()` to enable stack switching.
+`run_sync()` works only if the Javascript side calls into Python by using `callPromising()`, which is needed to enable stack switching.
 
-For instance, if you call the `do_something_with_request()` function from JavaScript:
+For instance, if you call `do_something_with_request()` from JavaScript without using `callPromising()`:
 
 ```js
 do_something_with_request = pyodide.globals.get("do_something_with_request");
@@ -134,7 +135,7 @@ For API compatibility, you need to call it like
 await_async_http_request.callPromising("https://example.com")
 ```
 
-This returns a promise, even though a synchronous Python function would
+This returns a Javascript promise, even though a synchronous Python function would
 ordinarily return the value directly.
 
 Also, calling the Python code that uses `run_sync()` requires using `pyodide.runPythonAsync()` instead of `pyodide.runPython()` to enable stack switching. 
@@ -160,11 +161,10 @@ We'll start with a basic example of the JSPI API. The full example is
 
 Suppose we have an async JavaScript function:
 ```js
-async function awaitAsyncHttpRequest(x) {
-    // Actually just sleep lol
-    console.log("JS: sleeping");
-    await sleep(1000);
-    console.log("JS: slept");
+async function fakeFetch(x) {
+    console.log("JS: fetching (fake)...");
+    await sleep(1000); // simulate a slow "fetch" request
+    console.log("JS: fetched (fake)");
     return x + 1;
 }
 ```
@@ -246,7 +246,7 @@ We can separate the function that blocks from the original promise-returning
 function. This lets us schedule multiple promises from C and only later block
 for them.
 
-Suppose now we have two async operationsm say `asyncHttpRequest()` and
+Suppose now we have two async operations say `asyncHttpRequest()` and
 `asyncDbQuery()`. They will return promises. In C, the return type will be
 `__externref_t` which is an opaque reference to a JavaScript object. The only
 operations allowed on them are assignment and calling functions. Attempting to
@@ -385,6 +385,8 @@ deallocating stack space that `victim()` is still using. Calling a third
 `overwritesVictimsStack()` function that allocates on the stack after
 `allocateOnStackAndSleep()` exits and before `victim()` resumes would then
 overwrite victim's stack space.
+
+This happens because `emcc` implements the C stack using a combination of the native WebAssembly stack (managed by the WebAssembly VM) and a shadow stack in linear memory (which the WebAssembly VM knows nothing about).  When doing stack switching, the WebAssembly VM only handles the native stack. Unless we  handle the shadow stack ourselves, it will go out of sync. 
 
 These other two functions look as follows:
 ```C
