@@ -311,8 +311,8 @@ async function asyncDbQuery(x) {
     return x * x;
 }
 ```
-Only `awaitInt` needs to be a `Suspending` import, the async fucntions just
-return promises.
+Only `awaitInt` needs to be a `Suspending` import, the async functions just
+return promises (represented as `__externref_t` in C).
 ```js
 const imports = {
     env: {
