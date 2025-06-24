@@ -523,7 +523,18 @@ explain it here, but you can find it
 
 ## Conclusion
 
-Pyodide 0.27.7 fully supports JSPI in Chrome 137, in Node 24 with the
-`--experimental-wasm-jspi` flag, in Firefox with the
-`javascript.options.wasm_js_promise_integration` flag. We will soon release a
-version of Cloudflare Python workers that supports JSPI as well.
+JavaScript promise integration finally lets us run synchronous Python code that
+consumes asynchronous JavaScript APIs. Pyodide 0.27.7 fully supports JSPI in
+Chrome 137, in Node 24 with the `--experimental-wasm-jspi` flag, in Firefox with
+the `javascript.options.wasm_js_promise_integration` flag. We will soon release
+a version of Cloudflare Python workers that supports JSPI as well.
+
+Using JSPI as a WebAssembly developer is unfortunately quite hard and there is
+still limited toolchain support for it. The WebAssembly native stack is
+automatically switched but separate work must be done to keep the linear memory
+stack in sync. Using an appropriate data structure we can do this efficiently.
+It will also only work with C code that is itself thread safe.
+
+Another major difficulty that arises in using JSPI is that we cannot stack
+switch through JavaScript stack frames. I will write a second blog post on this
+topic describing this problem and how we deal with it in Pyodide.
