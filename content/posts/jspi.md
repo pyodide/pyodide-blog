@@ -1,9 +1,9 @@
 ---
 title: "JavaScript Promise Integration in Pyodide"
-date: 2025-05-13T13:33:51-04:00
+date: 2025-06-30
 draft: true
 tags: ["announcement"]
-# author: "Me"
+author: "Hood Chatham"
 # author: ["Me", "You"] # multiple authors
 showToc: true
 TocOpen: false
@@ -136,7 +136,7 @@ supports Pyodide and will use stack switching if it is possible thanks to
 This also means we fully support `requests` since it is a dependency of
 `urllib3`.
 
-### When can we use `run_sync`?
+## When can we use `run_sync`?
 
 `run_sync()` works only if the JavaScript runtime supports stack switching and
 Javascript code calls into Python in an asynchronous way. If a `Promise` or
