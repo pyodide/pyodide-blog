@@ -35,7 +35,7 @@ make a request is with the `fetch` API which is asynchronous. Python also has
 APIs like `event_loop.run_until_complete()` which are supposed to block until an
 async task is completed. There was no way to do this in Pyodide.
 
-JavaScript Promise integration (JSPI) is a new web standard that gives
+JavaScript Promise Integration (JSPI) is a new web standard that gives
 us a way to work around this. It allows us to make a call that seems synchronous
 from the perspective of Python but is actually asynchronous from the perspective of
 JavaScript. In other words, you can have a blocking Python call without blocking the
@@ -44,9 +44,8 @@ JavaScript main thread. JSPI enables this by stack switching.
 For Pyodide, this means that by using this technology we can finally implement
 things like `time.sleep()`, `input()` or `requests.get()`.
 
-JavaScript Promise integration became a stage 4 finished proposal on April 8,
-2025. Chrome 137, released May 27th, 2025, [supports JavaScript Promise
-Integration](https://developer.chrome.com/release-notes/137#javascript_promise_integration).
+JSPI became a finished stage 4 proposal on April 8,
+2025. Chrome 137, released May 27th, 2025, [supports JSPI](https://developer.chrome.com/release-notes/137#javascript_promise_integration).
 This will make Pyodide quite a lot more useful.
 
 In this blog post, I will first give an explanation of how Pyodide's stack
@@ -186,7 +185,7 @@ pyodide.runPythonAsync("run_sync(asyncio.sleep(1))"); // Works fine
 
 ## Conclusion
 
-JavaScript promise integration finally lets us run synchronous Python code that
+JSPI finally lets us run synchronous Python code that
 consumes asynchronous JavaScript APIs. Pyodide 0.27.7 fully supports JSPI in
 Chrome 137, in Node 24 with the `--experimental-wasm-jspi` flag, and in Firefox with
 the `javascript.options.wasm_js_promise_integration` flag. There will soon be a
