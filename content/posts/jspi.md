@@ -37,8 +37,8 @@ async task is completed. There was no way to do this in Pyodide.
 
 JavaScript Promise integration (JSPI) is a new web standard that gives
 us a way to work around this. It allows us to make a call that seems synchronous
-from the perspective of C but is actually asynchronous from the perspective of
-JavaScript. In other words, you can have a blocking C call without blocking the
+from the perspective of Python but is actually asynchronous from the perspective of
+JavaScript. In other words, you can have a blocking Python call without blocking the
 JavaScript main thread. JSPI enables this by stack switching.
 
 For Pyodide, this means that by using this technology we can finally implement
