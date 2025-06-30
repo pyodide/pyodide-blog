@@ -1,8 +1,7 @@
 ---
 title: "JavaScript Promise Integration in Pyodide"
 date: 2025-06-30
-draft: true
-tags: ["announcement"]
+tags: []
 author: "Hood Chatham"
 # author: ["Me", "You"] # multiple authors
 showToc: true
