@@ -1,5 +1,5 @@
 ---
-title: "JavaScript Promise Integration and the sync/async problem in Pyodide"
+title: "JavaScript Promise Integration in Pyodide"
 date: 2025-05-13T13:33:51-04:00
 draft: true
 tags: ["announcement"]
@@ -10,7 +10,7 @@ TocOpen: false
 draft: false
 hidemeta: false
 comments: false
-description: "Desc Text."
+description: "Solving the sync/async problem with a new web standard."
 # canonicalURL: "https://canonical.url/to/page"
 disableHLJS: true # to disable highlightjs
 disableShare: false
@@ -35,7 +35,7 @@ make a request is with the `fetch` API which is asynchronous. Python also has
 APIs like `event_loop.run_until_complete()` which are supposed to block until an
 async task is completed. There was no way to do this in Pyodide.
 
-JavaScript Promise integration (JSPI) is a new WebAssembly standard that gives
+JavaScript Promise integration (JSPI) is a new web standard that gives
 us a way to work around this. It allows us to make a call that seems synchronous
 from the perspective of C but is actually asynchronous from the perspective of
 JavaScript. In other words, you can have a blocking C call without blocking the
@@ -188,6 +188,6 @@ pyodide.runPythonAsync("run_sync(asyncio.sleep(1))"); // Works fine
 
 JavaScript promise integration finally lets us run synchronous Python code that
 consumes asynchronous JavaScript APIs. Pyodide 0.27.7 fully supports JSPI in
-Chrome 137, in Node 24 with the `--experimental-wasm-jspi` flag, in Firefox with
+Chrome 137, in Node 24 with the `--experimental-wasm-jspi` flag, and in Firefox with
 the `javascript.options.wasm_js_promise_integration` flag. There will soon be a
 version of Cloudflare Python workers that supports JSPI as well.
