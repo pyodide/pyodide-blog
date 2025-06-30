@@ -1,5 +1,5 @@
 ---
-title: "WebAssembly stack switching and the sync async problem"
+title: "JavaScript Promise Integration and the sync/async problem in Pyodide"
 date: 2025-05-13T13:33:51-04:00
 draft: true
 tags: ["announcement"]
@@ -49,19 +49,22 @@ JavaScript Promise integration became a stage 4 finished proposal on April 8,
 Integration](https://developer.chrome.com/release-notes/137#javascript_promise_integration).
 This will make Pyodide quite a lot more useful.
 
-Thanks to Antonio Cuni for feedback on a draft. Thanks also to my current
-employer Cloudflare and my former employer Anaconda for paying me to work on
-this.
+In this blog post, I will first give an explanation of how Pyodide's stack
+switching API works. In followup posts I will discuss some of the technical
+details of the implementation.
+
+Thanks to Antonio Cuni, Guy Bedford, and Gyeongjae Choi for feedback on drafts.
+Thanks also to my current employer Cloudflare and my former employer Anaconda
+for paying me to work on this.
 
 ## Pyodide's stack switching API
 
 Pyodide defines a Python function `run_sync` which suspends the C stack until
-the given awaitable is resolved. This allows effectively resolving the
-sync/async problem.
+the given awaitable is completed. This solves the sync/async problem.
 
-For example, let's say you have a Python code that makes an HTTP request, using
-the builtin `urllib` library, and you want to use it in Pyodide. The code might
-look like this:
+For example, suppose you have Python code that makes an HTTP request using the
+builtin `urllib` library and you want to use it in Pyodide. The code might look
+like this:
 
 ```py
 import urllib.request
@@ -76,10 +79,9 @@ def do_something_with_request(url):
 ```
 
 The native implementation of `urllib` requires low-level socket operations which
-are not available in the browser. To make it work in Pyodide, we need to
+are not available in the browser. To make `urllib` work in Pyodide, we need to
 implement it based on the `fetch` browser API. However, `fetch` is asynchronous
-and returns a Promise, which means we cannot directly use it in a synchronous
-Python function.
+which means we cannot directly use it in a synchronous Python function.
 
 ```py
 from js import fetch
@@ -94,8 +96,9 @@ async def do_something_with_request(url):
     do_something_with(result)
 ```
 
-This is typical sync/async problem: when you introduce asynchronous API calls,
-you need to change all your code to be asynchronous as well.
+This is the typical sync/async problem: when you introduce an asynchronous API
+call, you need to change the code all the way up the call stack to be
+asynchronous as well.
 
 Pyodide's `run_sync` function helps with this. It allows us to call asynchronous
 functions synchronously from Python code.
@@ -127,12 +130,28 @@ version 0.27.7. If your browser supports JSPI, both `asyncio.run()` and
 `event_loop.run_until_complete()` will use stack switching to run the async
 task.
 
-### API compatibility with `run_sync`
+The builtin `urllib` library still does not work in Pyodide but `urllib3`
+supports Pyodide and will use stack switching if it is possible thanks to 
+[work contributed by Joe Marshall](https://github.com/urllib3/urllib3/pull/3427).
 
-`run_sync()` works only if the Javascript side calls into Python by using
-`callPromising()`, which is needed to enable stack switching.
+### When can we use `run_sync`?
 
-For instance, if you call `do_something_with_request()` from JavaScript without
+`run_sync()` works only if the JavaScript runtime supports stack switching and
+Javascript code calls into Python in an asynchronous way. If a `Promise` or
+other thenable is returned, stack switching will be enabled. If the function is
+synchronous, it will be disabled. Specifically, stack switching is enabled when:
+1. we call `pyodide.runPythonAsync()`,
+2. we call an asynchronous Python function, or
+3. we call a synchronous Python function with `callPromising()`.
+
+Stack switching is disabled when:
+1. we call `pyodide.runPython()` or
+2. we call a synchronous Python function directly.
+
+It is possible to query whether or not stack switching is enabled with
+`pyodide.ffi.can_run_sync()`.
+
+For example, if you call `do_something_with_request()` from JavaScript without
 using `callPromising()`:
 
 ```js
@@ -143,31 +162,26 @@ do_something_with_request("https://example.com");
 It will raise:
 
 ```py
-RuntimeError: Cannot stack switch because the Python entrypoint was a synchronous function. Use pyFunc.callPromising() to fix.
+RuntimeError: Cannot stack switch because the Python entrypoint was a synchronous
+              function. Use pyFunc.callPromising() to fix.
 ```
 
-For API compatibility, you need to call it like
-
+You need to call it like
 ```js
-await_async_http_request.callPromising("https://example.com")
+do_something_with_request.callPromising("https://example.com")
 ```
 
 This returns a Javascript promise, even though a synchronous Python function would
 ordinarily return the value directly.
 
-Also, executing Python code that uses `run_sync()` requires using
-`pyodide.runPythonAsync()` instead of `pyodide.runPython()` to enable stack
-switching.
-
+Executing Python code that uses `run_sync()` requires using
+`pyodide.runPythonAsync()` instead of `pyodide.runPython()`:
 
 ```js
 pyodide.runPython("run_sync(asyncio.sleep(1))"); // RuntimeError: Cannot stack switch ...
 pyodide.runPythonAsync("run_sync(asyncio.sleep(1))"); // Works fine
 ```
 
-As long as the Python entrypoint is an async function or invoked via
-`callPromising()` stack switching will be enabled. It is also possible to query
-whether or not stack switching is enabled with `pyodide.ffi.can_run_sync()`.
 
 ## Using JSPI directly
 
@@ -187,7 +201,7 @@ async function awaitFakeFetch(x) {
     return x + 1;
 }
 ```
-which we want to call from WebAssembly. From C's perspective, `awaitAsyncHttpRequest()`
+which we want to call from WebAssembly. From C's perspective, `awaitFakeFetch()`
 will return an `int`. We use it in the following C function:
 ```C
 // in our real code, we would be running a Python function here
@@ -230,14 +244,14 @@ function sleep(ms) {
 }
 ```
 And we need to make an `imports` object and instantiate the WebAssembly module.
-To make `awaitAsyncHttpRequest()` into a suspending import, we wrap it with
+To make `awaitFakeFetch()` into a suspending import, we wrap it with
 `new WebAssembly.Suspending()`.
 ```js
 const imports = {
   env: {
     logInt,
     logString,
-    awaitAsyncHttpRequest: new WebAssembly.Suspending(awaitAsyncHttpRequest),
+    awaitFakeFetch: new WebAssembly.Suspending(awaitFakeFetch),
   },
 };
 
@@ -247,18 +261,19 @@ export const { instance } = await WebAssembly.instantiate(
 );
 const HEAP = new Uint8Array(instance.exports.memory.buffer);
 ```
-To call `pythonFunction()`, we need to wrap the export in `WebAssembly.Promising()`:
+To call `fakePyFunc()`, we need to wrap the export in `WebAssembly.Promising()`:
 ```js
-export const pythonFunction = WebAssembly.promising(
-  instance.exports.pythonFunction,
+export const fakePyFunc = WebAssembly.promising(
+  instance.exports.fakePyFunc,
 );
 ```
-And now we call `pythonFunction(3)` and it will log:
+And now we call `fakePyFunc(3)` and it will log:
 ```
-C: About to call awaitAsyncHttpRequest
-JS: sleeping
+JS: Calling pythonFunction(3)
+C: About to call awaitFakeFetch
+JS: fetching (fake)...
 <pauses for 1000 ms>
-JS: slept
+JS: fetched (fake)
 C: Got result:
 C: 4
 ```
@@ -280,10 +295,10 @@ The only thing we can do with these `__externref_t` promises is call
 ```C
 WASM_EXPORT("pythonFunction")
 void pythonFunction(int x) {
-    logString("Call asyncHttpRequest");
-    __externref_t promiseHttpRequest = asyncHttpRequest(x);
-    logString("Call asyncDbQuery");
-    __externref_t promiseDbQuery = asyncDbQuery(x);
+    logString("Call asyncFakeHttpRequest");
+    __externref_t promiseHttpRequest = asyncFakeHttpRequest(x);
+    logString("Call asyncFakeDbQuery");
+    __externref_t promiseDbQuery = asyncFakeDbQuery(x);
     logString("Suspending for promiseHttpRequest");
     int res1 = awaitInt(promiseHttpRequest);
     logString("-- got res1:");
@@ -302,12 +317,12 @@ function awaitInt(x) {
     // We need it so we can wrap it with WebAssembly.Suspending
     return x;
 }
-async function asyncHttpRequest(x) {
+async function asyncFakeHttpRequest(x) {
     // Actually just sleep lol
     await sleep(500);
     return x + 1;
 }
-async function asyncDbQuery(x) {
+async function asyncFakeDbQuery(x) {
     // Actually just sleep lol
     await sleep(1000);
     return x * x;
@@ -320,8 +335,8 @@ const imports = {
     env: {
         logInt,
         logString,
-        asyncHttpRequest,
-        asyncDbQuery,
+        asyncFakeHttpRequest,
+        asyncFakeDbQuery,
         awaitInt: new WebAssembly.Suspending(awaitInt),
     }
 }
