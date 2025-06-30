@@ -1,8 +1,7 @@
 ---
 title: "React in Python with Pyodide"
 date: 2022-01-19T08:34:44+00:00
-draft: true
-tags: ["announcement"]
+tags: ["guest post"]
 author: "Xing Han Lu"
 # author: ["Me", "You"] # multiple authors
 showToc: true

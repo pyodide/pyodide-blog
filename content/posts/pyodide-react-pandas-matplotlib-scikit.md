@@ -1,8 +1,7 @@
 ---
 title: "Visual Low/No Code Data Preparation and Analysis Web App Built with Pyodide and React"
 date: 2024-07-27T01:39:18-04:00
-draft: true
-tags: ["announcement", "guest post"]
+tags: ["guest post"]
 author: "Raul Andrial"
 # author: ["Me", "You"] # multiple authors
 showToc: true
