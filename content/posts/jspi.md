@@ -137,7 +137,7 @@ This also means we fully support `requests` since it is a dependency of
 
 ## When can we use `run_sync`?
 
-`run_sync()` works only if the JavaScript runtime supports stack switching and
+`run_sync()` works only if the JavaScript runtime supports JSPI and
 Javascript code calls into Python in an asynchronous way. If a `Promise` or
 other thenable is returned, stack switching will be enabled. If the function is
 synchronous, it will be disabled. Specifically, stack switching is enabled when:
