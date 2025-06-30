@@ -133,6 +133,8 @@ task.
 The builtin `urllib` library still does not work in Pyodide but `urllib3`
 supports Pyodide and will use stack switching if it is possible thanks to 
 [work contributed by Joe Marshall](https://github.com/urllib3/urllib3/pull/3427).
+This also means we fully support `requests` since it is a dependency of
+`urllib3`.
 
 ### When can we use `run_sync`?
 
