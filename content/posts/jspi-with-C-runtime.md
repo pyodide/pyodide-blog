@@ -1,5 +1,5 @@
 ---
-title: "Integrating JSPI with the WebAssembly C runtime"
+title: "Integrating JSPI with the WebAssembly C Runtime"
 date: 2025-07-03
 draft: true
 tags: []
