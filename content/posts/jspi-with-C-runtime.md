@@ -1,6 +1,6 @@
 ---
 title: "Integrating JSPI with the WebAssembly C runtime"
-date: 2025-06-29T09:33:51-04:00
+date: 2025-07-03
 draft: true
 tags: []
 author: "Hood Chatham"
