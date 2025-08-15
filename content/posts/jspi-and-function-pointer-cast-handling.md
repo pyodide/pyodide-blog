@@ -27,11 +27,11 @@ cover:
     hidden: true # only hide on current single page
 ---
 
-In the last post, I demonstrated how to use JSPI in a simple program written for
-the `wasm32-unknown-unknown` platform. Of course, `wasm32-unknown-unknown` does
-not support the libc standard library, so it does not work for real-world code.
-Emscripten provides the `wasm32-unknown-emscripten` target which does support
-these features.
+[In the last post](content/posts/jspi-with-C-runtime), I demonstrated how to use
+JSPI in a simple program written for the `wasm32-unknown-unknown` platform. Of
+course, `wasm32-unknown-unknown` does not support the libc standard library, so
+it does not work for real-world code. Emscripten provides the
+`wasm32-unknown-emscripten` target which does support these features.
 
 The main additional problem that comes up when integrating with Emscripten is
 the problem of JavaScript frames. Recall from the last post that to use
@@ -65,7 +65,7 @@ JavaScript frames are used for:
 * Handling function pointer casts
 * C++ exceptions and Rust panics
 * libffi/ctypes
-* Dynamic loading of late-binding symbols
+* Resolution of late-binding symbols from dynamic libraries
 
 To make JSPI work with these features, there are two possible approaches: either
 we can somehow replace the JavaScript frame with equivalent WebAssembly
@@ -273,5 +273,19 @@ int callHandler(F f, int x, int y) {
 [Here's a pull request that updates Python to use the new
 intrinsic.](https://github.com/python/cpython/pull/137470)
 
-In the future, this should make dealing with these problems much cleaner.
+## Conclusion
+
+In the future, `__builtin_wasm_test_function_pointer_signature()` should make
+dealing with function pointer casting cleaner and faster. It will also allow
+handing function pointer casts in wasi and wasm32-unknown-unknown whenever the
+runtime supports wasm-gc, whereas previously it was not possible. It currently
+requires a very recent version of Emscripten, or a development version of clang
+and a quite recent web browser / node version, so it will still be a while
+before it can be adopted everywhere.
+
+All of this fixes just one of the many sources of JavaScript frames that cause
+trouble when using JSPI. This problem we solved by replacing functionality
+implemented using JavaScript with WebAssembly. Next time I'll discuss the
+approach of making a JavaScript frame cooperate with JSPI and the difficulties
+that occur with that approach.
 
