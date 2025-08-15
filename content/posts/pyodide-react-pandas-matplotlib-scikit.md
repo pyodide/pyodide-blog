@@ -60,7 +60,7 @@ export const PyodideContextProvider = ({children, toLoadPyodide=true}) => {
             setIsPyodideLoaded(true);
             return PyodideRef.current.runPythonAsync('2 * 3');
             
-        })().then(res => res === 6 ? console.log("Pyodide has loaded") : console.log("Something wrong appears to have happended when loading Pyodide"));
+        })().then(res => res === 6 ? console.log("Pyodide has loaded") : console.log("Something wrong appears to have happened when loading Pyodide"));
 
     }, [PyodideRef]);
     
@@ -129,7 +129,7 @@ const AddTwoNumsComp = () => {
 
 ## Pain Points
 
-- **Lack of documentation for working with React:** React is one of the most popular front-end libaries at the time this artical was written. However, there was very little documentation on how to get Pyodide working with React and very few examples. Also, the [react-py](https://github.com/elilambnz/react-py/issues/67) library does not currently support returning values from the Python scope which is what I needed for this project.
+- **Lack of documentation for working with React:** React is one of the most popular front-end libraries at the time this article was written. However, there was very little documentation on how to get Pyodide working with React and very few examples. Also, the [react-py](https://github.com/elilambnz/react-py/issues/67) library does not currently support returning values from the Python scope which is what I needed for this project.
 
 - **Testing:** It was not possible to test individual components using the React Testing Library since Pyodide needed to be loaded.
 
@@ -147,7 +147,7 @@ const AddTwoNumsComp = () => {
 
 - **Load Times:** While not terrible, Pyodide does take around 5 seconds to load when the home page is visited.
 
-- **Debugging:** Debugging the Python code, while certainly doable, was not always straighforward.
+- **Debugging:** Debugging the Python code, while certainly doable, was not always straightforward.
 
 ## Data Components
 

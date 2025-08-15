@@ -101,7 +101,7 @@ The above problems are similar but have a subtle difference amongst them. The
 first problem occurs for a single draw event (due to multiple _“draw_text()”_
 invocations in that draw event), while the second problem leads to multiple
 never-ending redraws. In general, these issues are related to Python not being able
-to do synchronous I/O operations when the underlying JavaScript APIs are asynchronus
+to do synchronous I/O operations when the underlying JavaScript APIs are asynchronous
 (https://github.com/pyodide/pyodide/issues/1503).
 
 Fortunately, both of these can be fixed using a global state which keeps track of

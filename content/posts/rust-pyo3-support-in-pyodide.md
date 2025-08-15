@@ -112,7 +112,7 @@ bad export type for `_emscripten_get_now`: undefined
 ```
 PyO3 v0.15 depends on the <code class="pkg">instant</code> crate via the <code
 class="pkg">parking_lot</code> crate. The <code class="pkg">instant</code> crate
-tries to explicitly support Emscripten but it mispells `emscripten_get_now` as
+tries to explicitly support Emscripten but it misspells `emscripten_get_now` as
 `_emscripten_get_now` which leads to linker errors. We have to patch <code
 class="pkg">instant</code> and use a Cargo dependency override. The <code
 class="pkg">instant</code> crate does not seem to be maintained anymore so [my
