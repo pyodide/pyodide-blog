@@ -52,7 +52,7 @@ with `--experimental-wasm-jspi`. (Unfortunately, Node 24 was released just
 before the JSPI feature gate was removed from v8.)
 
 We'll start with a basic example of the JSPI API. The full example is
-[here](https://github.com/hoodmane/jspi-blog-examples/tree/main/2-basic-example).
+[here](https://github.com/hoodmane/jspi-blog-examples/tree/main/02-basic-example).
 
 Suppose we have an async JavaScript function:
 ```js
@@ -136,8 +136,8 @@ C: Got result:
 C: 4
 ```
 If you have Node v24 and clang, you can try it out for yourself by cloning
-http://github.com/hoodmane/jspi-blog-examples/, cding into the `2-basic-example`
-directory, and running:
+http://github.com/hoodmane/jspi-blog-examples/, cding into the
+`02-basic-example` directory, and running:
 ```sh
 ./build.sh
 ./basic.mjs
@@ -237,7 +237,7 @@ could use an `awaitExternRef()` function where the return value is an
 convert the result to an integer.
 
 This example is
-[here](https://github.com/hoodmane/jspi-blog-examples/tree/main/3-separate-await).
+[here](https://github.com/hoodmane/jspi-blog-examples/tree/main/03-separate-await).
 
 ## Troubles with reentrancy
 
@@ -467,7 +467,7 @@ victim2 l write over lots of other stuff!
 ```
 
 This example is
-[here](https://github.com/hoodmane/jspi-blog-examples/tree/main/4-reentrancy-trouble).
+[here](https://github.com/hoodmane/jspi-blog-examples/tree/main/04-reentrancy-trouble).
 
 ## The simplest fix for reentrancy
 
@@ -512,7 +512,7 @@ In a more general case, we would run this code around `awaitInt()` or
 `awaitExternRef()`.
 
 This example is here:
-[here](https://github.com/hoodmane/jspi-blog-examples/tree/main/5-reentrancy-simple-fix).
+[here](https://github.com/hoodmane/jspi-blog-examples/tree/main/05-reentrancy-simple-fix).
 
 This code isn't efficient because we eagerly copy the stack. If no other task
 writes over this stack space while we are suspended, then we don't need to copy
@@ -523,7 +523,7 @@ data of any other threads that care about the stack range and restore any of its
 own data that has been evicted. The code that handles this is a bit more
 complicated so I won't explain it here, but you can find a complete working
 example here:
-[here](https://github.com/hoodmane/jspi-blog-examples/blob/main/6-reentrancy-full-fix/stack_state.mjs)
+[here](https://github.com/hoodmane/jspi-blog-examples/blob/main/06-reentrancy-full-fix/stack_state.mjs)
 
 ## Conclusion
 
