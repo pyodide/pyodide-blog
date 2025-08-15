@@ -148,51 +148,140 @@ the signature of a function before calling it. We can use this to count how many
 arguments the function was actually defined with and cast it to the right
 signature before making the call. Here is an example wat module
 
-```wat
-(module
-  (type $zero_args (func (result i32)))
-  (type $one_args (func (param i32) (result i32)))
-  (type $two_args (func (param i32 i32) (result i32)))
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
 
-  (import "env" "__indirect_function_table" (table $functable 1 funcref))
+.pygments {
+  font-size: .78em;
+}
 
-  (func (export "countArgs") (param $funcptr i32) (result i32)
-        (local $funcref funcref)
-    ;; Convert function pointer to function reference using table.get, store the
-    ;; result into $funcref local
-    local.get $funcptr
-    table.get $functable
-    local.tee $funcref
+.highlight .hll { background-color: #49483e }
+.highlight  { background: #272822; color: #f8f8f2 }
+.highlight .c { color: #75715e } /* Comment */
+.highlight .err { color: #960050; background-color: #1e0010 } /* Error */
+.highlight .k { color: #66d9ef } /* Keyword */
+.highlight .l { color: #ae81ff } /* Literal */
+.highlight .n { color: #f8f8f2 } /* Name */
+.highlight .o { color: #f92672 } /* Operator */
+.highlight .p { color: #f8f8f2 } /* Punctuation */
+.highlight .ch { color: #75715e } /* Comment.Hashbang */
+.highlight .cm { color: #75715e } /* Comment.Multiline */
+.highlight .cp { color: #75715e } /* Comment.Preproc */
+.highlight .cpf { color: #75715e } /* Comment.PreprocFile */
+.highlight .c1 { color: #75715e } /* Comment.Single */
+.highlight .cs { color: #75715e } /* Comment.Special */
+.highlight .gd { color: #f92672 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gi { color: #a6e22e } /* Generic.Inserted */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #75715e } /* Generic.Subheading */
+.highlight .kc { color: #66d9ef } /* Keyword.Constant */
+.highlight .kd { color: #66d9ef } /* Keyword.Declaration */
+.highlight .kn { color: #f92672 } /* Keyword.Namespace */
+.highlight .kp { color: #66d9ef } /* Keyword.Pseudo */
+.highlight .kr { color: #66d9ef } /* Keyword.Reserved */
+.highlight .kt { color: #66d9ef } /* Keyword.Type */
+.highlight .ld { color: #e6db74 } /* Literal.Date */
+.highlight .m { color: #ae81ff } /* Literal.Number */
+.highlight .s { color: #e6db74 } /* Literal.String */
+.highlight .na { color: #a6e22e } /* Name.Attribute */
+.highlight .nb { color: #f8f8f2 } /* Name.Builtin */
+.highlight .nc { color: #a6e22e } /* Name.Class */
+.highlight .no { color: #66d9ef } /* Name.Constant */
+.highlight .nd { color: #a6e22e } /* Name.Decorator */
+.highlight .ni { color: #f8f8f2 } /* Name.Entity */
+.highlight .ne { color: #a6e22e } /* Name.Exception */
+.highlight .nf { color: #a6e22e } /* Name.Function */
+.highlight .nl { color: #f8f8f2 } /* Name.Label */
+.highlight .nn { color: #f8f8f2 } /* Name.Namespace */
+.highlight .nx { color: #a6e22e } /* Name.Other */
+.highlight .py { color: #f8f8f2 } /* Name.Property */
+.highlight .nt { color: #f92672 } /* Name.Tag */
+.highlight .nfunc { color: #a6e22e } /* Name.Function */
+.highlight .nv { color: #f8f8f2 } /* Name.Variable */
+.highlight .ow { color: #f92672 } /* Operator.Word */
+.highlight .w { color: #f8f8f2 } /* Text.Whitespace */
+.highlight .mb { color: #ae81ff } /* Literal.Number.Bin */
+.highlight .mf { color: #ae81ff } /* Literal.Number.Float */
+.highlight .mh { color: #ae81ff } /* Literal.Number.Hex */
+.highlight .mi { color: #ae81ff } /* Literal.Number.Integer */
+.highlight .mo { color: #ae81ff } /* Literal.Number.Oct */
+.highlight .sa { color: #e6db74 } /* Literal.String.Affix */
+.highlight .sb { color: #e6db74 } /* Literal.String.Backtick */
+.highlight .sc { color: #e6db74 } /* Literal.String.Char */
+.highlight .dl { color: #e6db74 } /* Literal.String.Delimiter */
+.highlight .sd { color: #e6db74 } /* Literal.String.Doc */
+.highlight .s2 { color: #e6db74 } /* Literal.String.Double */
+.highlight .se { color: #ae81ff } /* Literal.String.Escape */
+.highlight .sh { color: #e6db74 } /* Literal.String.Heredoc */
+.highlight .si { color: #e6db74 } /* Literal.String.Interpol */
+.highlight .sx { color: #e6db74 } /* Literal.String.Other */
+.highlight .sr { color: #e6db74 } /* Literal.String.Regex */
+.highlight .s1 { color: #e6db74 } /* Literal.String.Single */
+.highlight .ss { color: #e6db74 } /* Literal.String.Symbol */
+.highlight .bp { color: #f8f8f2 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #a6e22e } /* Name.Function.Magic */
+.highlight .vc { color: #f8f8f2 } /* Name.Variable.Class */
+.highlight .vg { color: #f8f8f2 } /* Name.Variable.Global */
+.highlight .vi { color: #f8f8f2 } /* Name.Variable.Instance */
+.highlight .vm { color: #f8f8f2 } /* Name.Variable.Magic */
+.highlight .il { color: #ae81ff } /* Literal.Number.Integer.Long */
+</style>
 
-    ;; Two args?
-    ref.test (ref $two_args)
-    if
-      i32.const 2
-      return
-    end
-    local.get $funcref
 
-    ;; One arg?
-    ref.test (ref $one_args)
-    if
-      i32.const 1
-      return
-    end
-    local.get $funcref
+<div class="highlight">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<code>
+<span style="display:flex"><span class="p">(</span><span class="k">module</span></span>
+<span style="display:flex"><span>  <span class="p">(</span><span class="k">type</span> <span class="nv">$zero_args</span> <span class="p">(</span><span class="k">func</span> <span class="p">(</span><span class="k">result</span> <span class="kt">i32</span><span class="p">)))</span></span></span>
+<span style="display:flex"><span>  <span class="p">(</span><span class="k">type</span> <span class="nv">$one_args</span> <span class="p">(</span><span class="k">func</span> <span class="p">(</span><span class="k">param</span> <span class="kt">i32</span><span class="p">)</span> <span class="p">(</span><span class="k">result</span> <span class="kt">i32</span><span class="p">)))</span>
+  <span class="p">(</span><span class="k">type</span> <span class="nv">$two_args</span> <span class="p">(</span><span class="k">func</span> <span class="p">(</span><span class="k">param</span> <span class="kt">i32</span> <span class="kt">i32</span><span class="p">)</span> <span class="p">(</span><span class="k">result</span> <span class="kt">i32</span><span class="p">)))</span>
+  <span></span>
+  <span class="p">(</span><span class="k">import</span> <span class="s2">&quot;env&quot;</span> <span class="s2">&quot;__indirect_function_table&quot;</span> <span class="p">(</span><span class="k">table</span> <span class="nv">$functable</span> <span class="mi">1</span> <span class="k">funcref</span><span class="p">))</span>
+  <span></span>
+  <span class="p">(</span><span class="k">func</span> <span class="p">(</span><span class="k">export</span> <span class="s2">&quot;countArgs&quot;</span><span class="p">)</span> <span class="p">(</span><span class="k">param</span> <span class="nv">$funcptr</span> <span class="kt">i32</span><span class="p">)</span> <span class="p">(</span><span class="k">result</span> <span class="kt">i32</span><span class="p">)</span>
+        <span class="p">(</span><span class="k">local</span> <span class="nv">$funcref</span> <span class="k">funcref</span><span class="p">)</span>
+    <span class="c1">;; Convert function pointer to function reference using table.get, store the</span>
+    <span class="c1">;; result into $funcref local</span>
+    <span class="nb">local.get</span> <span class="nv">$funcptr</span>
+    <span class="nb">table.get</span> <span class="nv">$functable</span>
+    <span class="nb">local.tee</span> <span class="nv">$funcref</span>
+    <span class="c1"></span>
+    <span class="c1">;; Two args?</span>
+    <span class="nb">ref.test</span> <span class="p">(</span><span class="k">ref</span> <span class="nv">$two_args</span><span class="p">)</span>
+    <span class="k">if</span>
+      <span class="nb">i32.const</span> <span class="mi">2</span>
+      <span class="nb">return</span>
+    <span class="k">end</span>
+    <span class="nb">local.get</span> <span class="nv">$funcref</span>
+    <span class="c1"></span>
+    <span class="c1">;; One arg?</span>
+    <span class="nb">ref.test</span> <span class="p">(</span><span class="k">ref</span> <span class="nv">$one_args</span><span class="p">)</span>
+    <span class="k">if</span>
+      <span class="nb">i32.const</span> <span class="mi">1</span>
+      <span class="nb">return</span>
+    <span class="k">end</span>
+    <span class="nb">local.get</span> <span class="nv">$funcref</span>
+    <span class="c1"></span>
+    <span class="c1">;; Zero arg?</span>
+    <span class="nb">ref.test</span> <span class="p">(</span><span class="k">ref</span> <span class="nv">$zero_args</span><span class="p">)</span>
+    <span class="k">if</span>
+      <span class="nb">i32.const</span> <span class="mi">0</span>
+      <span class="nb">return</span>
+    <span class="k">end</span>
+    <span class="c1"></span>
+    <span class="c1">;; It takes more than two args, or uses a non-i32 type.</span>
+    <span class="nb">i32.const</span> <span class="mi">-1</span>
+    <span class="nb">return</span>
+  <span class="p">)</span>
+<span class="p">)</span>
+  </code></pre>
+</div>
 
-    ;; Zero arg?
-    ref.test (ref $zero_args)
-    if
-      i32.const 0
-      return
-    end
-
-    ;; It takes more than two args, or uses a non-i32 type.
-    i32.const -1
-    return
-  )
-)
-```
 Now we can use this as follows:
 ```C
 typedef int (*F)(int, int);
