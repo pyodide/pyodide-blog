@@ -257,5 +257,8 @@ int callHandler(F f, int x, int y) {
 }
 ```
 
+[Here's a pull request that updates Python to use the new
+intrinsic.](https://github.com/python/cpython/pull/137470)
+
 In the future, this should make dealing with these problems much cleaner.
 
