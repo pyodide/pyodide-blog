@@ -54,24 +54,25 @@ export const { instance } = await WebAssembly.instantiate(
 export const fakePyFunc = WebAssembly.promising(instance.exports.fakePyFunc);
 ```
 
-If there are any JavaScript calls in betwen the call into WebAssembly
+If there are any JavaScript calls in between the call into WebAssembly
 `fakePyFunc` and the call out to JavaScript `awaitFakeFetch`, the call to
 `awaitFakeFetch()` will fail. Before JSPI existed, features in the C runtime
 could be implemented using JavaScript frames and it would not make any
 observable difference to the behavior of the program. Now it does.
 
-JavaScript trampolines are used for:
+JavaScript frames are used for:
 
 * Handling function pointer casts
 * C++ exceptions and Rust panics
 * libffi/ctypes
 * Dynamic loading of late-binding symbols
 
-To fix the failure, there are two possible approaches: either we can somehow
-replace the JavaScript frame with equivalent WebAssembly functionality, or we
-can make the JavaScript frame cooperate with the stack switching. In practice,
-both of these approaches are quite challanging to implement. In this post, we'll
-focus on replacing the function pointer cast handling JS call with WebAssembly.
+To make JSPI work with these features, there are two possible approaches: either
+we can somehow replace the JavaScript frame with equivalent WebAssembly
+functionality, or we can make the JavaScript frame cooperate with the stack
+switching. In practice, both of these approaches are quite challenging to
+implement. In this post, we'll focus on replacing the function pointer cast
+handling JS call with WebAssembly.
 
 ## Function pointer casts
 
