@@ -60,7 +60,7 @@ If there are any JavaScript calls in between the call into WebAssembly
 could be implemented using JavaScript frames and it would not make any
 observable difference to the behavior of the program. Now it does.
 
-JavaScript frames are used for:
+In Pyodide, JavaScript frames are used for:
 
 * Handling function pointer casts
 * C++ exceptions and Rust panics
