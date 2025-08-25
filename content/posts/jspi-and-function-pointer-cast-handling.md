@@ -319,16 +319,17 @@ void fakePyFunc(int func_index, int x, int y) {
   logInt(res);
 }
 ```
-We can use `wasm-as` to convert the wat to wasm and use `wasm-merge` to merge
-`countArgs.wasm` with the compiled C code. `wasm-as` and `wasm-merge` are part
-of binaryen. See the full build script here:
+We can use `wasm-as` (WebAssembly Assemble) to convert the wat to wasm and use
+`wasm-merge` to merge `countArgs.wasm` with the compiled C code. `wasm-as` and
+`wasm-merge` are part of binaryen. See the full build script here:
 [here](https://github.com/hoodmane/jspi-blog-examples/tree/main/9-wat-count-args/build.sh).
 
-This approach to handling function pointer casts has the disadvantage that it
-requires wasm-gc which has only been supported in Safari since December of 2024.
-Furthermore, on iOS using wasm-gc causes crashes. However, we do know that every
-runtime that supports JSPI also supports wasm-gc, so we can use wasm-gc if we
-can and otherwise fall back to using a JavaScript trampoline.
+This approach to handling function pointer casts uses the `ref.test` instruction
+which was added as part of the garbage collection feature (wasm-gc) which has
+only been supported in Safari since December of 2024. Furthermore, on iOS using
+wasm-gc causes crashes. However, we do know that every runtime that supports
+JSPI also supports wasm-gc, so we can use wasm-gc if we can and otherwise fall
+back to using a JavaScript trampoline.
 
 You can see the current code used to handle function pointer casts in the Python
 interpreter
