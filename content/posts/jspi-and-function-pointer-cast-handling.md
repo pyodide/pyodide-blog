@@ -146,9 +146,9 @@ See the complete example
 ## Handling function pointer casts without JavaScript
 
 Luckily, `wasm-gc` has added a `ref.test` instruction which can be used to check
-the signature of a function before calling it. We can use this to count how many
-arguments the function was actually defined with and cast it to the right
-signature before making the call. Here is an example wat module
+the signature of a function before calling it. We can use this to cast the
+function to the right signature before making the call. Here is an example wat
+module
 
 <style>
 pre { line-height: 125%; }
@@ -323,6 +323,11 @@ We can use `wasm-as` (WebAssembly Assemble) to convert the wat to wasm and use
 `wasm-merge` to merge `countArgs.wasm` with the compiled C code. `wasm-as` and
 `wasm-merge` are part of binaryen. See the full build script here:
 [here](https://github.com/hoodmane/jspi-blog-examples/tree/main/9-wat-count-args/build.sh).
+(As an aside, we use `wasm-merge` instead of the normal approach of assembling
+to an object file and then linking the object file with `wasm-ld` because we can
+only use an instruction in an object file if llvm knows how to generate
+relocations for the instruction. I have now taught llvm how to generate
+relocations for `ref.test`, but it didn't know how to do this when I started.)
 
 This approach to handling function pointer casts uses the `ref.test` instruction
 which was added as part of the garbage collection feature (wasm-gc) which has
