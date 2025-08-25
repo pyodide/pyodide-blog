@@ -79,7 +79,9 @@ handling JS call with WebAssembly.
 I wrote [a blog post](content/posts/function-pointer-cast-handling.md) about
 this problem in 2021. Python extensions often declare functions with one
 signature, cast them to a different signature with more arguments, and call them
-with extra arguments. The WebAssembly `call_indirect` function which calls a
+with extra arguments. This is undefined behavior according to the C standard, but works in practice with most major compilers and architectures.
+
+However, WebAssembly is more strict and `call_indirect` instruction which calls a
 function pointer traps if the function pointer does not have the expected type.
 For example suppose we have code like this:
 ```C
