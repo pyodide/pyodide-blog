@@ -24,6 +24,8 @@ This post explores how I built a complete turtle graphics implementation using P
 
 {{< youtube 5Uor8WaKBmM >}}
 
+<br>
+
 Python's turtle module is often the first visual programming experience for learners. It's immediate, intuitive and deeply satisfying. You write code, a little arrow draws on screen.
 
 But running turtle in the browser has always been compromised.
