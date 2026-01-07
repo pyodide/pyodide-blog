@@ -9,16 +9,18 @@ comments: false
 ---
 # Running Python Turtle in the Browser
 
-*Hi, I’m Aaqid Masoodi. I hold a Master’s degree in Computing and Artificial Intelligence from Dublin City University and I’m the creator of CodeScapes, a browser-based code editor designed for educational use.
+Hi, I’m Aaqid Masoodi. I hold a Master’s degree in Computing and Artificial Intelligence from Dublin City University and I’m the creator of CodeScapes, a browser-based code editor designed for educational use.
 
 CodeScapes is built to help students and teachers get started with programming instantly, with zero setup. No installations, no environment issues, no “it works on my machine” problems. You open the browser and start learning.
 
 The core philosophy behind CodeScapes is simple but non-negotiable:
 code written in the browser should run unmodified on the desktop. This preserves pedagogical integrity and respects established teaching practices, instead of forcing students into hacky, broken patterns that only work in the browser.
 
-This post explores how I built a complete turtle graphics implementation using Pyodide, allowing unmodified desktop Python code to run directly in the browser while keeping the learning experience authentic, transferable and aligned with how Python is actually taught.*
+This post explores how I built a complete turtle graphics implementation using Pyodide, allowing unmodified desktop Python code to run directly in the browser while keeping the learning experience authentic, transferable and aligned with how Python is actually taught.
 
 ---
+
+{{< youtube 5Uor8WaKBmM >}}
 
 Python's turtle module is often the first visual programming experience for learners. It's immediate, intuitive and deeply satisfying. You write code, a little arrow draws on screen.
 
@@ -614,7 +616,7 @@ Pyodide allows patching built-in functions. We replace `builtins.input` with a b
 
 ## Compatibility Coverage
 
-### Fully Implemented ✅
+### Fully Implemented
 
 **Motion:** forward, `fd`, back, `bk`, `backward`, goto, `setpos`, `setposition`, setx, sety, setheading, seth, home, circle, teleport
 
