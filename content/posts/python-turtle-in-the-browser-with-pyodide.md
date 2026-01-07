@@ -9,12 +9,24 @@ comments: false
 ---
 # Running Python Turtle in the Browser
 
+*Hi, I’m Aaqid Masoodi. I hold a Master’s degree in Computing and Artificial Intelligence from Dublin City University and I’m the creator of CodeScapes, a browser-based code editor designed for educational use.
+
+CodeScapes is built to help students and teachers get started with programming instantly, with zero setup. No installations, no environment issues, no “it works on my machine” problems. You open the browser and start learning.
+
+The core philosophy behind CodeScapes is simple but non-negotiable:
+code written in the browser should run unmodified on the desktop. This preserves pedagogical integrity and respects established teaching practices, instead of forcing students into hacky, broken patterns that only work in the browser.
+
+This post explores how I built a complete turtle graphics implementation using Pyodide, allowing unmodified desktop Python code to run directly in the browser while keeping the learning experience authentic, transferable and aligned with how Python is actually taught.*
+
+---
 
 Python's turtle module is often the first visual programming experience for learners. It's immediate, intuitive and deeply satisfying. You write code, a little arrow draws on screen.
 
 But running turtle in the browser has always been compromised.
 
-Existing browser-based Python environments implement *subsets* of the turtle API. They work for simple demos: draw a square, make a spiral. But try anything interactive like keyboard-controlled games, mouse-driven drawing, real-time animations and the experience falls apart.
+The original turtle module is built on Tkinter, Python's standard GUI toolkit. Tkinter doesn't exist in the browser—there's no underlying Tk/Tcl runtime, no native window system, no event loop that integrates with the browser's execution model. This forces browser-based Python environments to reimplement turtle from scratch.
+
+Existing implementations like [Basthon](https://basthon.fr/), [Trinket](https://trinket.io/) and [Skulpt-based environments](https://skulpt.org/) provide *subsets* of the turtle API. They work for simple demos: draw a square, make a spiral. But try anything interactive like keyboard-controlled games, mouse-driven drawing, real-time animations and the experience falls apart.
 
 - mainloop() doesn't block, so event-driven programs exit immediately
 - onkeypress() handlers never fire, or fire inconsistently
@@ -62,7 +74,7 @@ Both games use the standard game loop pattern:
 6. Sleep briefly to control framerate
 7. Repeat forever via `while True`
 
-This pattern requires blocking operations, event handling and flicker-free rendering, all of which fail in typical browser implementations.
+This pattern requires blocking operations, event handling and flicker-free rendering, all of which fail in browser-based Python environments like Skulpt, Brython, and previous Pyodide turtle implementations.
 
 ---
 
@@ -75,7 +87,7 @@ This pattern requires blocking operations, event handling and flicker-free rende
 <br>
 ![GIF: Rotating spiral animation at 60 FPS](https://i.imgur.com/NpxBMbA.gif)
 
-Gif is only shows 15 fps, view original project at https://www.codescapes.io/view/71622718-fe46-4c80-a27c-d172585ce6c0
+GIF only shows 15 fps, view original project at https://www.codescapes.io/view/71622718-fe46-4c80-a27c-d172585ce6c0
 
 **Pattern Playlist**: Distinct geometric patterns (spirographs, mandalas, kaleidoscopes) cycling automatically with one-second intervals.
 
@@ -83,7 +95,7 @@ Gif is only shows 15 fps, view original project at https://www.codescapes.io/vie
 <br>
 ![GIF: Multiple patterns transitioning](https://i.imgur.com/G6Y5npu.gif)
 
-These demonstrate sustained animation loops with `time.sleep()` for pacing. This is another operation that typically breaks in browser Python.
+These demonstrate sustained animation loops with `time.sleep()` for pacing. This is another operation that typically breaks in Pyodide without special handling.
 
 ---
 
@@ -118,7 +130,7 @@ The full mouse event API working correctly is rare in browser implementations.
 
 This demonstrates:
 - Python's input() function working correctly
-- HTTP requests via the `requests` library (patched through pyodide-http)
+- HTTP requests via the `requests` library (supported natively in recent Pyodide versions)
 - Multi-module imports across separate files
 - Turtle used for UI rather than just drawing
 
@@ -126,11 +138,11 @@ The virtual filesystem, package ecosystem and blocking input all functioning tog
 
 ### Slow Drawing Examples
 
-| | |
-|---|---|
-| ![Neon Vortex](https://i.imgur.com/QVbghjC.gif) | ![Glow Rosette](https://i.imgur.com/OxGes8L.gif) |
+|                                                                                                |                                                                                                |
+| ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| ![Neon Vortex](https://i.imgur.com/QVbghjC.gif)                                                | ![Glow Rosette](https://i.imgur.com/OxGes8L.gif)                                               |
 | [View Project](https://www.codescapes.io/community/scape/b2c4bcb3-e284-43b1-a924-b1c724f6ec39) | [View Project](https://www.codescapes.io/community/scape/a44431fe-42da-4456-8fcd-f1a0e3e3799d) |
-| ![Skulpt Example](https://i.imgur.com/EFViUgh.gif) | ![Spiral Multi Color](https://i.imgur.com/oZrxo3g.gif) |
+| ![Skulpt Example](https://i.imgur.com/EFViUgh.gif)                                             | ![Spiral Multi Color](https://i.imgur.com/oZrxo3g.gif)                                         |
 | [View Project](https://www.codescapes.io/community/scape/396cfcb6-aa0a-4229-864f-23be2c6b6e36) | [View Project](https://www.codescapes.io/community/scape/41afe444-22f3-4598-adca-7f048d046e1d) |
 
 
@@ -167,7 +179,7 @@ Browsers enforce a fundamentally different model:
 
 2. **No synchronous input API**: There's no browser primitive that blocks JavaScript until user input arrives. `prompt()` exists but can't be accessed from Web Workers.
 
-3. **Isolated rendering context**: WebAssembly code (where Pyodide runs) cannot directly access the DOM or Canvas. Communication requires message passing.
+3. **Isolated rendering context**: Web Workers (where Pyodide runs for non-blocking execution) cannot directly access the DOM or Canvas. Communication requires message passing.
 
 4. **Sleep blocks everything**: In a Worker, `time.sleep()` blocks the entire Worker thread. That's acceptable, but during that time no messages can be processed.
 
@@ -254,43 +266,43 @@ Every message follows the envelope format:
 }
 ```
 
-The [id](file:///Users/aaqidmasoodi/Documents/codescapes/src/runners/python/turtle_shim.py#1150-1153) field identifies which turtle the command affects. This enables multiple independent turtles.
+The `id` field identifies which turtle the command affects. This enables multiple independent turtles.
 
 ### Command Categories
 
 **Initialization Commands**
 
-| Command | Purpose |
-|---------|---------|
-| `INIT` | Reset canvas, set dimensions, clear all state |
-| `SETUP` | Resize canvas dimensions |
+| Command  | Purpose                                          |
+| -------- | ------------------------------------------------ |
+| `INIT`   | Reset canvas, set dimensions, clear all state    |
+| `SETUP`  | Resize canvas dimensions                         |
 | `CREATE` | Instantiate a new turtle with initial properties |
 
 **Motion Commands**
 
-| Command | Fields | Notes |
-|---------|--------|-------|
-| `MOVE` | `x, y, pen_down, color, width` | Draws line if pen is down |
-| `ROTATE` | [heading](file:///Users/aaqidmasoodi/Documents/codescapes/src/runners/python/turtle_shim.py#1167-1169) | Updates turtle orientation |
-| `CIRCLE` | `radius, extent, steps, color, filling, fillcolor` | Arc or full circle |
+| Command  | Fields                                             | Notes                      |
+| -------- | -------------------------------------------------- | -------------------------- |
+| `MOVE`   | `x, y, pen_down, color, width`                     | Draws line if pen is down  |
+| `ROTATE` | `heading`                                          | Updates turtle orientation |
+| `CIRCLE` | `radius, extent, steps, color, filling, fillcolor` | Arc or full circle         |
 
 **State Commands**
 
-| Command | Purpose |
-|---------|---------|
-| `PEN_UPDATE` | Change pen color, fill color, or width |
-| `UPDATE_TURTLE` | Change shape, stretch factors, speed |
-| `SHOW` / `HIDE` | Toggle turtle visibility |
-| `BEGIN_FILL` / `END_FILL` | Polygon fill boundary markers |
+| Command                   | Purpose                                |
+| ------------------------- | -------------------------------------- |
+| `PEN_UPDATE`              | Change pen color, fill color, or width |
+| `UPDATE_TURTLE`           | Change shape, stretch factors, speed   |
+| `SHOW` / `HIDE`           | Toggle turtle visibility               |
+| `BEGIN_FILL` / `END_FILL` | Polygon fill boundary markers          |
 
 **Rendering Control**
 
-| Command | Purpose |
-|---------|---------|
-| `UPDATE` | Swap back buffer to display (the "present" operation) |
-| `SET_AUTO_UPDATE` | Enable/disable automatic buffer swaps |
-| `CLEAR` | Clear a specific turtle's drawings |
-| `CLEAR_SCREEN` | Reset entire canvas |
+| Command           | Purpose                                               |
+| ----------------- | ----------------------------------------------------- |
+| `UPDATE`          | Swap back buffer to display (the "present" operation) |
+| `SET_AUTO_UPDATE` | Enable/disable automatic buffer swaps                 |
+| `CLEAR`           | Clear a specific turtle's drawings                    |
+| `CLEAR_SCREEN`    | Reset entire canvas                                   |
 
 ### State Synchronization Strategy
 
@@ -298,7 +310,7 @@ A critical design decision: **Python owns the authoritative state; TypeScript ow
 
 When you call `t.forward(100)`:
 
-1. Python calculates the new position using its local [(x, y)](file:///Users/aaqidmasoodi/Documents/codescapes/src/runners/python/turtle_shim.py#1330-1331) and [heading](file:///Users/aaqidmasoodi/Documents/codescapes/src/runners/python/turtle_shim.py#1167-1169)
+1. Python calculates the new position using its local `(x, y)` and `heading`
 2. Python updates its internal state
 3. Python sends `MOVE` with the new absolute position
 4. TypeScript draws a line from the turtle's previous rendered position to the new position
@@ -437,14 +449,14 @@ This enables ondrag() for interactive manipulation—critical for the 3D rotatio
 
 Browser key names differ from Tkinter's expectations. We maintain a mapping:
 
-| Browser Key | Turtle Key |
-|-------------|------------|
-| `ArrowUp` | `Up` |
-| `ArrowDown` | `Down` |
-| `ArrowLeft` | `Left` |
-| `ArrowRight` | `Right` |
-| `Enter` | `Return` |
-| ` ` (space) | `space` |
+| Browser Key  | Turtle Key |
+| ------------ | ---------- |
+| `ArrowUp`    | `Up`       |
+| `ArrowDown`  | `Down`     |
+| `ArrowLeft`  | `Left`     |
+| `ArrowRight` | `Right`    |
+| `Enter`      | `Return`   |
+| ` ` (space)  | `space`    |
 
 Python code using onkeypress(handler, "Up") works unchanged.
 
@@ -520,7 +532,7 @@ For animated movement:
 
 ### Tracer Setting
 
-tracer(n)controls automatic screen updates:
+tracer(n) controls automatic screen updates:
 
 - tracer(0): Disable automatic updates; only update() swaps buffers
 - tracer(1); Update after every command (default)
@@ -564,7 +576,7 @@ On end_fill():
 
 ### Handling Arcs in Fills
 
-circle()complicates fills because it's not a straight line. We decompose arcs into a series of points along the circumference, adding each to the fill path. The visual result is a smooth filled arc.
+circle() complicates fills because it's not a straight line. We decompose arcs into a series of points along the circumference, adding each to the fill path. The visual result is a smooth filled arc.
 
 ---
 
@@ -577,14 +589,14 @@ Our turtle implementation leverages Pyodide's broader capabilities.
 Pyodide provides an in-memory POSIX filesystem. We use this for:
 
 - **Multi-file projects**: Import custom modules from sibling files
-- **Asset loading**: bgpic("background.png")loads from virtual FS
+- **Asset loading**: bgpic("background.png") loads from virtual FS
 - **Saving drawings**: `screen.save("output.png")` writes PNG to virtual FS, triggering UI file explorer update
 
 ### Package Support
 
 Through Pyodide's micropip:
 
-- **requests** (patched via pyodide-http): HTTP in turtle programs (weather app example)
+- **requests**: HTTP in turtle programs (weather app example), supported natively in recent Pyodide versions
 - **Standard library**: `math`, `random`, time, `json` all work as expected
 
 ### Input Patching
@@ -685,11 +697,11 @@ Create a Python project and start drawing immediately.
 
 This project builds on [Pyodide](https://pyodide.org)'s extraordinary work bringing CPython to WebAssembly. Without Pyodide providing a real Python runtime in the browser, bridging to turtle would be impossible.
 
-Thanks to the Pyodide community for the invitation to contribute this post.
+Thanks to the creators of Pyodide for the invitation to contribute this post.
 
 ---
 
 *Aaqid Masoodi*  
-*Creator, CodeScapes* 
-*Masters In Computing* Dublin City University  
+*Creator, CodeScapes*  
+*MSc Computing and Artificial Intelligence (Dublin City University)*  
 *January 2026*
