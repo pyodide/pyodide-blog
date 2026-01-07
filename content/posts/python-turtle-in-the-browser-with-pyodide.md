@@ -20,7 +20,7 @@ This post explores how I built a complete turtle graphics implementation using P
 
 ---
 
-*The video below demonstrates some of CodeScapes' Python capabilities, including turtle graphics. Note: The AI coding assistant (Scapper) shown is an early beta version—it has since been significantly improved with features like apply_diff for surgical edits instead of regenerating entire files.*
+*The video below demonstrates some of CodeScapes' Python capabilities, including turtle graphics. Note: The AI coding assistant (Scapper) shown is an early beta version. it has since been significantly improved with features like apply_diff for surgical edits instead of regenerating entire files.*
 
 {{< youtube 5Uor8WaKBmM >}}
 
@@ -28,7 +28,7 @@ Python's turtle module is often the first visual programming experience for lear
 
 But running turtle in the browser has always been compromised.
 
-The original turtle module is built on Tkinter, Python's standard GUI toolkit. Tkinter doesn't exist in the browser—there's no underlying Tk/Tcl runtime, no native window system, no event loop that integrates with the browser's execution model. This forces browser-based Python environments to reimplement turtle from scratch.
+The original turtle module is built on Tkinter, Python's standard GUI toolkit. Tkinter doesn't exist in the browser, there's no underlying Tk/Tcl runtime, no native window system, no event loop that integrates with the browser's execution model. This forces browser-based Python environments to reimplement turtle from scratch.
 
 Existing implementations like [Basthon](https://basthon.fr/), [Trinket](https://trinket.io/) and [Skulpt-based environments](https://skulpt.org/) provide *subsets* of the turtle API. They work for simple demos: draw a square, make a spiral. But try anything interactive like keyboard-controlled games, mouse-driven drawing, real-time animations and the experience falls apart.
 
@@ -51,7 +51,7 @@ Before diving into architecture, let's establish what "works" means in practice.
 
 ### Interactive Games
 
-**Pong**: Two-player game with keyboard controls (`W/S` and `Arrow keys`), ball physics, paddle collision detection, and live scoring.
+**Pong**: Two-player game with keyboard controls (`W/S` and `Arrow keys`), ball physics, paddle collision detection and live scoring.
 
 
 [View Project](https://www.codescapes.io/community/scape/f10bced9-f2e3-4c50-ab9c-38023c70cb5d)
@@ -179,7 +179,7 @@ The CPython turtle module was built for Tkinter, a desktop GUI toolkit. It assum
 
 Browsers enforce a fundamentally different model:
 
-1. **Non-blocking main thread**: The main thread runs the JavaScript event loop. Blocking it freezes the entire page—no rendering, no input, no network responses. Browsers actively prevent this.
+1. **Non-blocking main thread**: The main thread runs the JavaScript event loop. Blocking it freezes the entire page,no rendering, no input, no network responses. Browsers actively prevent this.
 
 2. **No synchronous input API**: There's no browser primitive that blocks JavaScript until user input arrives. `prompt()` exists but can't be accessed from Web Workers.
 
@@ -369,7 +369,7 @@ Steps 4-7 happen in a single JavaScript execution frame. The user sees only the 
 
 The ink buffer presents a challenge: when clearing a single turtle's drawings (via `t.clear()`), we must preserve other turtles' drawings.
 
-We maintain a **draw history**—a per-turtle record of all primitives (lines, arcs, dots, fills, text) rendered to the ink buffer. On `CLEAR`:
+We maintain a **draw history**, a per-turtle record of all primitives (lines, arcs, dots, fills, text) rendered to the ink buffer. On `CLEAR`:
 
 1. Delete the target turtle's history
 2. Clear the ink buffer entirely
@@ -385,7 +385,7 @@ Handling keyboard and mouse input in a Worker environment requires solving the b
 
 ### The Sync XHR Pattern
 
-Web Workers cannot receive DOM events directly. Our solution uses synchronous XMLHttpRequest—deprecated for main-thread use but available in Workers—combined with Service Worker interception.
+Web Workers cannot receive DOM events directly. Our solution uses synchronous XMLHttpRequest, deprecated for main-thread use but available in Workers,combined with Service Worker interception.
 
 **Event Flow:**
 
@@ -422,7 +422,7 @@ During mainloop():
 
 1. Python enters an infinite loop
 2. Each iteration: poll events, handle them, sleep briefly
-3. The `sleep()` blocks the Worker—but that's fine, nothing else runs there
+3. The `sleep()` blocks the Worker but that's fine, nothing else runs there
 4. The sync XHR to `/_turtle_events` blocks briefly until the SW responds
 5. Events captured during the sleep are queued and returned on next poll
 
@@ -447,7 +447,7 @@ Mouse events are more complex than keyboard events because they involve geometry
 2. On `mousemove` while button held, emit `{type: "drag", x, y, id: dragTarget}`
 3. On `mouseup`, emit `{type: "mouseup", x, y, id}`
 
-This enables ondrag() for interactive manipulation—critical for the 3D rotation example.
+This enables ondrag() for interactive manipulation, critical for the 3D rotation example.
 
 ### Key Mapping
 
@@ -549,7 +549,7 @@ When tracer(0) is set:
 1. Commands still execute and modify back buffers
 2. No automatic swaps occur
 3. User explicitly calls update() to present
-4. This pattern enables: clear, draw 100 objects, present—as one atomic visual change
+4. This pattern enables: clear, draw 100 objects, present, as one atomic visual change
 
 ---
 
