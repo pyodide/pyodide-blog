@@ -20,6 +20,8 @@ This post explores how I built a complete turtle graphics implementation using P
 
 ---
 
+*The video below demonstrates some of CodeScapes' Python capabilities, including turtle graphics. Note: The AI coding assistant (Scapper) shown is an early beta version—it has since been significantly improved with features like apply_diff for surgical edits instead of regenerating entire files.*
+
 {{< youtube 5Uor8WaKBmM >}}
 
 Python's turtle module is often the first visual programming experience for learners. It's immediate, intuitive and deeply satisfying. You write code, a little arrow draws on screen.
