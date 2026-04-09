@@ -1,6 +1,6 @@
 ---
 title: "Pyodide 314.0 Alpha Release and Packaging Updates"
-date: 2026-03-20
+date: 2026-04-10
 draft: false
 tags: ["announcement"]
 author: ["Gyeongjae Choi", "Hood Chatham", "Agriya Khetarpal"] # multiple authors
@@ -39,13 +39,13 @@ Before this change, the Pyodide maintainers had to maintain, build, and host ove
 
 Moving forward, package maintainers can simply build and publish Pyodide wheels to PyPI, just as they do for native wheels on Linux, macOS, or Windows.
 
-We will be providing comprehensive documentation on building packages with our toolchain soon. Until then, please refer to the [existing Pyodide documentation](https://pyodide.org/en/stable/development/building-packages.html) on cross-compiling packages.
+We wrote a comprehensive guide on how to build and publish Pyodide wheels to PyPI. You can find it [here](https://pyodide-build.readthedocs.io/en/latest/).
 
 ## Wasn't the last version 0.29, and now it is 314.0?
 
 Yes, we are updating Pyodide's versioning scheme, and it is aligned with these new packaging standards.
 
-To fully standardize the packaging process under PEP 783, we needed to stabilize the platform compatibility for packages so they don't break with every minor Pyodide release. Therefore, we are transitioning to a Python-version-based versioning scheme. For example, Pyodide 314.x directly corresponds to Python 3.14.
+To fully standardize the packaging process under PEP 783, we wanted to stabilize the platform compatibility for packages so they don't break with every Pyodide release. Therefore, we are transitioning to a Python-version-based versioning scheme. For example, Pyodide 314.x directly corresponds to Python 3.14.
 
 Whenever we make binary-incompatible changes, they will now align strictly with upstream Python updates (typically once a year). This means you are safe to use existing packages built for the same Python version across multiple Pyodide releases. We plan to release a new major Pyodide version annually, in sync with the Python update.
 
@@ -58,3 +58,7 @@ We are putting out this alpha release to encourage package maintainers and early
 Unlike CPython alpha releases, this does not mean a complete freeze on feature breaking changes. Pyodide is a fast-growing project, and we will still make necessary adjustments to the API if needed.
 
 However, this alpha release acts as a strict guarantee on ABI stability for packages. We are NOT making any further ABI breaking changes regarding package builds. Any packages you build using this 314.0 alpha release will work seamlessly with any future Pyodide 314.X versions.
+
+## When Will the Stable Version Drop?
+
+We are targeting the stable release of Pyodide 314.0 in a few weeks.
