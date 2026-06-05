@@ -38,7 +38,7 @@ Moving forward, package maintainers can simply build and publish Pyodide wheels 
 
 We've written a comprehensive guide on building and publishing Pyodide wheels to PyPI. You can find it [here](https://pyodide-build.readthedocs.io/en/latest/).
 
-If you are a maintainer of a Rust-based Python package that uses PyO3 or maturin, there is also a good article written by Pydantic team that explains how to build and publish PyEmscripten wheels [here](https://pydantic.dev/articles/emscripten-wheels-pydantic).
+If you are a maintainer of a Rust-based Python package that uses PyO3 or maturin, there is also a good article written by Pydantic team that explains [how to build and publish PyEmscripten wheels](https://pydantic.dev/articles/emscripten-wheels-pydantic).
 
 ## New Versioning Scheme
 
