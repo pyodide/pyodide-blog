@@ -38,7 +38,7 @@ Moving forward, package maintainers can simply build and publish Pyodide wheels 
 
 We've written a comprehensive guide on building and publishing Pyodide wheels to PyPI. You can find it [here](https://pyodide-build.readthedocs.io/en/latest/).
 
-If you are a maintainer of a Rust-based Python package that uses PyO3 or maturin, there is also a good article written by Pydantic team that explains [how to build and publish PyEmscripten wheels](https://pydantic.dev/articles/emscripten-wheels-pydantic).
+If you are a maintainer of a Python package that uses PyO3 or maturin, there is also a good article written by [Victorien Plot](https://github.com/Viicos) from the Pydantic team that explains [how to build and publish PyEmscripten wheels](https://pydantic.dev/articles/emscripten-wheels-pydantic).
 
 With PEP 783 now formally accepted, the platform tags now use the `pyemscripten_*` prefix: `pyemscripten_2025_0` for Python 3.13 (Pyodide 0.29.x) and `pyemscripten_2026_0` for Python 3.14 (Pyodide 314.x). If you build wheels for either of these versions, update your build configurations and `pyodide-build` version accordingly.
 
@@ -149,7 +149,7 @@ proxy[::2]   # every other element
 
 ## Acknowledgements
 
-A big thank you to Python Steering Council members and the broader Python community for their support and feedback on PEP 783 and related standards. Thanks also to the [cibuildwheel](https://cibuildwheel.pypa.io/) team for adding PyEmscripten support, and to the [Pydantic](https://pydantic.dev/) team for writing a guide on building and publishing PyEmscripten wheels for Rust-based packages.
+A big thank you to Python Steering Council members and the broader Python community for their support and feedback on PEP 783 and related standards. Thanks also to the [cibuildwheel](https://cibuildwheel.pypa.io/) team for adding PyEmscripten support, and to [Victorien Plot](https://github.com/Viicos) for writing the guide on building and publishing PyEmscripten wheels on the Pydantic blog.
 
 Thanks to all the contributors who made this release possible:
 
