@@ -97,7 +97,7 @@ Additionally, we've decided to drop `OpenSSL` support from the standard library,
 
 ## Experimental Support for Socket Operations in Node.js
 
-We've added experimental support for socket operations in Node.js. This allows you to use the `socket` module in Pyodide when running in a Node.js environment, enabling TCP socket creation and communication, such as connecting to a remote database server.
+We've added experimental support for socket operations in Node.js. This allows you to use the `socket` module in Pyodide when running in a Node.js environment, enabling TCP socket creation and communication, such as connecting to a remote database server. It covers TCP sockets with TLS, async socket functions for the webloop, and non-blocking mode. We've tested with a few database drivers: `pymysql` (MySQL), `pg8000` (PostgreSQL), and `redis-py`.
 
 This can be enabled by running `pyodide.useNodeSockFS()`:
 
