@@ -149,7 +149,7 @@ proxy[::2]   # every other element
 
 ## Acknowledgements
 
-A big thank you to Python Steering Council members and the broader Python community for their support and feedback on PEP 783 and related standards.
+A big thank you to Python Steering Council members and the broader Python community for their support and feedback on PEP 783 and related standards. Thanks also to the [cibuildwheel](https://cibuildwheel.pypa.io/) team for adding PyEmscripten support, and to the [Pydantic](https://pydantic.dev/) team for writing a guide on building and publishing PyEmscripten wheels for Rust-based packages.
 
 Thanks to all the contributors who made this release possible:
 
