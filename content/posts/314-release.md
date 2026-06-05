@@ -1,6 +1,6 @@
 ---
 title: "Pyodide 314.0 Release"
-date: 2026-05-13
+date: 2026-06-07
 draft: false
 tags: ["announcement"]
 author: ["Gyeongjae Choi", "Hood Chatham", "Agriya Khetarpal"]
@@ -37,6 +37,8 @@ Previously, the Pyodide maintainers had to maintain, build, and host over 300 pa
 Moving forward, package maintainers can simply build and publish Pyodide wheels to PyPI, just as they do for native wheels on Linux, macOS, or Windows.
 
 We've written a comprehensive guide on building and publishing Pyodide wheels to PyPI. You can find it [here](https://pyodide-build.readthedocs.io/en/latest/).
+
+If you are a maintainer of a Rust-based Python package that uses PyO3 or maturin, there is also a good article written by Pydantic team that explains how to build and publish PyEmscripten wheels [here](https://pydantic.dev/articles/emscripten-wheels-pydantic).
 
 ## New Versioning Scheme
 
@@ -84,6 +86,12 @@ You also need to enable JSPI by passing `--experimental-wasm-stack-switching` wh
 
 ## Acknowledgements
 
+A big thank you to Python Steering Council members and the broader Python community for their support and feedback on PEP 783 and related standards.
+
 Thanks to all the contributors who made this release possible:
 
-UPDATE ME
+Agriya Khetarpal, Amir Tadrisi, Andrej730, BOMIN LYU, Chanho
+Lee, Christian Clauss, Copilot, Daniel Chambers, Darshan, Gyeongjae Choi,
+Hanjeong Lee, Hood Chatham, hyoinandout, Juniper Tyree, kaif ansari, Maddy
+Guthridge, MisterNox, Pepijn de Vos, Qiaochu Hu, Raj Kumar Gupta,
+SATHVIK V SHETTY, Seungheon Lee, SongYoungUk, Victorien
