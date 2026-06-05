@@ -108,6 +108,25 @@ The JavaScript interop layer in Pyodide has been improved in a few ways. We list
 
 We've added `pyodide.ffi.JsBigInt`, a new `int` subtype that makes JavaScript's `bigint` type roundtrip correctly through Python. Before this, a `bigint` arriving in Python would be converted to an `int`, but converting it back to JavaScript would produce a `number`, which silently loses precision for values above 2^53. Python integers larger than 2^53 had the same problem. Now both cases produce a `JsBigInt`, which converts back to `bigint` on the JavaScript side. Since `JsBigInt` supports all the same operations as `int`, most existing code won't need any changes.
 
+### JavaScript Resource Management and Python Context Managers
+
+Pyodide now works with the [JavaScript/ECMAScript Explicit Resource Management proposal](https://github.com/tc39/proposal-explicit-resource-management) (`using` declarations) on both sides of the language boundary.
+
+On the JavaScript side, `PyProxy` and `PyBufferView` now implement `[Symbol.dispose]`, so you can use `using` to make sure Python objects get cleaned up when they go out of scope:
+
+```js
+{
+  using proxy = pyodide.runPython("some_object()");
+  // proxy is destroyed automatically at end of block
+}
+```
+
+On the Python side, if a JavaScript object has a `[Symbol.dispose]()` method, you can use its `JsProxy` as a context manager with `with`. The same goes for `[Symbol.asyncDispose]()` for async context managers:
+
+```python
+with js_object as x:
+    ...  # x[Symbol.dispose]() is called on exit
+```
 
 ## Acknowledgements
 
