@@ -70,6 +70,8 @@ await pyodide.loadPackage("sqlite3");
 
 However, with Pyodide now supporting PEP 783, we've decided to restore these libraries to the standard library to provide a better user experience. This introduces a trade-off: while the initial download size increases, users no longer need to install these packages separately, creating a more seamless experience.
 
+As part of this cleanup, the `pydecimal` and `test` packages have been removed from the distribution. The `fullstdlib` option in `loadPyodide()` is now deprecated and has no effect.
+
 Since this release ships with Python 3.14, the new `compression.zstd` module is now available in Pyodide out of the box, providing native zstd compression and decompression support.
 
 Additionally, we've decided to drop `OpenSSL` support from the standard library, which would have introduced a substantial size increase when vendored. This results in some breaking changes:
