@@ -30,7 +30,7 @@ This release focuses on standardization and packaging, marking a significant mil
 
 The acceptance of [PEP 783: Emscripten packaging](https://peps.python.org/pep-0783/) marks perhaps the most exciting change in the history of the Python-in-the-browser ecosystem. Pyodide maintainers—especially [@hoodmane](https://github.com/hoodmane)—have poured an immense amount of effort into this over a very long time. Achieving this long-standing goal will expand our ecosystem exponentially.
 
-What does this mean in practice? You can now publish Python packages built for Pyodide (or any Python runtime compatible with the PyEmscripten platform defined in PEP 783) directly to PyPI and install them at runtime.
+What does this mean in practice? You can now publish Python packages built for Pyodide (or any Python runtime compatible with [the PyEmscripten platform defined in PEP 783](https://pyodide.org/en/stable/development/abi.html)) directly to PyPI and install them at runtime.
 
 Previously, the Pyodide maintainers had to maintain, build, and host over 300 packages ourselves. This created a significant burden on our maintainers and became a major bottleneck for the community, as every new package required manual review.
 
