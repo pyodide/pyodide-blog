@@ -102,7 +102,7 @@ const pyodide = await loadPyodide();
 await pyodide.useNodeSockFS();
 ```
 
-You also need to enable JSPI by passing `--experimental-wasm-stack-switching` when running Node.js <= v24.
+On Node.js <= v24, you also need to pass `--experimental-wasm-stack-switching` to enable JSPI.
 
 ## JavaScript Interop Improvements
 
