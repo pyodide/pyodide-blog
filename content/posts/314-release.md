@@ -36,7 +36,7 @@ Previously, the Pyodide maintainers had to maintain, build, and host over 300 pa
 
 Moving forward, package maintainers can simply build and publish Pyodide wheels to PyPI, just as they do for native wheels on Linux, macOS, or Windows. By the time you are reading this, [cibuildwheel v4.0](https://cibuildwheel.pypa.io/) already supports building for the PyEmscripten 2025 and 2026 ABIs.
 
-We've written a comprehensive guide on building and publishing Pyodide wheels to PyPI. You can find it [here](https://pyodide-build.readthedocs.io/en/latest/).
+We've written a comprehensive guide on building and publishing Pyodide wheels to PyPI. You can find it in the [`pyodide-build` documentation](https://pyodide-build.readthedocs.io/en/latest/).
 
 If you are a maintainer of a Python package that uses PyO3 or maturin, there is also a good article written by [Victorien Plot](https://github.com/Viicos) from the Pydantic team that explains [how to build and publish PyEmscripten wheels](https://pydantic.dev/articles/emscripten-wheels-pydantic).
 
