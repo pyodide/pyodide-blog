@@ -40,6 +40,8 @@ We've written a comprehensive guide on building and publishing Pyodide wheels to
 
 If you are a maintainer of a Rust-based Python package that uses PyO3 or maturin, there is also a good article written by Pydantic team that explains [how to build and publish PyEmscripten wheels](https://pydantic.dev/articles/emscripten-wheels-pydantic).
 
+With PEP 783 now formally accepted, the platform tags now use the `pyemscripten_*` prefix: `pyemscripten_2025_0` for Python 3.13 (Pyodide 0.29.x) and `pyemscripten_2026_0` for Python 3.14 (Pyodide 314.x). If you build wheels for either of these versions, update your build configurations accordingly.
+
 ## New Versioning Scheme
 
 You might be wondering: wasn't the last version 0.29, and now it's 314.0?
