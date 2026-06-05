@@ -136,6 +136,17 @@ with js_object as x:
     ...  # x[Symbol.dispose]() is called on exit
 ```
 
+### Better Array-like Support for `JsProxy`
+
+Previously, only true JavaScript arrays (where `Array.isArray()` returns true) and a handful of known types like `HTMLCollection` and `NodeList` would get subscript support in their `JsProxy`. Now any JavaScript object that is iterable and has a `length` property is treated as array-like, so `proxy[i]` just works for a much broader set of objects.
+
+On top of that, slice subscripting now works too:
+
+```python
+proxy[1:4]   # returns a new array-like from index 1 to 3
+proxy[::2]   # every other element
+```
+
 ## Acknowledgements
 
 A big thank you to Python Steering Council members and the broader Python community for their support and feedback on PEP 783 and related standards.
