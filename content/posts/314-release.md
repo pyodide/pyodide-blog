@@ -100,6 +100,15 @@ await pyodide.useNodeSockFS();
 
 You also need to enable JSPI by passing `--experimental-wasm-stack-switching` when running Node.js <= v24.
 
+## JavaScript Interop Improvements
+
+The JavaScript interop layer in Pyodide has been improved in a few ways. We list some of them here:
+
+### `JsBigInt`: Proper `bigint` roundtripping
+
+We've added `pyodide.ffi.JsBigInt`, a new `int` subtype that makes JavaScript's `bigint` type roundtrip correctly through Python. Before this, a `bigint` arriving in Python would be converted to an `int`, but converting it back to JavaScript would produce a `number`, which silently loses precision for values above 2^53. Python integers larger than 2^53 had the same problem. Now both cases produce a `JsBigInt`, which converts back to `bigint` on the JavaScript side. Since `JsBigInt` supports all the same operations as `int`, most existing code won't need any changes.
+
+
 ## Acknowledgements
 
 A big thank you to Python Steering Council members and the broader Python community for their support and feedback on PEP 783 and related standards.
