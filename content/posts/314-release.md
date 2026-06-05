@@ -110,7 +110,7 @@ On Node.js <= v24, you also need to pass `--experimental-wasm-stack-switching` t
 
 ## JavaScript Interop Improvements
 
-The JavaScript interop layer in Pyodide has been improved in a few ways. We list some of them here:
+This release brings several improvements to the JavaScript interop layer:
 
 ### `JsBigInt`: Proper `bigint` roundtripping
 
