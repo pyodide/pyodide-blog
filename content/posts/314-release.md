@@ -71,6 +71,22 @@ Additionally, we've decided to drop `OpenSSL` support from the standard library,
 1. The `ssl` module no longer relies on OpenSSL. We've implemented a custom SSL implementation that provides basic features compatible with the standard library's `ssl` module, but without actual SSL/TLS support. Note that most of the `ssl` module's functionality didn't work even before this change because we didn't support socket operations in the browser.
 2. The `hashlib` module no longer supports some cryptographic hash functions that were previously available through OpenSSL.
 
+## Pyodide Is Now a Native ES Module
+
+`pyodide.asm.js` has been renamed to `pyodide.asm.mjs` to properly reflect that it is an ES module. Most users will not need to change anything, since `loadPyodide()` handles this internally. However, if you reference the file directly, there are some breaking changes to be aware of:
+
+- **Classic (non-module) workers** are no longer supported. You must use a module worker (`type: "module"`) instead.
+- **Service workers** that statically imported `pyodide.asm.js` must now import `createPyodideModule` from `pyodide.asm.mjs` and pass the result as an argument to `loadPyodide`:
+
+    ```js
+    import createPyodideModule from "./pyodide.asm.mjs";
+    import { loadPyodide } from "./pyodide.mjs";
+
+    loadPyodide({ createPyodideModule }).then((pyodide) => { ... });
+    ```
+
+- **Bundlers**: Update any configuration that explicitly references `pyodide.asm.js` to use `pyodide.asm.mjs` instead.
+
 ## Experimental Support for Socket Operations in Node.js
 
 We've added experimental support for socket operations in Node.js. This allows you to use the `socket` module in Pyodide when running in a Node.js environment, enabling TCP socket creation and communication, such as connecting to a remote database server.
