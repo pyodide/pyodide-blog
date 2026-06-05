@@ -50,6 +50,8 @@ To fully standardize the packaging process under PEP 783, we wanted to stabilize
 
 Whenever we make binary-incompatible changes, they will now align strictly with upstream Python updates (typically once a year). This means you can safely use existing packages built for the same Python version across multiple Pyodide releases. We plan to release a new major Pyodide version annually, synchronized with Python updates.
 
+This first release in the new scheme ships Python 3.14.2 and Emscripten 5.0.3.
+
 See also: [Pyodide Issue #6084](https://github.com/pyodide/pyodide/issues/6084) for more context.
 
 ## Standard Library Changes
