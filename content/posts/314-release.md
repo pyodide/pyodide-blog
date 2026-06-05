@@ -70,14 +70,14 @@ await pyodide.loadPackage("sqlite3");
 
 However, with Pyodide now supporting PEP 783, we've decided to restore these libraries to the standard library to provide a better user experience. This introduces a trade-off: while the initial download size increases, users no longer need to install these packages separately, creating a more seamless experience.
 
-As part of this cleanup, the `pydecimal` and `test` packages have been removed from the distribution. The `fullstdlib` option in `loadPyodide()` is now deprecated and has no effect.
+As part of this cleanup, the `pydecimal` and `test` packages have been removed from the distribution, and the `fullstdlib` option in `loadPyodide()` is now deprecated and has no effect.
 
-Since this release ships with Python 3.14, the new `compression.zstd` module is now available in Pyodide out of the box, providing native zstd compression and decompression support.
-
-Additionally, we've decided to drop `OpenSSL` support from the standard library, which would have introduced a substantial size increase when vendored. This results in some breaking changes:
+We've also decided to drop `OpenSSL` from the standard library, which would have introduced a substantial size increase when vendored. This results in two breaking changes:
 
 1. The `ssl` module no longer relies on OpenSSL. We've implemented a custom SSL implementation that provides basic features compatible with the standard library's `ssl` module, but without actual SSL/TLS support. Note that most of the `ssl` module's functionality didn't work even before this change because we didn't support socket operations in the browser.
 2. The `hashlib` module no longer supports some cryptographic hash functions that were previously available through OpenSSL.
+
+Since this release ships Python 3.14, the new `compression.zstd` module is now available in Pyodide out of the box, providing native zstd compression and decompression support.
 
 ## Pyodide Is Now a Native ES Module
 
