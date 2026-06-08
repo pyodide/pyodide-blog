@@ -34,7 +34,7 @@ What does this mean in practice? You can now publish Python packages built for P
 
 Previously, the Pyodide maintainers had to maintain, build, and host over 300 packages ourselves. This created a significant burden on our maintainers and became a major bottleneck for the community, as every new package required manual review.
 
-Moving forward, package maintainers can simply build and publish Pyodide wheels to PyPI, just as they do for native wheels on Linux, macOS, or Windows. By the time you are reading this, [cibuildwheel v4.0](https://iscinumpy.dev/post/cibuildwheel-4-0-0/) already supports building for the PyEmscripten 2025 and 2026 ABIs. The 2026 ABI is currently for our prerelease build only and thus needs to be enabled via the `pyodide-prerelease` option, but we will update update cibuildwheel and make 314.0 stable available in a v4.1.0 release soon.
+Moving forward, package maintainers can simply build and publish Pyodide wheels to PyPI, just as they do for native wheels on Linux, macOS, or Windows. By the time you are reading this, [cibuildwheel v4.0](https://iscinumpy.dev/post/cibuildwheel-4-0-0/) already supports building for the PyEmscripten 2025 and 2026 ABIs. The 2026 ABI is currently for our prerelease build only and thus needs to be enabled via the `pyodide-prerelease` option, but we will update cibuildwheel and make 314.0 stable available in a v4.1.0 release soon.
 
 We've written a comprehensive guide on building and publishing Pyodide wheels to PyPI. You can find it in the [`pyodide-build` documentation](https://pyodide-build.readthedocs.io/en/latest/).
 
