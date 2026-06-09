@@ -1,6 +1,6 @@
 ---
 title: "Pyodide 314.0 Release"
-date: 2026-06-07
+date: 2026-06-09
 draft: false
 tags: ["announcement"]
 author: ["Gyeongjae Choi", "Hood Chatham", "Agriya Khetarpal"]
