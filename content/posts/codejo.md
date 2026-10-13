@@ -155,9 +155,9 @@ I will be 100% open here and admit that this is a mostly unexplored challenge. I
 
 Two attack modes are obvious:
 
-* Code shared by other CodeJo users. There is currently no direct way to load a user-generated CodeJo project file, but such capability is planned. Even if the only attack vector is *"Copy and paste this code into a new CodeJo project!"* attacks made possible by sharing code need to be examined. Before making it easy to share code, the current system should be examined to find all possible ways that malicious code *could* be run on the system, and the extent to which malicious code could negatively affect a user's system.
+* **Code shared by other CodeJo users.** There is currently no direct way to load a user-generated CodeJo project file, but such capability is planned. Even if the only attack vector is *"Copy and paste this code into a new CodeJo project!"* attacks made possible by sharing code need to be examined. Before making it easy to share code, the current system should be examined to find all possible ways that malicious code *could* be run on the system, and the extent to which malicious code could negatively affect a user's system.
 
-* Code delivered by Content Delivery Network (CDN): CodeJo has moved as much upstream code usage to CDN as possible. The advantages of upstreaming all that code are clear. We have also seen attacks on upstream networks that could easily (and often undetectably) modify popular libraries used by thousands if not millions of users. *[What is the most popular JS library served by CDN?]* Until now, most attacks have targeted coders by poisoning their local copies of libraries; an attack on the user side could be devastating.
+* **Code delivered by Content Delivery Network (CDN).** CodeJo has moved as much upstream code usage to CDN as possible. The advantages of upstreaming all that code are clear. We have also seen attacks on upstream networks that could easily (and often undetectably) modify popular libraries used by thousands if not millions of users. *[What is the most popular JS library served by CDN?]* Until now, most attacks have targeted coders by poisoning their local copies of libraries; an attack on the user side could be devastating.
 
 ---
 ---
