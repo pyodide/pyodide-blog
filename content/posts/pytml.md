@@ -1,6 +1,6 @@
 ---
 title: "Pytml: Python in Your HTML with a Single Script Tag"
-date: 2026-10-07
+date: 2026-10-17
 draft: false
 tags:
   - announcement
@@ -10,7 +10,6 @@ author:
 showToc: true
 TocOpen: false
 hidemeta: false
-comments: false
 description: "Writing interactive HTML pages with Python, powered by Pyodide."
 disableHLJS: true
 disableShare: false
@@ -21,7 +20,7 @@ ShowBreadCrumbs: true
 ShowPostNavLinks: true
 ---
 
-I'm the creator of [Pytml](https://github.com/NodeX-AR/Pytml), an open-source project that lets you write Python directly inside HTML and execute it in the browser using Pyodide.
+I'm the creator of Pytml, an open-source JavaScript library that lets you write Python directly inside HTML and execute it in the browser using Pyodide.
 
 The idea is simple: add one script tag, write Python in a `<py>` block, and let Pyodide provide the Python runtime.
 
@@ -37,7 +36,7 @@ There is no Python server involved. The Python code runs in the browser.
 
 I originally built Pytml to make the first step into interactive web programming easier for people who already know, or are learning, Python. Along the way, the project became an experiment in how a relatively small JavaScript layer can connect Python to the browser DOM.
 
-In this post, I'll describe how Pytml works, why I chose Pyodide, some of the problems I encountered while building it, and where I want to take the project next.
+In this post, I'll describe how Pytml works, why I chose Pyodide, some of the problems I encountered while building it, how it compares with other Python web tools, and where I want to take the project next.
 
 ## What is Pytml?
 
@@ -51,7 +50,7 @@ A normal webpage might use JavaScript to respond to a button:
 
 <script>
 document.getElementById("hello").addEventListener("click", () => {
-  document.getElementById("output").textContent = "Hello!";
+    document.getElementById("output").textContent = "Hello!";
 });
 </script>
 ```
@@ -92,11 +91,10 @@ For example, a counter can keep its state in Python:
 <p id="output">count = 0</p>
 
 <py1>
-
-count = 0
-
 <btn1>Add</btn1>
 <btn2>Reset</btn2>
+
+count = 0
 
 def add_one(event):
     global count
@@ -110,11 +108,42 @@ def reset(event):
 
 btn1.on("click", add_one)
 btn2.on("click", reset)
-
 </py1>
 ```
 
 The Python program owns the state, while the HTML elements provide the interface.
+
+### How Pytml differs from other Python web tools
+
+There are already several ways to build applications with Python without writing traditional JavaScript.
+
+Projects such as Streamlit, Panel, Gradio, and Anvil provide higher-level abstractions for building applications with Python. Their architectures and deployment models are different, and some of them can also use browser-side Python in certain configurations.
+
+Pytml takes a different approach.
+
+Instead of primarily providing a Python API that describes an entire interface, Pytml starts with an HTML document and provides a bridge from Python to that document.
+
+That means the author can still think in terms of HTML:
+
+```html
+<button id="hello">Hello</button>
+<p id="output"></p>
+```
+
+while using Python for the behavior:
+
+```python
+def clicked(event):
+    output.text = "Hello!"
+
+hello.on("click", clicked)
+```
+
+The trade-off is intentional.
+
+A higher-level framework can hide HTML and browser details and provide a more Pythonic programming model. Pytml does almost the opposite: it keeps the HTML visible and tries to make the connection between Python and the browser obvious.
+
+This makes Pytml useful for small interactive pages, experiments, and for people who want to stay close to HTML while using Python for behavior.
 
 ## Why Pyodide?
 
@@ -178,7 +207,7 @@ print("Program two")
 
 The numbered tags are program identifiers rather than filenames.
 
-This allows multiple blocks to share a program context:
+This allows multiple blocks to share a Python program context:
 
 ```html
 <py1>
@@ -200,7 +229,7 @@ message = "This belongs to program two"
 </py2>
 ```
 
-Pytml also supports Python source files through the `src` attribute and supports `script[type="text/python"]` blocks.
+This is useful when a page contains multiple independent pieces of Python.
 
 ## Preprocessing HTML and Python
 
@@ -236,7 +265,7 @@ For example:
 <btn1>1</btn1>
 ```
 
-becomes approximately:
+becomes a real button:
 
 ```html
 <button id="btn1">1</button>
@@ -255,6 +284,8 @@ elements.
 This was deliberately implemented as a small preprocessing layer rather than as a new Python syntax or a complete compiler.
 
 Python indentation is preserved while the block is processed, so normal Python formatting can remain normal Python formatting.
+
+This was one of the places where I had to be careful: HTML is not sensitive to indentation in the same way Python is. A preprocessing step that accidentally changed Python whitespace could turn valid Python into invalid Python.
 
 ## Binding the DOM to Python
 
@@ -282,9 +313,7 @@ The wrapper provides properties such as:
 
 ```python
 output.text = "Hello"
-
 input_box.value = "Python"
-
 button.disabled = True
 ```
 
@@ -312,6 +341,8 @@ button = get("hello")
 
 The important part is that the Python object is only a wrapper. The actual element remains a normal browser DOM object.
 
+This is an intentional design choice. I don't want every browser capability to become a completely separate Pytml abstraction. Where possible, the Python API should stay close to the underlying web platform.
+
 ## Events
 
 Reading and changing the DOM is useful, but interactive applications also need events.
@@ -333,7 +364,7 @@ button.on("click", clicked)
 
 The JavaScript runtime creates a Pyodide proxy around the Python callback and registers it as a normal DOM event listener.
 
-When the browser event occurs, Pytml converts the event into a Python-friendly dictionary-like object.
+When the browser event occurs, Pytml converts the event into a Python-friendly object.
 
 For example:
 
@@ -347,7 +378,7 @@ def changed(event):
 input_box.on("input", changed)
 ```
 
-The event object includes common browser information such as coordinates, keyboard information, pointer information, input values, checkbox state, scrolling values, and modifier keys.
+The event object exposes browser information such as coordinates, keyboard information, pointer information, input values, checkbox state, scrolling values, and modifier keys.
 
 It also provides event-control methods:
 
@@ -388,7 +419,7 @@ blocks until the user enters a value.
 
 A browser doesn't work that way. Blocking the JavaScript thread while waiting for an HTML input would freeze the page.
 
-Pytml therefore replaces Python's `input()` with an asynchronous browser implementation.
+Pytml therefore provides a browser-compatible implementation of `input()`.
 
 When Python calls:
 
@@ -399,6 +430,14 @@ name = input("What is your name? ")
 Pytml displays an input control in the page.
 
 Internally, the runtime transforms calls to `input()` using Python's AST machinery so that the browser interaction can be awaited.
+
+At a high level, the process is:
+
+1. Pytml parses the Python source into an abstract syntax tree.
+2. It identifies calls to `input()`.
+3. Those calls are transformed into the asynchronous Pytml input path.
+4. The browser displays an input control and waits for the user without blocking the page.
+5. The resulting value is returned to the Python program.
 
 This allows familiar Python code to work without blocking the browser.
 
@@ -420,7 +459,7 @@ This makes small examples behave more like ordinary Python programs.
 
 Errors are similarly captured and reported through the Pytml output system.
 
-There is still room for improvement here. Since Python code originates inside an HTML document, source mapping and error locations can become less straightforward than they are in a normal `.py` file.
+Since Python code originates inside an HTML document, source mapping and error locations can be less straightforward than they are in a normal `.py` file.
 
 Improving that debugging experience is one of the areas I would like to work on further.
 
@@ -432,11 +471,11 @@ A Python runtime compiled to WebAssembly is considerably larger than a small Jav
 
 Pytml therefore starts preparing Pyodide as early as possible.
 
-The runtime establishes the connection to the Pyodide CDN and preloads the WebAssembly file while the rest of the page is loading.
+The runtime establishes the connection to the Pyodide CDN and begins loading the WebAssembly runtime while the rest of the page is loading.
 
 The page also has a boot state.
 
-While Pyodide is starting, interactive controls are visible but temporarily inert, and Pytml displays:
+While Pyodide is starting, interactive controls are temporarily inert and Pytml displays:
 
 ```text
 Loading Python…
@@ -464,17 +503,19 @@ import numpy as np
 print(np.mean([1, 2, 3]))
 ```
 
-The repository includes examples using NumPy, pandas, and matplotlib.
+Packages available in the Pyodide environment can be used from Pytml, including common scientific packages such as NumPy, pandas, and Matplotlib.
 
-This means Pytml is not limited to toy browser interactions. Python code can also make use of the scientific Python ecosystem where the required package is available in the Pyodide environment.
+You can see the package examples and other runnable examples in the project's [examples directory](https://github.com/NodeX-AR/Pytml/tree/main/examples).
 
-The package support is really another example of why Pytml is built on Pyodide rather than attempting to create its own browser Python environment.
+The [live demos](https://pytml.js.org/demo.html) provide another way to see the browser-side examples without setting up a development environment.
+
+This is another reason I chose to build Pytml on Pyodide rather than attempting to create a separate browser Python environment.
 
 ## Beyond buttons
 
 Once the DOM bridge existed, it became natural to expose more browser functionality.
 
-Pytml's runtime currently includes helpers for things such as:
+Pytml's runtime includes helpers for things such as:
 
 - mouse, pointer, touch, keyboard, and scroll events
 - timers
@@ -509,61 +550,122 @@ stick.on("joystickmove", move)
 </py1>
 ```
 
-The joystick itself is implemented using browser pointer events. Pytml turns those interactions into a Python event containing values such as `x`, `y`, `magnitude`, `angle`, and whether the joystick is active.
+The joystick turns browser interaction into a Python event containing values such as its X and Y position, magnitude, angle, and active state.
 
-This is where the project became more interesting to me than the original "Python inside HTML" experiment. Once there is a Python-to-DOM bridge, browser capabilities can be exposed incrementally without requiring a separate abstraction for every kind of application.
+The [joystick example in the Pytml examples](https://github.com/NodeX-AR/Pytml/tree/main/examples) is a useful place to see this kind of browser interaction in context.
 
-## A calculator as a test case
+This was one of the points where the project became more interesting to me than the original "Python inside HTML" experiment.
 
-A calculator became one of the useful examples for testing the Pytml model.
+Once there is a Python-to-DOM bridge, browser capabilities can be exposed incrementally without requiring a separate abstraction for every kind of application.
 
-The page contains an ordinary HTML display:
+## A tiny joystick game
+
+A calculator was useful for testing the basic Pytml model, but it doesn't show why browser interaction becomes interesting once Python can receive richer input.
+
+A small game is a better example.
+
+The idea is simple: move a player around a small board using a joystick and reach the goal.
+
+The board itself is just a normal HTML `<pre>` element. Python keeps track of the player's position and updates the element when the joystick moves.
 
 ```html
-<div id="display">0</div>
+<div id="stick"></div>
+<pre id="board"></pre>
+
+<py1>
+from pytml import joystick
+
+width = 11
+height = 7
+
+player_x = 1
+player_y = 1
+
+goal_x = width - 2
+goal_y = height - 2
+
+won = False
+
+def draw():
+    rows = []
+
+    for y in range(height):
+        row = ""
+
+        for x in range(width):
+            if x == player_x and y == player_y:
+                row += "@ "
+            elif x == goal_x and y == goal_y:
+                row += "* "
+            elif x == 0 or x == width - 1 or y == 0 or y == height - 1:
+                row += "# "
+            else:
+                row += ". "
+
+        rows.append(row)
+
+    board.text = "\n".join(rows)
+
+stick = joystick("stick")
+
+def move(event):
+    global player_x, player_y, won
+
+    if won:
+        return
+
+    x = event["joystick_x"]
+    y = event["joystick_y"]
+
+    if abs(x) < 0.25 and abs(y) < 0.25:
+        return
+
+    if abs(x) > abs(y):
+        player_x += 1 if x > 0 else -1
+    else:
+        player_y += 1 if y > 0 else -1
+
+    player_x = max(1, min(width - 2, player_x))
+    player_y = max(1, min(height - 2, player_y))
+
+    if player_x == goal_x and player_y == goal_y:
+        won = True
+        board.text = "You win!"
+        return
+
+    draw()
+
+stick.on("joystickmove", move)
+
+draw()
+</py1>
 ```
 
-and the controls can be declared directly in the Python block:
+The game is deliberately small.
 
-```html
-<btn1>1</btn1>
-<btn2>2</btn2>
-<btn3>3</btn3>
-<btn4>+</btn4>
+`@` represents the player, `*` represents the goal, and `#` represents the border.
+
+The interesting part isn't the game itself. It is the path from the browser to Python:
+
+```text
+touch joystick
+      ↓
+browser pointer events
+      ↓
+Pytml joystick event
+      ↓
+Python callback
+      ↓
+Python game state
+      ↓
+DOM update
 ```
 
-The Python program holds the state:
+There is no game engine involved. Python owns the state and the game rules, while Pytml connects the browser input to the Python program and lets the program update an ordinary HTML element.
 
-```python
-num1 = ""
-operator = ""
+That is the kind of interaction I wanted Pytml to make approachable.
 
-def number(n):
-    global num1
-    num1 += str(n)
-    display.text = num1
-```
-
-and connects the browser events:
-
-```python
-btn1.on("click", lambda e: number(1))
-btn2.on("click", lambda e: number(2))
-btn3.on("click", lambda e: number(3))
-```
-
-The calculator isn't technically complicated. That's the point.
-
-It tests several pieces of Pytml at once:
-
-- inline UI preprocessing
-- DOM ID binding
-- Python state
-- event callbacks
-- DOM updates
-- normal Python functions and variables
-
-If those pieces work together, a small interactive page can remain mostly ordinary Python.
+You can explore more working examples in the [Pytml examples directory](https://github.com/NodeX-AR/Pytml/tree/main/examples), or try the [live Pytml demos](https://pytml.js.org/demo.html).
 
 ## What was difficult?
 
@@ -583,6 +685,8 @@ A preprocessing layer therefore has to be careful not to accidentally change Pyt
 
 The current Pytml implementation preserves text nodes while extracting its supported UI declarations.
 
+This sounds small, but it is an important part of making the syntax feel natural. A beginner writing normal Python shouldn't have to think about how an HTML parser might alter their indentation.
+
 ### JavaScript is event-driven
 
 Python examples often assume sequential execution.
@@ -591,6 +695,10 @@ Browser applications are event-driven.
 
 Pytml has to translate between these models through callbacks, proxies, asynchronous functions, and browser events.
 
+The `input()` implementation is one example. Instead of blocking like terminal input, the browser interaction has to yield while the user interacts with the page.
+
+Event callbacks are another. A Python function has to remain callable from JavaScript after the Python code that registered it has finished executing.
+
 ### The DOM is not Python
 
 A browser DOM element is a JavaScript object.
@@ -598,6 +706,20 @@ A browser DOM element is a JavaScript object.
 Giving it a Python-friendly interface requires wrappers for properties, methods, events, and browser-specific behavior.
 
 The `Element` class is intentionally a relatively thin wrapper. I would rather expose the browser's capabilities than create an entirely separate UI framework.
+
+This is also why Pytml keeps ordinary HTML elements rather than replacing them with completely new Python-only components.
+
+### Main-thread DOM access
+
+There is another architectural limitation worth making explicit.
+
+The browser DOM is not directly available from a Web Worker.
+
+Pytml's current DOM bridge therefore works around the normal browser DOM rather than providing a worker-to-DOM messaging architecture.
+
+Pyodide itself can be used in different execution arrangements, but moving the Pytml DOM layer into a worker would require a separate communication layer between the worker and the main thread.
+
+That isn't something Pytml currently provides.
 
 ### Startup matters
 
@@ -611,15 +733,35 @@ This is why the current runtime begins loading Pyodide early and provides a visi
 
 Pytml is part of a larger ecosystem made possible by Pyodide.
 
-Projects such as PyScript and marimo demonstrate other ways of bringing Python to the browser.
+Projects such as PyScript and marimo demonstrate other approaches to running Python in web environments.
 
-The projects have different goals.
+There are also Python application frameworks such as Streamlit, Panel, Gradio, and Anvil that solve a different part of the problem by providing higher-level ways to build applications with Python.
+
+The important distinction is the authoring model.
 
 Pytml focuses on the relationship between ordinary HTML and Python.
 
 The page remains an HTML document, and Pytml provides the runtime needed to execute Python and connect it to the DOM.
 
-That makes Pytml particularly useful for experimenting with small interactive pages where the author wants to stay close to HTML while using Python for behavior.
+A framework that generates or manages most of the interface for you can be a better fit for a larger application. Pytml is intentionally closer to the page itself.
+
+I wanted the following to remain possible:
+
+```html
+<button id="hello">Hello</button>
+<p id="output"></p>
+```
+
+with the behavior written as:
+
+```python
+def clicked(event):
+    output.text = "Hello!"
+
+hello.on("click", clicked)
+```
+
+The goal is not to hide the web platform. It is to make it possible to use Python while still seeing the web platform underneath.
 
 ## What Pyodide allowed me to avoid building
 
@@ -669,7 +811,7 @@ The more interesting question became:
 
 > What is the smallest bridge needed to make browser APIs feel natural from Python?
 
-That led to the current `Element`, `Event`, DOM-binding, and callback APIs.
+That led to the current DOM, event, input, and browser-helper APIs.
 
 It also highlighted the importance of keeping the abstraction small. If every browser feature is hidden behind a completely new Python framework, the user has to learn the framework instead of learning the web platform.
 
@@ -712,15 +854,9 @@ print("Hello from Pytml!")
 </py>
 ```
 
-The project repository contains examples for counters, calculators, multiple Python programs, browser controls, NumPy, pandas, matplotlib, and touch joysticks.
+If you want to see the project before writing your own page, start with the [Pytml live demos](https://pytml.js.org/demo.html). For the implementation behind those examples, the [examples directory](https://github.com/NodeX-AR/Pytml/tree/main/examples) contains the project's example pages.
 
-The project is open source on GitHub:
-
-https://github.com/NodeX-AR/Pytml
-
-You can also try the live demos:
-
-https://pytml.js.org/
+The [Pytml repository](https://github.com/NodeX-AR/Pytml) contains the runtime, examples, tests, and documentation.
 
 ## Conclusion
 
