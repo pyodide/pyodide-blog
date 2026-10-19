@@ -28,6 +28,7 @@ cover:
 # Introduction. What is CodeJo?
 - the vision
 - the current state
+- the tour
 - the near future
 
 ---
@@ -42,7 +43,7 @@ That was frustrating for me, because I remember when my family got our first com
 
 That is the vision for CodeJo. Computers are way more ubiqitous these days -- and way more complicated, and way more capable -- but someone who is just trying to decide if they might enjoy writing some code doesn't need a whole lot of hoops to jump through before they can even getting started.
 
-<img src="https://a.fsdn.com/con/app/proj/codejo/screenshots/CodeJo0-669bc3f8.png" style="width: 70%; margin-left: 3em;"/>
+<img src="https://a.fsdn.com/con/app/proj/codejo/screenshots/CodeJo0-669bc3f8.png" style="width: 70%" title="CodeJo Grid Canvas scratchpad, ready for code!" />
 
 Now they don't need to. They can simply point their browser at [https://codejo.pages.dev/](https://codejo.pages.dev/ "CodeJo") and start programming!
 
@@ -64,6 +65,12 @@ CodeJo is built on a strong foundation of free and open source code and open sta
 Codemirror provides the editor block, a huge step up from writing (and numbering!) code line by line in the Apple ][ terminal. Jquery-terminal enables the interactive interpreter area, giving live access to the Python interpreter and the code objects living inside it. And we can't forget the browser itself and the html, css, and ECMAScript standards that make it possible to write code that can run reliably on anyone's computer, no matter what make, model, or operating system.
 
 CodeJo is working now, with several different display canvases available: The Grid Canvas is a programmable array of pixels with a variable grid pitch; The Fabric Canvas wraps the [FabricJS](https://www.fabricjs.com/) Javascript graphics library; The Web Canvas is a more barebones html5 webcanvas interface; and the Document Canvas utilizes html Document objects.
+
+---
+
+## the tour
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ShJNLZ_lzug?si=o82S3zGhcRw6Vyaj" title="YouTube video tour of CodeJo." frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ---
 
