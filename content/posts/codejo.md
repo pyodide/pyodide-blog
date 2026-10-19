@@ -42,7 +42,7 @@ That was frustrating for me, because I remember when my family got our first com
 
 That is the vision for CodeJo. Computers are way more ubiqitous these days -- and way more complicated, and way more capable -- but someone who is just trying to decide if they might enjoy writing some code doesn't need a whole lot of hoops to jump through before they can even getting started.
 
-<img src="https://a.fsdn.com/con/app/proj/codejo/screenshots/CodeJo0-669bc3f8.png" style="width: 70%;"/>
+<img src="https://a.fsdn.com/con/app/proj/codejo/screenshots/CodeJo0-669bc3f8.png" style="width: 70%; margin: auto;"/>
 
 Now they don't need to. They can simply point their browser at [https://codejo.pages.dev/](https://codejo.pages.dev/ "CodeJo") and start programming!
 
