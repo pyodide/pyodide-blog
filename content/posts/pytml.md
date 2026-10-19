@@ -480,6 +480,28 @@ Since Python code originates inside an HTML document, source mapping and error l
 
 Improving that debugging experience is one of the areas I would like to work on further.
 
+## Security and XSS by default
+
+When exposing DOM elements to Python, one of the most important concerns is Cross-Site Scripting (XSS). Since Pytml is designed to be beginner-friendly, I wanted to ensure that the default behavior would not accidentally introduce security vulnerabilities.
+
+In Pytml, if you want to output text, you use the `.text` property:
+
+```python
+output.text = "Hello, " + user_input
+```
+
+Under the hood, Pytml maps `.text` directly to the browser's `textContent` API. This means that the browser treats the input strictly as literal text. Even if a user inputs an XSS payload like `<script>alert(1)</script>` or `<img src=x onerror=alert('HACKED')>`, the browser will simply render the characters on the screen. The payload will not execute.
+
+I tested this myself by trying to break my own framework. As long as I used `.text`, Pytml was 100% immune to XSS.
+
+However, there are times when a developer needs to inject raw HTML (for example, to render bold text or a complex layout). For this, Pytml provides an `.html` property. 
+
+Because `.html` maps to `innerHTML`, it is powerful but potentially dangerous. I learned this the hard way when I accidentally used `.html` in one of my own Pytml demo pages and successfully executed an XSS payload against my live website. 
+
+This experience reinforced a core design principle for Pytml: **frameworks must guide users toward safe defaults.** By making `.text` the primary and most intuitive way to output data, beginners are protected by default. The `.html` escape hatch exists for advanced users, but the safe path is the easiest one to take.
+
+The fix for this issue is listed in my repository: [Pytml](https://github.com/nodex-ar/pytml)
+
 ## Loading Pyodide
 
 The biggest unavoidable challenge is startup time.
