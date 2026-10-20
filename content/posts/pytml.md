@@ -1,6 +1,6 @@
 ---
 title: "Pytml: Python in Your HTML with a Single Script Tag"
-date: 2026-10-07
+date: 2026-10-19
 draft: false
 tags:
   - announcement
