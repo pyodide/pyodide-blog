@@ -26,8 +26,8 @@ cover:
 ---
 
 # Introduction. What is CodeJo?
-- the vision
-- the current state
+- [the vision](#the-vision)
+- [the current state](#the-current-state)
 - the tour
 - the near future
 
