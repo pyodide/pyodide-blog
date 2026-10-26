@@ -25,6 +25,12 @@ cover:
     hidden: true # only hide on current single page
 ---
 
+# Contents
+
+- [Introduction. What is CodeJo?](#introduction-what-is-codejo)
+- [Challenges Encountered](#challenges-encountered)
+- [And In Conclusion.](#and-in-conclusion)
+
 # Introduction. What is CodeJo?
 - [the vision](#the-vision)
 - [the current state](#the-current-state)
