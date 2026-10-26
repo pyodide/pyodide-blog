@@ -117,25 +117,34 @@ On Chrome, and on a fairly modern system, the speed of the system is pretty good
 
 [test-grd speedtest2()](https://codejo.pages.dev?load=test-grd&call=speedtest2)
 
-On my main, desktop system, Chrome gets over 21000tps on speedtest() and takes just over 2 seconds for speedtest2()
+On my main, desktop system, Chrome gets over 21000tps on speedtest() and speedtest2() produces about 5000tps.
 
-Using Firefox on the same system, speedtest() gets <15000tps and speedtest2() takes more than 23 seconds.
+Using Firefox on the same system, speedtest() gets less than 13000tps and speedtest2() is less than 500tps.
 
-On my ancient Chromebook, speedtest() only gets about 1100tps and speedtest2() takes almost 30 seconds -- and that's with a screen about half the area of the desktop system!
+On my ancient Chromebook, speedtest() only gets about 1200tps and speedtest2() is just over 200tps.
 
 
 [test-web speedtest3()](https://codejo.pages.dev?load=test-web&call=speedtest3)
 
-On Chrome I get about 0.3 seconds. On Firefox, it's more than 3 seconds!
+On Chrome I get about 4300tps. On Firefox, it's more like 400tps.
 
-On the old Chromebook, more than 5 seconds.
+On the old Chromebook, less than 200tps.
 
 
 [test-fab speedtest4()](https://codejo.pages.dev?load=test-fab&call=speedtest4)
 
-On Chrome I get just over 5 seconds and on Firefox closer to 8 seconds.
+On Chrome I get about 180tps and on Firefox close to 130tps.
 
-On the old Chromebook, more than 37 seconds.
+On the old Chromebook, about 30tps.
+
+
+| Test | Canv | Desktop | Desktop | Chromebook |
+|      |      | Chrome  | Firefox | Chrome     |
+|------|------|--------:|--------:|-----------:|
+| [`speedtest()`](https://codejo.pages.dev?load=test-grd&call=speedtest) | grd | 21800 | 12500 | 1260 |
+| [`speedtest2()`](https://codejo.pages.dev?load=test-grd&call=speedtest2) | grd | 5100 | 470 | 210 |
+| [`speedtest3()`](https://codejo.pages.dev?load=test-web&call=speedtest3) | web | 4300 | 430 | 190 |
+| [`speedtest4()`](https://codejo.pages.dev?load=test-fab&call=speedtest4) | fab | 180 | 130 | 27 |
 
 
 These speed tests (all except for the original `test-grd speedtest`) test synchronized writing and reading to and from the canvas. (Checking the canvas for which color is currently showing at a particular location, which is probably not the best way to do what you're trying to do!) There is going to be a speed penalty for getting all of that synchronization correct, but in all cases the most expensive part is the canvas read.
