@@ -28,8 +28,8 @@ cover:
 # Introduction. What is CodeJo?
 - [the vision](#the-vision)
 - [the current state](#the-current-state)
-- the tour
-- the near future
+- [the tour](#the-tour)
+- [the near future](#the-near-future)
 
 ---
 
@@ -84,10 +84,10 @@ The introductory CodeJo experience should always be available: Browse to the web
 ---
 
 # Challenges Encountered
-- interrupting running code
-- the speed problem
-- race conditions
-- code security
+- [interrupting running code](#interrupting-running-code)
+- [the speed problem](#the-speed-problem)
+- [race conditions](#race-conditions)
+- [code security](#code-security)
 
 ---
 
@@ -164,9 +164,9 @@ Two attack modes are obvious:
 ---
 
 # And In Conclusion.
-- who's writing code?
-- what about ai?
-- your next os!
+- [who's writing code?](#who's-writing-code)
+- [what about ai?](#what-about-ai?)
+- [your next os!](#your-next-os!)
 
 ---
 
