@@ -111,53 +111,27 @@ Using these strategies, CodeJo provides the most reactive and interactive Python
 
 CodeJo is not fast. Depending on the hardware it's running on, and the specific browser being used, speed ranges anywhere from "Pretty Good" to "All But Unusuable."
 
-On Chrome, and on a fairly modern system, the speed of the system is pretty good. To test the speed on your own setup, see the several speedtests available:
-
-[test-grd speedtest()](https://codejo.pages.dev?load=test-grd&call=speedtest)
-
-[test-grd speedtest2()](https://codejo.pages.dev?load=test-grd&call=speedtest2)
-
-On my main, desktop system, Chrome gets over 21000tps on speedtest() and speedtest2() produces about 5000tps.
-
-Using Firefox on the same system, speedtest() gets less than 13000tps and speedtest2() is less than 500tps.
-
-On my ancient Chromebook, speedtest() only gets about 1200tps and speedtest2() is just over 200tps.
-
-
-[test-web speedtest3()](https://codejo.pages.dev?load=test-web&call=speedtest3)
-
-On Chrome I get about 4300tps. On Firefox, it's more like 400tps.
-
-On the old Chromebook, less than 200tps.
-
-
-[test-fab speedtest4()](https://codejo.pages.dev?load=test-fab&call=speedtest4)
-
-On Chrome I get about 180tps and on Firefox close to 130tps.
-
-On the old Chromebook, about 30tps.
-
-
-| Test | Canv | Desktop<br>Chrome | Desktop<br>Firefox | Chromebook<br>Chrome |
-|------|------|------------------:|-------------------:|---------------------:|
-| [`speedtest()`](https://codejo.pages.dev?load=test-grd&call=speedtest)   | grd | 21800 | 12500 | 1260 |
-| [`speedtest2()`](https://codejo.pages.dev?load=test-grd&call=speedtest2) | grd |  5100 |   470 |  210 |
-| [`speedtest3()`](https://codejo.pages.dev?load=test-web&call=speedtest3) | web |  4300 |   430 |  190 |
-| [`speedtest4()`](https://codejo.pages.dev?load=test-fab&call=speedtest4) | fab |   180 |   130 |   27 |
+The original `speedtest` in the `test-grd` project tests the raw speed of the system. If you just want to get a sense of whether CodeJo will be usable on your system, run `speedtest()`. Mostly, it tests the speed at which Pyodide can execute Python code and throw requests over the worker wall asking the main side to draw things on the Canvas. Higher numbers are better. As the table below shows, Chrome browser has a significant speed advantage.
 
 
 | Environment | [`speedtest()`](https://codejo.pages.dev?load=test-grd&call=speedtest)   | [`speedtest2()`](https://codejo.pages.dev?load=test-grd&call=speedtest2) | [`speedtest3()`](https://codejo.pages.dev?load=test-web&call=speedtest3) | [`speedtest4()`](https://codejo.pages.dev?load=test-fab&call=speedtest4) |
 |:-----|-----:|-----:|-----:|-----:|
+| Canvas              | grd   |   grd |   web |   fab |
 | Desktop - Chrome    | 21800 |  5100 |  4300 |   180 |
 | Desktop - Firefox   | 12500 |   470 |   430 |   130 |
 | Chromebook - Chrome |  1260 |   210 |   190 |    27 |
 
+Tests 2-4 stress synchronized writing and reading to and from the Canvas in different Canvas environments. They do this by checking the canvas for which color is currently showing at a particular location (which is probably not the best way to do what you're trying to do!) There is a speed penalty for getting all of that synchronization correct, but in all cases the most expensive part is the canvas read itself.
 
-These speed tests (all except for the original `test-grd speedtest`) test synchronized writing and reading to and from the canvas. (Checking the canvas for which color is currently showing at a particular location, which is probably not the best way to do what you're trying to do!) There is going to be a speed penalty for getting all of that synchronization correct, but in all cases the most expensive part is the canvas read.
+There is room for here optimization. On the Grid Canvas, caching is now available so that `canvas.colorat()` requests can be answered entirely on the worker side without needing to actually cross over and read the canvas color directly. The result is at least a 2-to-3-times speedup, with even larger gains possible on slower systems.
+
+| Environment | uncached | cached | speedup  |
+|:------------|---------:|-------:|----------:
+| Desktop - Chrome    |   5100 | 13900 | 2.7 |
+| Desktop - Firefox   |    470 |  8000 |17.0 |
+| Chromebook - Chrome |    210 |   630 | 3.0 |
 
 Even at the slower speeds (and even at the slowest speed) the system is still usable, it's just much less useful than it is on a more powerful computer. The good news is that computers continue to get faster every year, so CodeJo will continue to get better as people acquire better computers.
-
-There is also room for optimization. On the Grid Canvas, caching is now available so that `canvas.colorat` requests can be answered entirely on the worker side without needing to actually cross over and read the canvas color directly. The result is at least a 2-to-3-times speedup, with even larger gains possible on slower systems.
 
 ---
 
