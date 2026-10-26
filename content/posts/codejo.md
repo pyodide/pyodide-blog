@@ -28,8 +28,19 @@ cover:
 # Contents
 
 - [Introduction. What is CodeJo?](#introduction-what-is-codejo)
+    - [the vision](#the-vision)
+    - [the current state](#the-current-state)
+    - [the tour](#the-tour)
+    - [the near future](#the-near-future)
 - [Challenges Encountered](#challenges-encountered)
+    - [interrupting running code](#interrupting-running-code)
+    - [the speed problem](#the-speed-problem)
+    - [race conditions](#race-conditions)
+    - [code security](#code-security)
 - [And In Conclusion.](#and-in-conclusion)
+    - [who's writing code?](#who's-writing-code)
+    - [what about ai?](#what-about-ai)
+    - [your next os!](#your-next-os)
 
 # Introduction. What is CodeJo?
 - [the vision](#the-vision)
