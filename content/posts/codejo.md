@@ -38,7 +38,7 @@ cover:
     - [race conditions](#race-conditions)
     - [code security](#code-security)
 - [And In Conclusion.](#and-in-conclusion)
-    - [who's writing code?](#who's-writing-code)
+    - [who's writing code?](#whos-writing-code)
     - [what about ai?](#what-about-ai)
     - [your next os!](#your-next-os)
 
@@ -181,7 +181,7 @@ Two attack modes are obvious:
 ---
 
 # And In Conclusion.
-- [who's writing code?](#who's-writing-code)
+- [who's writing code?](#whos-writing-code)
 - [what about ai?](#what-about-ai)
 - [your next os!](#your-next-os)
 
