@@ -146,6 +146,13 @@ On the old Chromebook, about 30tps.
 | [`speedtest4()`](https://codejo.pages.dev?load=test-fab&call=speedtest4) | fab |   180 |   130 |   27 |
 
 
+| Environment | [`speedtest()`](https://codejo.pages.dev?load=test-grd&call=speedtest)   | [`speedtest2()`](https://codejo.pages.dev?load=test-grd&call=speedtest2) | [`speedtest3()`](https://codejo.pages.dev?load=test-web&call=speedtest3) | [`speedtest4()`](https://codejo.pages.dev?load=test-fab&call=speedtest4) |
+|:-----|-----:|-----:|-----:|-----:|
+| Desktop - Chrome    | 21800 |  5100 |  4300 |   180 |
+| Desktop - Firefox   | 12500 |   470 |   430 |   130 |
+| Chromebook - Chrome |  1260 |   210 |   190 |    27 |
+
+
 These speed tests (all except for the original `test-grd speedtest`) test synchronized writing and reading to and from the canvas. (Checking the canvas for which color is currently showing at a particular location, which is probably not the best way to do what you're trying to do!) There is going to be a speed penalty for getting all of that synchronization correct, but in all cases the most expensive part is the canvas read.
 
 Even at the slower speeds (and even at the slowest speed) the system is still usable, it's just much less useful than it is on a more powerful computer. The good news is that computers continue to get faster every year, so CodeJo will continue to get better as people acquire better computers.
