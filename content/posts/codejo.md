@@ -165,8 +165,8 @@ Two attack modes are obvious:
 
 # And In Conclusion.
 - [who's writing code?](#who's-writing-code)
-- [what about ai?](#what-about-ai?)
-- [your next os!](#your-next-os!)
+- [what about ai?](#what-about-ai)
+- [your next os!](#your-next-os)
 
 ---
 
