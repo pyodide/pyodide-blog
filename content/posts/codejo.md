@@ -193,7 +193,7 @@ I have a bad feeling that people are going to start telling kids, *"Don't learn 
 
 Unfortunately, it seems like maybe this sort of thing is already happening: Teachers are using AI to create assignments; Students are using AI to complete the assignments; Teachers are also using AI to grade the assignments. We may as well cut the humans out of the learning loop altogether!
 
-CodeJo is for people who want to learn to code, just because they want to know how computers work. And just like learning foreign languages, and music, and math, and cooking, and crafts, and conversation, and all sorts of other skills are good for developing human minds, learning to write computer code can offer another way of looking at the world. If nothing else, the strict logic imposed by programming digital computers is like playing in a scientific sandbox where propositions can be tested to the very limits of 0 and 1.
+CodeJo is for people who want to learn to code, just because they want to know how computers work. And just like learning foreign languages -- and music, and math, and cooking, and crafts, and conversation, and all sorts of other skills -- are good for developing human minds, learning to write computer code can offer another way of looking at the world. If nothing else, the strict logic imposed by programming digital computers is like playing in a scientific sandbox where propositions can be tested to the very limits of 0 and 1.
 
 In a few years, we'll probably be glad we have at least a few people who still understand, so that we'll have a chance at shutting off all the AIs!
 
