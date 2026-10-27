@@ -137,9 +137,9 @@ There is room for here optimization. On the Grid Canvas, caching is now availabl
 
 | Environment | uncached | cached | speedup  |
 |:------------|---------:|-------:|----------:
-| Desktop - Chrome    |   5100 | 13900 | 2.7 |
-| Desktop - Firefox   |    470 |  8000 |17.0 |
-| Chromebook - Chrome |    210 |   630 | 3.0 |
+| Desktop - Chrome    |   5100 | 13900 | 2.7x |
+| Desktop - Firefox   |    470 |  8000 |17.0x |
+| Chromebook - Chrome |    210 |   630 | 3.0x |
 
 Even at the slower speeds (and even at the slowest speed) the system is still usable, it's just much less useful than it is on a more powerful computer. The good news is that computers continue to get faster every year, so CodeJo will continue to get better as people acquire better computers.
 
