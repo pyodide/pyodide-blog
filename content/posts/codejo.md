@@ -25,22 +25,12 @@ cover:
     hidden: true # only hide on current single page
 ---
 
-# Contents
+[CodeJo](https://codejo.pages.dev/) is a browser-based old-school programming environment mostly aimed at people who are learning to code, but it could also be of interest to more experienced programmers who want to do some coding without needing to do a lot of setup.
 
-- [Introduction. What is CodeJo?](#introduction-what-is-codejo)
-    - [the vision](#the-vision)
-    - [the current state](#the-current-state)
-    - [the tour](#the-tour)
-    - [the near future](#the-near-future)
-- [Challenges Encountered](#challenges-encountered)
-    - [interrupting running code](#interrupting-running-code)
-    - [the speed problem](#the-speed-problem)
-    - [race conditions](#race-conditions)
-    - [code security](#code-security)
-- [And In Conclusion.](#and-in-conclusion)
-    - [who's writing code?](#whos-writing-code)
-    - [what about ai?](#what-about-ai)
-    - [your next os!](#your-next-os)
+<img src="https://a.fsdn.com/con/app/proj/codejo/screenshots/turtle_spiral-abea960e.png" style="width: 70%" title="CodeJo turtle spiral." />
+
+---
+---
 
 # Introduction. What is CodeJo?
 - [the vision](#the-vision)
@@ -60,7 +50,7 @@ That was frustrating for me, because I remember when my family got our first com
 
 That is the vision for CodeJo. Computers are way more ubiqitous these days -- and way more complicated, and way more capable -- but someone who is just trying to decide if they might enjoy writing some code doesn't need a whole lot of hoops to jump through before they can even getting started.
 
-<img src="https://a.fsdn.com/con/app/proj/codejo/screenshots/CodeJo0-669bc3f8.png" style="width: 70%" title="CodeJo Grid Canvas scratchpad, ready for code!" />
+<img src="https://a.fsdn.com/con/app/proj/codejo/screenshots/codejo_start-98885c54.png" style="width: 70%" title="CodeJo Grid Canvas scratchpad, plus catalog. Ready for code!" />
 
 Now they don't need to. They can simply point their browser at [https://codejo.pages.dev/](https://codejo.pages.dev/ "CodeJo") and start programming!
 
