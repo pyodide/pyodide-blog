@@ -25,7 +25,7 @@ cover:
     hidden: true # only hide on current single page
 ---
 
-[CodeJo](https://codejo.pages.dev/) is a browser-based old-school programming environment mostly aimed at people who are learning to code, but it could also be of interest to more experienced programmers who want to do some coding without needing to do a lot of setup.
+[CodeJo](https://codejo.pages.dev/) (rhymes with "dojo") is a browser-based old-school programming environment mostly aimed at people who are learning to code, but it could also be of interest to more experienced programmers who want to do some coding without needing to do a lot of setup.
 
 <img src="https://a.fsdn.com/con/app/proj/codejo/screenshots/turtle_spiral-abea960e.png" style="width: 70%" title="CodeJo turtle spiral." />
 
