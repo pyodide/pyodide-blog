@@ -1,6 +1,6 @@
 ---
 title: "CodeJo. Code in your browser, right now. Powered by Pyodide!"
-date: 2026-09-22
+date: 2026-11-03
 tags: ["guest post", "education"]
 author: "Lee Harr"
 showToc: true
